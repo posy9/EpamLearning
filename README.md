@@ -1,19 +1,3 @@
-1. Для создания пакета com.epam.jwd.app необходимо в папке проекта последовательно использовать команды:
-
-mkdir com
-mkdir com/epam
-mkdir com/epam/jwd
-mkdir com/epam/jwd/app
-Для создания пакета com.epam.jwd.model в папке проекта после этих команд использовать:
-mkdir com/epam/jwd/model
-
-
-2.  Для создания папки lib использовать в папке проекта:
-
-mkdir lib
-
-Скачать необходимые jar с интернета и переместить их с папки загрузок в папку lib
-
 
 3. Для компиляции против библиотек из папки lib необходимо переместиться в папку lib.
 Для этого из папки проект использовать:
@@ -61,6 +45,21 @@ cp ../log4j2.xml app
 Запускаем MyAwesomeApplication.class:
 
 java -cp "./app;lib/*" com.epam.jwd.app.MyAwesomeApplication
+
+
+6. Создал папку fat_jar и перешел в нее. В этой папке создал конфигурационный файл Maven - pom.xml, также сделал иерархию папок для проекта maven.
+Для сборки в fat jar использовал maven shade plugin, интегрировал в pom.xml нужные зависимости.
+
+Для сборки в jar использовал:
+
+mvn package
+
+Для запуска jar:
+
+$ java -jar target/your-project-1.0-SNAPSHOT.jar
+
+
+
 
 
 
