@@ -1,29 +1,30 @@
 package com.epam.jwd.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Dot {
-    private double x;
-    private double y;
-    private double z;
+    private BigDecimal x;
+    private BigDecimal y;
+    private BigDecimal z;
 
-    public Dot(double x, double y, double z) {
+    public Dot(BigDecimal x, BigDecimal y, BigDecimal z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public double getX() {
+    public BigDecimal getX() {
         return x;
     }
 
 
-    public double getY() {
+    public BigDecimal getY() {
         return y;
     }
 
 
-    public double getZ() {
+    public BigDecimal getZ() {
         return z;
     }
 

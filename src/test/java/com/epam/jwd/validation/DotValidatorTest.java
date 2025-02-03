@@ -1,14 +1,13 @@
 package com.epam.jwd.validation;
 
-import com.epam.jwd.exception.IllegalCoordinatePlaneException;
+
 import com.epam.jwd.exception.IllegalDotCoordinatesException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -27,7 +26,7 @@ public class DotValidatorTest {
 
     @ParameterizedTest
     @MethodSource("wrongCoordinatesProvider")
-    public void isValidDot_shouldThrowException_whenDotIsInvalid(List<Double> wrongCoordinates)  {
+    public void isValidDot_shouldThrowException_whenDotIsInvalid(List<BigDecimal> wrongCoordinates)  {
 
         assertThrows(IllegalDotCoordinatesException.class, () -> {
             dotValidator.isValidDot(wrongCoordinates);

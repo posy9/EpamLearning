@@ -4,32 +4,33 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileConverter {
+public class FileParser {
 
 
 
-    private static final Logger LOG = LogManager.getLogger(FileConverter.class);
+    private static final Logger LOG = LogManager.getLogger(FileParser.class);
 
-    public List<List<Double>> readFileAndParseToDouble(String path_to_file) {
+    public List<List<BigDecimal>> readFileAndParseToBigDecimal(String path_to_file) {
         Path path = Paths.get(path_to_file);
 
-        List<List<Double>> allLists = new ArrayList<>();
+        List<List<BigDecimal>> allLists = new ArrayList<>();
         try {
 
             List<String> lines = Files.readAllLines(path);
             for (String line : lines) {
                 line = line.replaceAll("\\s+", " ");
-                List<Double> currentList = new ArrayList<>();
+                List<BigDecimal> currentList = new ArrayList<>();
                 boolean hasError = false;
                 for (String element : line.split(" ")) {
                     try {
-                        currentList.add(Double.parseDouble(element));
+                        currentList.add(new BigDecimal(element));
                         LOG.trace("Element {} successfully parsed", element);
 
                     } catch (NumberFormatException e) {

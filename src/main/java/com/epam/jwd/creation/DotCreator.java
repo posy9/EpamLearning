@@ -2,11 +2,12 @@ package com.epam.jwd.creation;
 
 import com.epam.jwd.exception.IllegalDotCoordinatesException;
 import com.epam.jwd.model.Dot;
-import com.epam.jwd.read.FileConverter;
+import com.epam.jwd.read.FileParser;
 import com.epam.jwd.validation.DotValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,17 +18,17 @@ public class DotCreator {
     private final DotValidator dotValidator = new DotValidator();
 
 
-    public List<List<Dot>> createDots(FileConverter fileConverter)  {
+    public List<List<Dot>> createDots(FileParser fileConverter)  {
         List<List<Dot>> dotsForPlane = new ArrayList<>();
         List<Dot> dots;
-        List<List<Double>> expectedDotList = fileConverter.readFileAndParseToDouble(PATH_TO_FILE);
-        for (List<Double> expectedDot : expectedDotList) {
+        List<List<BigDecimal>> DotList = fileConverter.readFileAndParseToBigDecimal(PATH_TO_FILE);
+        for (List<BigDecimal> expectedDot : DotList) {
             dots = new ArrayList<>();
             try{
                 dotValidator.isValidDot(expectedDot);
-                dots.add(new Dot(expectedDot.get(0), expectedDot.get(1), expectedDot.get(2)));
-                dots.add(new Dot(expectedDot.get(3), expectedDot.get(4), expectedDot.get(5)));
-                dots.add(new Dot(expectedDot.get(6), expectedDot.get(7), expectedDot.get(8)));
+                for (int i = 0; i < expectedDot.size(); i += 3) {
+                    dots.add(new Dot(expectedDot.get(i), expectedDot.get(i + 1), expectedDot.get(i + 2)));
+                }
                 dotsForPlane.add(dots);
                 LOG.trace("Dots with coordinates x: {},y: {},z: {}, x: {},y: {},z: {}, x: {},y: {},z: {} are validated",
                         expectedDot.get(0), expectedDot.get(1), expectedDot.get(2), expectedDot.get(3), expectedDot.get(4),

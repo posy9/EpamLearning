@@ -4,6 +4,7 @@ import com.epam.jwd.exception.IllegalDotCoordinatesException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class DotValidator {
@@ -12,7 +13,7 @@ public class DotValidator {
 
     Logger LOG= LogManager.getLogger(DotValidator.class);
 
-    public void isValidDot(List<Double> coordinates) throws IllegalDotCoordinatesException {
+    public void isValidDot(List<BigDecimal> coordinates) throws IllegalDotCoordinatesException {
         if (coordinates.size()!=QUANTITY_OF_REQUIRED_PARAMETRES){
             throw new IllegalDotCoordinatesException("Invalid dot"+ coordinates);
         }

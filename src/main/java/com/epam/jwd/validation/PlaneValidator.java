@@ -1,29 +1,49 @@
 package com.epam.jwd.validation;
 
+import com.epam.jwd.exception.IllegalCoordinatePlaneException;
 import com.epam.jwd.exception.IllegalPlaneCoordinatesException;
 import com.epam.jwd.model.Dot;
+import com.epam.jwd.model.Plane;
+
+import java.math.BigDecimal;
 
 
 public class PlaneValidator {
 
     public void isValidPlane(Dot a, Dot b, Dot c) throws IllegalPlaneCoordinatesException {
 
-        double v1x = b.getX() - a.getX();
-        double v1y = b.getY() - a.getY();
-        double v1z = b.getZ() - a.getZ();
+        BigDecimal v1x = b.getX().subtract(a.getX());
+        BigDecimal v1y = b.getY().subtract(a.getY());
+        BigDecimal v1z = b.getZ().subtract(a.getZ());
 
-        double v2x = c.getX() - a.getX();
-        double v2y = c.getY() - a.getY();
-        double v2z = c.getZ() - a.getZ();
+        BigDecimal v2x = c.getX().subtract(a.getX());
+        BigDecimal v2y = c.getY().subtract(a.getY());
+        BigDecimal v2z = c.getZ().subtract(a.getZ());
 
-        double i = v1y * v2z - v1z * v2y;
-        double j = v1z * v2x - v1x * v2z;
-        double k = v1x * v2y - v1y * v2x;
+        BigDecimal i = v1y.multiply(v2z).subtract(v1z.multiply(v2y));
+        BigDecimal j = v1z.multiply(v2x).subtract(v1x.multiply(v2z));
+        BigDecimal k = v1x.multiply(v2y).subtract(v1y.multiply(v2x));
 
 
-        if (i == 0 && j == 0 && k == 0) {
+        if (i.compareTo(BigDecimal.ZERO) == 0 && j.compareTo(BigDecimal.ZERO) == 0 && k.compareTo(BigDecimal.ZERO) == 0) {
             throw new IllegalPlaneCoordinatesException("Invalid plane with coordinates " + a + ", " + b + ", " + c + ".");
         }
     }
+
+    public void isValidCoordinatePlane(Plane plane) throws IllegalCoordinatePlaneException {
+
+        if (!((plane.getA().getX().compareTo(BigDecimal.ZERO) == 0
+                && plane.getB().getX().compareTo(BigDecimal.ZERO) == 0
+                && plane.getC().getX().compareTo(BigDecimal.ZERO) == 0) ||
+                (plane.getA().getY().compareTo(BigDecimal.ZERO) == 0
+                        && plane.getB().getY().compareTo(BigDecimal.ZERO) == 0
+                        && plane.getC().getY().compareTo(BigDecimal.ZERO) == 0) ||
+                (plane.getA().getZ().compareTo(BigDecimal.ZERO) == 0
+                        && plane.getB().getZ().compareTo(BigDecimal.ZERO) == 0
+                        && plane.getC().getZ().compareTo(BigDecimal.ZERO) == 0))) {
+            throw new IllegalCoordinatePlaneException("Plane: " + plane + " is not a coordinate plane.");
+        }
+    }
+
 
 }
