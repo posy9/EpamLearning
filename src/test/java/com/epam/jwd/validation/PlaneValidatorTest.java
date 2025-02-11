@@ -3,16 +3,13 @@ package com.epam.jwd.validation;
 
 import com.epam.jwd.creation.PlaneCreator;
 import com.epam.jwd.exception.IllegalCoordinatePlaneException;
-import com.epam.jwd.exception.IllegalDotCoordinatesException;
 import com.epam.jwd.exception.IllegalPlaneCoordinatesException;
 import com.epam.jwd.model.Dot;
 import com.epam.jwd.model.Plane;
 import org.junit.jupiter.api.BeforeEach;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -24,25 +21,24 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 public class PlaneValidatorTest {
 
-    private PlaneValidator planeValidator;
+    private final PlaneValidator planeValidator = PlaneValidator.getInstance();
 
     @BeforeEach
     void setUp() {
-        planeValidator = new PlaneValidator();
     }
 
     @ParameterizedTest
     @MethodSource("wrongDotsProvider")
-    public void isValidPlane_shouldThrowException_whenDotIsInvalid(List<Dot> wrongDots)  {
+    public void isValidPlane_shouldThrowException_whenDotIsInvalid(List<Dot> wrongDots) {
 
         assertThrows(IllegalPlaneCoordinatesException.class, () -> {
-            planeValidator.isValidPlane(wrongDots.getFirst(),wrongDots.get(1),wrongDots.get(2));
+            planeValidator.isValidPlane(wrongDots.getFirst(), wrongDots.get(1), wrongDots.get(2));
         });
     }
 
     @ParameterizedTest
     @MethodSource("wrongCoordinatePlanesProvider")
-    public void isValidCoordinatePlane_shouldThrowException_whenPlaneIsNotCoordinatePlane(Plane inValidCoordinatePlane){
+    public void isValidCoordinatePlane_shouldThrowException_whenPlaneIsNotCoordinatePlane(Plane inValidCoordinatePlane) {
         assertThrows(IllegalCoordinatePlaneException.class, () -> {
             planeValidator.isValidCoordinatePlane(inValidCoordinatePlane);
         });
@@ -51,12 +47,12 @@ public class PlaneValidatorTest {
 
     private static Stream<Arguments> wrongDotsProvider() {
         return Stream.of(
-                arguments(Arrays.asList(new Dot(new BigDecimal("1"),new BigDecimal("2"),new BigDecimal("3")),
-                        new Dot(new BigDecimal("1"),new BigDecimal("2"),new BigDecimal("3")),
-                                new Dot(new BigDecimal("1"),new BigDecimal("2"),new BigDecimal("3")))),
-                arguments(Arrays.asList(new Dot(new BigDecimal("1"),new BigDecimal("2"),new BigDecimal("3")),
-                        new Dot(new BigDecimal("2"),new BigDecimal("4"),new BigDecimal("6")),
-                        new Dot(new BigDecimal("3"),new BigDecimal("6"),new BigDecimal("9"))))
+                arguments(Arrays.asList(new Dot(new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("3")),
+                        new Dot(new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("3")),
+                        new Dot(new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("3")))),
+                arguments(Arrays.asList(new Dot(new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("3")),
+                        new Dot(new BigDecimal("2"), new BigDecimal("4"), new BigDecimal("6")),
+                        new Dot(new BigDecimal("3"), new BigDecimal("6"), new BigDecimal("9"))))
         );
     }
 
@@ -78,7 +74,7 @@ public class PlaneValidatorTest {
                         new Dot(new BigDecimal("0"), new BigDecimal("13"), new BigDecimal("15.0"))
                 )
         );
-        PlaneCreator planeCreator = new PlaneCreator();
+        PlaneCreator planeCreator = PlaneCreator.getInstance();
         List<Plane> coordinatePlanes = planeCreator.createPlanes(listOfCoordinatePlanes);
         return Stream.of(
                 arguments(coordinatePlanes.getFirst()),

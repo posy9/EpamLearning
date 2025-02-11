@@ -14,14 +14,27 @@ import java.util.List;
 public class DotCreator {
     private static final Logger LOG = LogManager.getLogger(DotCreator.class);
     private static final String PATH_TO_FILE = "";
+    private static  DotCreator instance;
 
-    private final DotValidator dotValidator = new DotValidator();
+    private DotCreator() {
+
+    }
+
+    public static DotCreator getInstance() {
+        if (instance == null) {
+            instance = new DotCreator();
+        }
+        return instance;
+    }
+
+    private final DotValidator dotValidator = DotValidator.getInstance();
+    FileParser fileConverter = FileParser.getInstance();
 
 
-    public List<List<Dot>> createDots(FileParser fileConverter)  {
+    public List<List<Dot>> createDots(List<List<BigDecimal>> DotList)  {
         List<List<Dot>> dotsForPlane = new ArrayList<>();
         List<Dot> dots;
-        List<List<BigDecimal>> DotList = fileConverter.readFileAndParseToBigDecimal(PATH_TO_FILE);
+
         for (List<BigDecimal> expectedDot : DotList) {
             dots = new ArrayList<>();
             try{

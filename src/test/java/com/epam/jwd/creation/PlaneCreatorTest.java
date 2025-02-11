@@ -24,13 +24,12 @@ public class PlaneCreatorTest {
 
     @BeforeEach
     public void setUp() {
-         planeCreator = new PlaneCreator();
+        planeCreator = PlaneCreator.getInstance();
     }
 
 
-
     @Test
-    public void createPlanes_shouldReturnListOfPlanes_whenAllDotesAreValid(){
+    public void createPlanes_shouldReturnListOfPlanes_whenAllDotesAreValid() {
 
         List<List<Dot>> mockDotList = Arrays.asList(
                 Arrays.asList(
@@ -55,7 +54,7 @@ public class PlaneCreatorTest {
     }
 
     @Test
-    public void createPlanes_shouldReturnListOfPlanesWithCorrectDots_whenAllDotsAreValid(){
+    public void createPlanes_shouldReturnListOfPlanesWithCorrectDots_whenAllDotsAreValid() {
 
         List<List<Dot>> mockDotList = List.of(
                 Arrays.asList(
@@ -73,7 +72,7 @@ public class PlaneCreatorTest {
     }
 
     @Test
-    public void createPlanes_shouldReturnListOfPlanesOfCorrectSize_whenSomeDotsAreValid(){
+    public void createPlanes_shouldReturnListOfPlanesOfCorrectSize_whenSomeDotsAreValid() {
 
         List<List<Dot>> mockDotList = Arrays.asList(
                 Arrays.asList(new Dot(new BigDecimal("10"), new BigDecimal("11"), new BigDecimal("12")),
@@ -91,7 +90,7 @@ public class PlaneCreatorTest {
 
     @ParameterizedTest
     @MethodSource("mockIncorrectDotsListAndCorrectSizeProvider")
-    public void createPlanes_shouldReturnEmptyListOfPlanes_whenAllDotsAreNotValid(List<List<Dot>> mockDotList,int expectedAnswer){
+    public void createPlanes_shouldReturnEmptyListOfPlanes_whenAllDotsAreNotValid(List<List<Dot>> mockDotList, int expectedAnswer) {
 
         List<Plane> result = planeCreator.createPlanes(mockDotList);
 
@@ -117,8 +116,6 @@ public class PlaneCreatorTest {
         );
 
     }
-
-
 
 
 }

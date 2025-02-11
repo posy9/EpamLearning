@@ -1,18 +1,29 @@
 package com.epam.jwd.model;
 
 import java.util.Objects;
+import java.util.concurrent.Flow;
 
 public class Plane implements Figure {
 
-    private final Dot a;
-    private final Dot b;
-    private final Dot c;
+    private Integer id;
+    private Dot a;
+    private Dot b;
+    private Dot c;
 
-     Plane(Dot a, Dot b, Dot c) {
+
+    public Plane(Dot a, Dot b, Dot c) {
         this.a = a;
         this.b = b;
         this.c = c;
     }
+
+    public Plane(Integer id, Dot a, Dot b, Dot c) {
+        this.id = id;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
+
 
     @Override
     public Dot getA() {
@@ -24,12 +35,35 @@ public class Plane implements Figure {
         return b;
     }
 
-
     @Override
     public Dot getC() {
         return c;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+
+    public void setA(Dot a) {
+        this.a = a;
+
+    }
+
+    public void setB(Dot b) {
+        this.b = b;
+
+    }
+
+    public void setC(Dot c) {
+        this.c = c;
+
+    }
+
+
+    public Plane withId(Integer id) {
+        return new Plane(id, a, b, c);
+    }
 
 
     @Override
@@ -53,4 +87,6 @@ public class Plane implements Figure {
                 ", c=" + c +
                 '}';
     }
+
+
 }

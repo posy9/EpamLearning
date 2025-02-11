@@ -8,6 +8,6 @@ public interface FigureFactory {
     Figure createFigure(FigureContext context) throws IllegalFigureNameException;
 
     static FigureFactory newInstance() {
-        return new FormFactory();
+        return FormFactory.getInstance();
     }
 }

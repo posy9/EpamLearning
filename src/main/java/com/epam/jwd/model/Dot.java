@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Dot {
-    private BigDecimal x;
-    private BigDecimal y;
-    private BigDecimal z;
+    private final BigDecimal x;
+    private final BigDecimal y;
+    private final BigDecimal z;
 
     public Dot(BigDecimal x, BigDecimal y, BigDecimal z) {
         this.x = x;
@@ -48,7 +48,7 @@ public class Dot {
             return false;
         }
         Dot dot = (Dot) obj;
-        return x == dot.x && y == dot.y && z == dot.z;
+        return Objects.equals(x, dot.x) && Objects.equals(y, dot.y) && Objects.equals(z, dot.z);
     }
 
 

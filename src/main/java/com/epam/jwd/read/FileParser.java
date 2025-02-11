@@ -1,5 +1,6 @@
 package com.epam.jwd.read;
 
+import com.epam.jwd.repository.InMemoryPlaneCalculationResultsRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,6 +17,18 @@ public class FileParser {
 
 
     private static final Logger LOG = LogManager.getLogger(FileParser.class);
+    private static  FileParser instance;
+
+    private FileParser() {
+
+    }
+
+    public static FileParser getInstance() {
+        if (instance == null) {
+            instance = new FileParser();
+        }
+        return instance;
+    }
 
     public List<List<BigDecimal>> readFileAndParseToBigDecimal(String path_to_file) {
         Path path = Paths.get(path_to_file);

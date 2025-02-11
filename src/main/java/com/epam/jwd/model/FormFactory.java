@@ -1,6 +1,7 @@
 package com.epam.jwd.model;
 
 import com.epam.jwd.context.FigureContext;
+import com.epam.jwd.creation.DotCreator;
 import com.epam.jwd.exception.IllegalFigureNameException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,8 +9,19 @@ import org.apache.logging.log4j.Logger;
 public class FormFactory implements FigureFactory {
     private static final Logger LOG = LogManager.getLogger(FormFactory.class);
 
-    FormFactory() {
 
+
+    private static FormFactory instance;
+
+    private FormFactory() {
+
+    }
+
+    public static FormFactory getInstance() {
+        if (instance == null) {
+            instance = new FormFactory();
+        }
+        return instance;
     }
 
 

@@ -21,12 +21,12 @@ public class DotValidatorTest {
 
     @BeforeEach
     void setUp() {
-        dotValidator = new DotValidator();
+        dotValidator = DotValidator.getInstance();
     }
 
     @ParameterizedTest
     @MethodSource("wrongCoordinatesProvider")
-    public void isValidDot_shouldThrowException_whenDotIsInvalid(List<BigDecimal> wrongCoordinates)  {
+    public void isValidDot_shouldThrowException_whenDotIsInvalid(List<BigDecimal> wrongCoordinates) {
 
         assertThrows(IllegalDotCoordinatesException.class, () -> {
             dotValidator.isValidDot(wrongCoordinates);
@@ -35,7 +35,7 @@ public class DotValidatorTest {
 
     private static Stream<Arguments> wrongCoordinatesProvider() {
         return Stream.of(
-                arguments(Arrays.asList(1.0,2.0,3.0)),
+                arguments(Arrays.asList(1.0, 2.0, 3.0)),
                 arguments(List.of())
         );
     }

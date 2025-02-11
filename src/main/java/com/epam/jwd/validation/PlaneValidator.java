@@ -4,11 +4,25 @@ import com.epam.jwd.exception.IllegalCoordinatePlaneException;
 import com.epam.jwd.exception.IllegalPlaneCoordinatesException;
 import com.epam.jwd.model.Dot;
 import com.epam.jwd.model.Plane;
+import com.epam.jwd.read.FileParser;
 
 import java.math.BigDecimal;
 
 
 public class PlaneValidator {
+
+    private static PlaneValidator instance;
+
+    private PlaneValidator() {
+
+    }
+
+    public static PlaneValidator getInstance() {
+        if (instance == null) {
+            instance = new PlaneValidator();
+        }
+        return instance;
+    }
 
     public void isValidPlane(Dot a, Dot b, Dot c) throws IllegalPlaneCoordinatesException {
 

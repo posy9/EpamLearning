@@ -2,7 +2,6 @@ package com.epam.jwd.creation;
 
 import com.epam.jwd.exception.IllegalDotCoordinatesException;
 import com.epam.jwd.model.Dot;
-import com.epam.jwd.read.FileParser;
 import com.epam.jwd.validation.DotValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,18 +17,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
 public class DotCreatorTest {
 
     @Mock
     private DotValidator mockDotValidator;
-    @Mock
-    private FileParser mockFileConverter;
+
 
     @InjectMocks
     private DotCreator dotCreator;
@@ -49,9 +49,9 @@ public class DotCreatorTest {
                         new BigDecimal("54"), new BigDecimal("33"), new BigDecimal("18")
                 )
         );
-        lenient().when(mockFileConverter.readFileAndParseToBigDecimal(anyString())).thenReturn(mockCoordinatesList);
+
         lenient().doNothing().when(mockDotValidator).isValidDot(anyList());
-        List<List<Dot>> result = dotCreator.createDots(mockFileConverter);
+        List<List<Dot>> result = dotCreator.createDots(mockCoordinatesList);
         assertEquals(mockCoordinatesList.size(), result.size());
     }
 
@@ -60,29 +60,23 @@ public class DotCreatorTest {
             throws IllegalDotCoordinatesException {
 
 
-        List<List<BigDecimal>> mockCoordinatesList = List.of(Arrays.asList(
+        List<List<BigDecimal>> input = List.of(Arrays.asList(
                 new BigDecimal("7"), new BigDecimal("4"), new BigDecimal("5"),
                 new BigDecimal("11"), new BigDecimal("16"), new BigDecimal("23"),
                 new BigDecimal("42"), new BigDecimal("34"), new BigDecimal("5")
         ));
 
-        lenient().when(mockFileConverter.readFileAndParseToBigDecimal(anyString())).thenReturn(mockCoordinatesList);
-        lenient().doNothing().when(mockDotValidator).isValidDot(anyList());
-        List<List<Dot>> result = dotCreator.createDots(mockFileConverter);
+        List<List<Dot>> expectedResult = List.of(Arrays.asList(new Dot(new BigDecimal("7"), new BigDecimal("4"), new BigDecimal("5")),
+                new Dot(new BigDecimal("11"), new BigDecimal("16"), new BigDecimal("23")),
+                new Dot(new BigDecimal("42"), new BigDecimal("34"), new BigDecimal("5"))
+        ));
 
-        List<Dot> firstDots = result.getFirst();
 
-        assertEquals(mockCoordinatesList.getFirst().getFirst(), firstDots.getFirst().getX());
-        assertEquals(mockCoordinatesList.getFirst().get(1), firstDots.getFirst().getY());
-        assertEquals(mockCoordinatesList.getFirst().get(2), firstDots.getFirst().getZ());
+        List<List<Dot>> result = dotCreator.createDots(input);
 
-        assertEquals(mockCoordinatesList.getFirst().get(3), firstDots.get(1).getX());
-        assertEquals(mockCoordinatesList.getFirst().get(4), firstDots.get(1).getY());
-        assertEquals(mockCoordinatesList.getFirst().get(5), firstDots.get(1).getZ());
 
-        assertEquals(mockCoordinatesList.getFirst().get(6), firstDots.get(2).getX());
-        assertEquals(mockCoordinatesList.getFirst().get(7), firstDots.get(2).getY());
-        assertEquals(mockCoordinatesList.getFirst().get(8), firstDots.get(2).getZ());
+        assertEquals(expectedResult.size(), result.size());
+        assertArrayEquals(expectedResult.toArray(), result.toArray());
 
     }
 
@@ -102,13 +96,12 @@ public class DotCreatorTest {
                 )
         );
 
-        lenient().when(mockFileConverter.readFileAndParseToBigDecimal(anyString())).thenReturn(mockCoordinatesList);
 
         lenient().doNothing().when(mockDotValidator).isValidDot(eq(mockCoordinatesList.get(0)));
         lenient().doThrow(new IllegalDotCoordinatesException("Invalid coordinates"))
                 .when(mockDotValidator).isValidDot(eq(mockCoordinatesList.get(1)));
 
-        List<List<Dot>> result = dotCreator.createDots(mockFileConverter);
+        List<List<Dot>> result = dotCreator.createDots(mockCoordinatesList);
 
         assertEquals(1, result.size());
     }
@@ -117,12 +110,11 @@ public class DotCreatorTest {
     @MethodSource("mockDotListAndCorrectSizeProvider")
     void createDots_shouldReturnEmptyList_whenAllCoordinatesAreNotValid(List<List<BigDecimal>> mockDotList, int expectedAnswer) throws IllegalDotCoordinatesException {
 
-        lenient().when(mockFileConverter.readFileAndParseToBigDecimal(anyString())).thenReturn(mockDotList);
 
         lenient().doThrow(new IllegalDotCoordinatesException("Invalid coordinates"))
                 .when(mockDotValidator).isValidDot(anyList());
 
-        List<List<Dot>> result = dotCreator.createDots(mockFileConverter);
+        List<List<Dot>> result = dotCreator.createDots(mockDotList);
 
         assertEquals(expectedAnswer, result.size());
     }

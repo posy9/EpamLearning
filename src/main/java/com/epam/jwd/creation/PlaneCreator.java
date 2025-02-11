@@ -17,7 +17,20 @@ import java.util.List;
 public class PlaneCreator {
     private static final Logger LOG = LogManager.getLogger(PlaneCreator.class);
 
-    private final PlaneValidator planeValidator = new PlaneValidator();
+    private final PlaneValidator planeValidator = PlaneValidator.getInstance();
+
+    private static  PlaneCreator instance;
+
+    private PlaneCreator() {
+
+    }
+
+    public static PlaneCreator getInstance() {
+        if (instance == null) {
+            instance = new PlaneCreator();
+        }
+        return instance;
+    }
 
     public List<Plane> createPlanes(List<List<Dot>> dotsForPlane) {
 
@@ -27,7 +40,7 @@ public class PlaneCreator {
             try {
                 planeValidator.isValidPlane(dots.get(0), dots.get(1), dots.get(2));
                 FigureContext planeContext = FigureContext.of("Plane", dots.get(0), dots.get(1), dots.get(2));
-                Figure plane = null;
+                Figure plane;
                 plane = FigureFactory.newInstance().createFigure(planeContext);
                 planes.add((Plane) plane);
                 LOG.trace("Plane from dots {} was created", dots);
