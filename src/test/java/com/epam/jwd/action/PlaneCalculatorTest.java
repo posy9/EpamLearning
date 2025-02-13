@@ -17,12 +17,9 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-
 public class PlaneCalculatorTest {
 
-
     PlaneCalculator planeAction = PlaneCalculator.getInstance();
-
 
     private static Stream<Arguments> coordinatePlaneAndDegreesProvider() {
         List<List<Dot>> listOfCoordinatePlanes = Arrays.asList(
@@ -77,17 +74,13 @@ public class PlaneCalculatorTest {
         );
     }
 
-
     @ParameterizedTest
     @MethodSource("coordinatePlaneAndDegreesProvider")
     public void angleWithCoordinatePlane_shouldFindAngle_whenCoordinatePlaneIsValid(Plane param, BigDecimal expectedResult) {
         Plane mockPlane = new Plane(new Dot(new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("3")),
                 new Dot(new BigDecimal("9"), new BigDecimal("2"), new BigDecimal("6")),
                 new Dot(new BigDecimal("7"), new BigDecimal("8"), new BigDecimal("9")));
-
-
         BigDecimal result = planeAction.angleWithCoordinatePlane(mockPlane, param);
-
         assertEquals(expectedResult, result);
     }
 
@@ -98,8 +91,6 @@ public class PlaneCalculatorTest {
                 new Dot(new BigDecimal("9"), new BigDecimal("2"), new BigDecimal("6")),
                 new Dot(new BigDecimal("7"), new BigDecimal("8"), new BigDecimal("9")));
         assertThrows(IllegalCoordinatePlaneException.class, () -> planeAction.angleWithCoordinatePlane(mockPlane, param));
-
-
     }
 
 
@@ -120,6 +111,4 @@ public class PlaneCalculatorTest {
         boolean result = planeAction.isNormal(mockPlane);
         assertFalse(result);
     }
-
-
 }

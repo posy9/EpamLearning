@@ -1,6 +1,5 @@
 package com.epam.jwd.validation;
 
-
 import com.epam.jwd.creation.PlaneCreator;
 import com.epam.jwd.exception.IllegalCoordinatePlaneException;
 import com.epam.jwd.exception.IllegalPlaneCoordinatesException;
@@ -30,7 +29,6 @@ public class PlaneValidatorTest {
     @ParameterizedTest
     @MethodSource("wrongDotsProvider")
     public void isValidPlane_shouldThrowException_whenDotIsInvalid(List<Dot> wrongDots) {
-
         assertThrows(IllegalPlaneCoordinatesException.class, () -> {
             planeValidator.isValidPlane(wrongDots.getFirst(), wrongDots.get(1), wrongDots.get(2));
         });
@@ -42,7 +40,6 @@ public class PlaneValidatorTest {
         assertThrows(IllegalCoordinatePlaneException.class, () -> {
             planeValidator.isValidCoordinatePlane(inValidCoordinatePlane);
         });
-
     }
 
     private static Stream<Arguments> wrongDotsProvider() {

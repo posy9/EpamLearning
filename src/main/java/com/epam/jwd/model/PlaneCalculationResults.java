@@ -12,12 +12,11 @@ public class PlaneCalculationResults {
     private static final Logger LOG = LogManager.getLogger(PlaneCalculationResults.class);
 
     private final PlaneCalculator planeCalculator =PlaneCalculator.getInstance();
-    private Integer planeId;
-    private BigDecimal angleWithXY;
-    private BigDecimal angleWithXZ;
-    private BigDecimal angleWithYZ;
-    private boolean isNormal;
-
+    private final Integer planeId;
+    private final BigDecimal angleWithXY;
+    private final BigDecimal angleWithXZ;
+    private final BigDecimal angleWithYZ;
+    private final boolean isNormal;
 
     public PlaneCalculationResults(Plane plane) {
         this.planeId = plane.getId();
@@ -26,7 +25,6 @@ public class PlaneCalculationResults {
         this.angleWithYZ = planeCalculator.angleWithCoordinatePlane(plane, PlaneCalculator.YZ_PLANE);
         this.isNormal = planeCalculator.isNormal(plane);
     }
-
 
     public BigDecimal getAngleWithXY() {
         return angleWithXY;

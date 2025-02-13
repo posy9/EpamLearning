@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Dot {
+
     private final BigDecimal x;
     private final BigDecimal y;
     private final BigDecimal z;
@@ -18,11 +19,9 @@ public class Dot {
         return x;
     }
 
-
     public BigDecimal getY() {
         return y;
     }
-
 
     public BigDecimal getZ() {
         return z;
@@ -32,7 +31,6 @@ public class Dot {
     public int hashCode() {
         return Objects.hash(x, y, z);
     }
-
 
     @Override
     public String toString() {
@@ -50,6 +48,4 @@ public class Dot {
         Dot dot = (Dot) obj;
         return Objects.equals(x, dot.x) && Objects.equals(y, dot.y) && Objects.equals(z, dot.z);
     }
-
-
 }

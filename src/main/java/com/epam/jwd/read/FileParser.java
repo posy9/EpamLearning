@@ -1,6 +1,5 @@
 package com.epam.jwd.read;
 
-import com.epam.jwd.repository.InMemoryPlaneCalculationResultsRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,14 +13,10 @@ import java.util.List;
 
 public class FileParser {
 
-
-
     private static final Logger LOG = LogManager.getLogger(FileParser.class);
     private static  FileParser instance;
 
-    private FileParser() {
-
-    }
+    private FileParser() {}
 
     public static FileParser getInstance() {
         if (instance == null) {
@@ -32,10 +27,8 @@ public class FileParser {
 
     public List<List<BigDecimal>> readFileAndParseToBigDecimal(String path_to_file) {
         Path path = Paths.get(path_to_file);
-
         List<List<BigDecimal>> allLists = new ArrayList<>();
         try {
-
             List<String> lines = Files.readAllLines(path);
             for (String line : lines) {
                 line = line.replaceAll("\\s+", " ");
@@ -55,14 +48,11 @@ public class FileParser {
                 if (!hasError) {
                     allLists.add(currentList);
                 }
-
             }
-
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             LOG.error("Error reading file {}", path_to_file);
         }
-
         return allLists;
     }
-
 }

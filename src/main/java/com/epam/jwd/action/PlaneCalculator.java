@@ -13,23 +13,18 @@ import java.math.RoundingMode;
 
 import static java.lang.Math.acos;
 
-
 public class PlaneCalculator {
-
-
 
     public static final Plane XY_PLANE =new Plane(
             new Dot(new BigDecimal("2"), new BigDecimal("11.0"), new BigDecimal("0")),
             new Dot(new BigDecimal("6"), new BigDecimal("14.0"), new BigDecimal("0")),
             new Dot(new BigDecimal("7"), new BigDecimal("13.0"), new BigDecimal("0"))
     );
-
     public static final Plane XZ_PLANE = new Plane(
             new Dot(new BigDecimal("10.0"), new BigDecimal("0"), new BigDecimal("5")),
             new Dot(new BigDecimal("13.0"), new BigDecimal("0"), new BigDecimal("13")),
             new Dot(new BigDecimal("21.0"), new BigDecimal("0"), new BigDecimal("2"))
     );
-
     public static final Plane YZ_PLANE = new Plane(
             new Dot(new BigDecimal("3"), new BigDecimal("11.0"), new BigDecimal("0")),
             new Dot(new BigDecimal("5"), new BigDecimal("14.0"), new BigDecimal("0")),
@@ -37,6 +32,7 @@ public class PlaneCalculator {
     );
 
     private static PlaneCalculator instance;
+    private static final Logger LOG = LogManager.getLogger(PlaneCalculator.class);
 
     private PlaneCalculator() {}
 
@@ -47,9 +43,6 @@ public class PlaneCalculator {
         return instance;
     }
 
-
-    private static final Logger LOG = LogManager.getLogger(PlaneCalculator.class);
-
     private Dot findVectorByCoordinates(Dot a, Dot b) {
         BigDecimal VectorXCoordinate = a.getX().subtract(b.getX());
         BigDecimal VectorYCoordinate = a.getY().subtract(b.getY());
@@ -59,7 +52,6 @@ public class PlaneCalculator {
     }
 
     private Dot findNormalVector(Plane plane) {
-
         Dot firstVectorCoordinates = findVectorByCoordinates(plane.getA(), plane.getB());
         Dot secondVector = findVectorByCoordinates(plane.getC(), plane.getB());
 
@@ -99,12 +91,9 @@ public class PlaneCalculator {
             BigDecimal normalCoordinateVectorLength = findLengthOfVector(normalVector);
             BigDecimal scalarProduct = scalarProduct(normalVector, normalVectorForPlane);
 
-
             BigDecimal cosTheta = scalarProduct.divide(normalVectorLength.multiply(normalCoordinateVectorLength), MathContext.DECIMAL128);
 
-
             cosTheta = cosTheta.max(new BigDecimal("-1")).min(new BigDecimal("1"));
-
 
             angleInRadians = BigDecimal.valueOf(acos(cosTheta.doubleValue()));
             angleInDegrees = BigDecimal.valueOf(Math.toDegrees(angleInRadians.doubleValue())).setScale(2, RoundingMode.HALF_UP);
@@ -116,11 +105,8 @@ public class PlaneCalculator {
             LOG.error(e.getMessage());
             throw new IllegalCoordinatePlaneException(e.getMessage());
         }
-
         return angleInDegrees;
     }
-
-
 
     public boolean isNormal(Plane plane) {
         Dot normalVector = findNormalVector(plane);
@@ -128,10 +114,6 @@ public class PlaneCalculator {
                 || normalVector.getY().compareTo(BigDecimal.ZERO) == 0
                 || normalVector.getZ().compareTo(BigDecimal.ZERO) == 0;
     }
-
-
-
-
 }
 
 

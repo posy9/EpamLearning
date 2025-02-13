@@ -22,24 +22,20 @@ public class FileParserTest {
         fileConverter = FileParser.getInstance();
     }
 
-
     @Test
     public void readFileAndParseToDouble_shouldReturnListOfCoordinatesWithCorrectSize_whenAllValuesAreValid() {
-
         List<List<BigDecimal>> result = fileConverter.readFileAndParseToBigDecimal(PATH_TO_FILE_WITH_CORRECT_VALUES);
         assertEquals(3, result.size());
     }
 
     @Test
     public void readFileAndParseToDouble_shouldReturnEmptyList_whenAllValuesAreNotValid() {
-
         List<List<BigDecimal>> result = fileConverter.readFileAndParseToBigDecimal(PATH_TO_FILE_WITH_INCORRECT_VALUES);
         assertEquals(0, result.size());
     }
 
     @Test
     public void readFileAndParseToDouble_shouldReturnListOfCoordinatesWithCorrectSize_whenSomeValuesAreNotValid() {
-
         List<List<BigDecimal>> result = fileConverter.readFileAndParseToBigDecimal(PATH_TO_FILE_WITH_SOME_INCORRECT_VALUES);
         assertEquals(3, result.size());
     }

@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
@@ -27,10 +28,8 @@ public class PlaneCreatorTest {
         planeCreator = PlaneCreator.getInstance();
     }
 
-
     @Test
     public void createPlanes_shouldReturnListOfPlanes_whenAllDotesAreValid() {
-
         List<List<Dot>> mockDotList = Arrays.asList(
                 Arrays.asList(
                         new Dot(new BigDecimal("10.0"), new BigDecimal("11.0"), new BigDecimal("12.0")),
@@ -50,12 +49,10 @@ public class PlaneCreatorTest {
         );
         List<Plane> result = planeCreator.createPlanes(mockDotList);
         assertEquals(3, result.size());
-
     }
 
     @Test
     public void createPlanes_shouldReturnListOfPlanesWithCorrectDots_whenAllDotsAreValid() {
-
         List<List<Dot>> mockDotList = List.of(
                 Arrays.asList(
                         new Dot(new BigDecimal("10.0"), new BigDecimal("11.0"), new BigDecimal("12.0")),
@@ -63,12 +60,14 @@ public class PlaneCreatorTest {
                         new Dot(new BigDecimal("21.0"), new BigDecimal("13.0"), new BigDecimal("18.0"))
                 )
         );
+        List<Plane> expectedResult = List.of(new Plane(
+                new Dot(new BigDecimal("10.0"), new BigDecimal("11.0"), new BigDecimal("12.0")),
+                new Dot(new BigDecimal("13.0"), new BigDecimal("14.0"), new BigDecimal("15.0")),
+                new Dot(new BigDecimal("21.0"), new BigDecimal("13.0"), new BigDecimal("18.0")))
+        );
         List<Plane> result = planeCreator.createPlanes(mockDotList);
-
-        assertEquals(mockDotList.getFirst().getFirst(), result.getFirst().getA());
-        assertEquals(mockDotList.getFirst().get(1), result.getFirst().getB());
-        assertEquals(mockDotList.getFirst().get(2), result.getFirst().getC());
-
+        assertEquals(expectedResult.size(), result.size());
+        assertArrayEquals(expectedResult.toArray(), result.toArray());
     }
 
     @Test
@@ -82,21 +81,16 @@ public class PlaneCreatorTest {
                         new Dot(new BigDecimal("2"), new BigDecimal("4"), new BigDecimal("6")),
                         new Dot(new BigDecimal("3"), new BigDecimal("6"), new BigDecimal("9")))
         );
-
         List<Plane> result = planeCreator.createPlanes(mockDotList);
-
         assertEquals(1, result.size());
     }
 
     @ParameterizedTest
     @MethodSource("mockIncorrectDotsListAndCorrectSizeProvider")
     public void createPlanes_shouldReturnEmptyListOfPlanes_whenAllDotsAreNotValid(List<List<Dot>> mockDotList, int expectedAnswer) {
-
         List<Plane> result = planeCreator.createPlanes(mockDotList);
-
         assertEquals(expectedAnswer, result.size());
     }
-
 
     private static Stream<Arguments> mockIncorrectDotsListAndCorrectSizeProvider() {
         return Stream.of(
@@ -114,10 +108,7 @@ public class PlaneCreatorTest {
                 ), 0),
                 arguments(List.of(), 0)
         );
-
     }
-
-
 }
 
 

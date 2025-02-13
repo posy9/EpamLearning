@@ -28,7 +28,6 @@ public class InMemoryPlaneRepository implements PlaneRepository, Publisher {
         this.planeHolder = new ArrayList<>();
     }
 
-
     public static InMemoryPlaneRepository getInstance() {
         if (instance == null) {
                     instance = new InMemoryPlaneRepository();
@@ -177,6 +176,4 @@ public class InMemoryPlaneRepository implements PlaneRepository, Publisher {
         }
         throw new PlaneNotFoundException(String.format(PLANE_NOT_FOUND_BY_ID_MSG, id));
     }
-
-
 }

@@ -1,21 +1,12 @@
 package com.epam.jwd.model;
 
 import com.epam.jwd.context.FigureContext;
-import com.epam.jwd.creation.DotCreator;
 import com.epam.jwd.exception.IllegalFigureNameException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class FormFactory implements FigureFactory {
-    private static final Logger LOG = LogManager.getLogger(FormFactory.class);
-
-
-
     private static FormFactory instance;
 
-    private FormFactory() {
-
-    }
+    private FormFactory() {}
 
     public static FormFactory getInstance() {
         if (instance == null) {
@@ -23,7 +14,6 @@ public class FormFactory implements FigureFactory {
         }
         return instance;
     }
-
 
     @Override
     public Figure createFigure(FigureContext context) throws IllegalFigureNameException {
@@ -35,5 +25,4 @@ public class FormFactory implements FigureFactory {
         }
         return figure;
     }
-
 }

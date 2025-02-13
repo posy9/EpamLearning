@@ -31,11 +31,11 @@ public class DotCreator {
     FileParser fileConverter = FileParser.getInstance();
 
 
-    public List<List<Dot>> createDots(List<List<BigDecimal>> DotList)  {
+    public List<List<Dot>> createDots(List<List<BigDecimal>> dotList)  {
         List<List<Dot>> dotsForPlane = new ArrayList<>();
         List<Dot> dots;
 
-        for (List<BigDecimal> expectedDot : DotList) {
+        for (List<BigDecimal> expectedDot : dotList) {
             dots = new ArrayList<>();
             try{
                 dotValidator.isValidDot(expectedDot);

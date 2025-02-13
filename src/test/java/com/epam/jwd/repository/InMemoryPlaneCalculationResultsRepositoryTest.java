@@ -25,24 +25,19 @@ public class InMemoryPlaneCalculationResultsRepositoryTest {
 
     @Test
     public void read_shouldThrowPlaneCalculationResultNotFoundException_whenIdDoesNotExist() {
-
         int inputId = 1;
         assertThrows(PlaneCalculationResultNotFoundException.class, () -> repository.read(inputId));
-
     }
 
     @Test
     public void read_shouldReturnPlaneCalculationResultForCorrectPlane_whenIdExists() {
-
         Plane inputPlane = new Plane(1, new Dot(new BigDecimal("10.0"), new BigDecimal("11.0"), new BigDecimal("12.0")),
                 new Dot(new BigDecimal("13.0"), new BigDecimal("14.0"), new BigDecimal("15.0")),
                 new Dot(new BigDecimal("21.0"), new BigDecimal("13.0"), new BigDecimal("18.0")));
-
         PlaneCalculationResults input = new PlaneCalculationResults(inputPlane);
         Plane savedPlane = planeRepository.create(inputPlane);
         PlaneCalculationResults savedPlaneCalculationResults = repository.read(savedPlane.getId());
         assertEquals(input, savedPlaneCalculationResults);
-
     }
 
     @Test
@@ -50,11 +45,9 @@ public class InMemoryPlaneCalculationResultsRepositoryTest {
         Plane inputPlane = new Plane(SOME_ID, new Dot(new BigDecimal("10.0"), new BigDecimal("11.0"), new BigDecimal("12.0")),
                 new Dot(new BigDecimal("13.0"), new BigDecimal("14.0"), new BigDecimal("15.0")),
                 new Dot(new BigDecimal("21.0"), new BigDecimal("13.0"), new BigDecimal("18.0")));
-
         Plane inputUpdatedPlane = new Plane(SOME_ID, new Dot(new BigDecimal("13.0"), new BigDecimal("11.0"), new BigDecimal("12.0")),
                 new Dot(new BigDecimal("1.0"), new BigDecimal("14.0"), new BigDecimal("15.0")),
                 new Dot(new BigDecimal("5.0"), new BigDecimal("13.0"), new BigDecimal("18.0")));
-
         repository.planeToAdd(inputPlane);
         PlaneCalculationResults input = repository.read(inputPlane.getId());
         repository.planeToUpdate(inputUpdatedPlane);
@@ -72,7 +65,6 @@ public class InMemoryPlaneCalculationResultsRepositoryTest {
                 new Dot(new BigDecimal("1.0"), new BigDecimal("14.0"), new BigDecimal("15.0")),
                 new Dot(new BigDecimal("5.0"), new BigDecimal("13.0"), new BigDecimal("18.0")));
         PlaneCalculationResults updatedInput = new PlaneCalculationResults(inputUpdatedPlane);
-
         repository.planeToUpdate(inputUpdatedPlane);
         PlaneCalculationResults updatedResult = repository.read(inputUpdatedPlane.getId());
         assertEquals(updatedInput, updatedResult);

@@ -1,15 +1,13 @@
 package com.epam.jwd.model;
 
 import java.util.Objects;
-import java.util.concurrent.Flow;
 
 public class Plane implements Figure {
 
     private Integer id;
-    private Dot a;
-    private Dot b;
-    private Dot c;
-
+    private final Dot a;
+    private final Dot b;
+    private final Dot c;
 
     public Plane(Dot a, Dot b, Dot c) {
         this.a = a;
@@ -23,7 +21,6 @@ public class Plane implements Figure {
         this.b = b;
         this.c = c;
     }
-
 
     @Override
     public Dot getA() {
@@ -44,27 +41,9 @@ public class Plane implements Figure {
         return id;
     }
 
-
-    public void setA(Dot a) {
-        this.a = a;
-
-    }
-
-    public void setB(Dot b) {
-        this.b = b;
-
-    }
-
-    public void setC(Dot c) {
-        this.c = c;
-
-    }
-
-
     public Plane withId(Integer id) {
         return new Plane(id, a, b, c);
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -87,6 +66,4 @@ public class Plane implements Figure {
                 ", c=" + c +
                 '}';
     }
-
-
 }

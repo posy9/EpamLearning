@@ -55,7 +55,6 @@ public class InMemoryPlaneRepositoryTest {
                 new Dot(new BigDecimal("21.0"), new BigDecimal("13.0"), new BigDecimal("18.0")));
         Plane result = planeRepository.create(inputPlane);
         assertEquals(inputPlane, result);
-
     }
 
     @Test
@@ -105,7 +104,6 @@ public class InMemoryPlaneRepositoryTest {
         Plane secondInputPlane = new Plane(SOME_ID, new Dot(new BigDecimal("10.0"), new BigDecimal("11.0"), new BigDecimal("12.0")),
                 new Dot(new BigDecimal("13.0"), new BigDecimal("14.0"), new BigDecimal("15.0")),
                 new Dot(new BigDecimal("21.0"), new BigDecimal("13.0"), new BigDecimal("18.0")));
-
         firstInputPlane = planeRepository.create(firstInputPlane);
         Plane result = planeRepository.update(secondInputPlane);
         assertEquals(firstInputPlane.getId(), result.getId());
@@ -177,17 +175,14 @@ public class InMemoryPlaneRepositoryTest {
                 new Dot(new BigDecimal("21.0"), new BigDecimal("13.0"), new BigDecimal("18.0")));
         planeRepository.create(thirdInputPlane);
         List<Plane> expectedResult = Arrays.asList(firstInputPlane, secondInputPlane);
-
         List<Plane> result = planeRepository.findPlanesByAngleWithCoordinatePlane(TEST_ANGLE, PlaneCalculator.XY_PLANE);
         assertEquals(expectedResult.size(), result.size());
         assertArrayEquals(expectedResult.toArray(), result.toArray());
-
     }
 
     @Test
     public void findOrthogonalPlanes_shouldThrowException_whenAllPlanesDoNotSatisfy() {
         assertThrows(PlaneNotFoundException.class, planeRepository::findOrthogonalPlanes);
-
     }
 
     @Test
@@ -250,8 +245,6 @@ public class InMemoryPlaneRepositoryTest {
         List<Plane> result = planeRepository.sortPlanesByXCoordinateOfFirstDot();
         assertEquals(expectedResult.size(), result.size());
         assertArrayEquals(expectedResult.toArray(), result.toArray());
-
-
     }
 
     @Test
@@ -272,8 +265,6 @@ public class InMemoryPlaneRepositoryTest {
         List<Plane> result = planeRepository.sortPlanesByYCoordinateOfFirstDot();
         assertEquals(expectedResult.size(), result.size());
         assertArrayEquals(expectedResult.toArray(), result.toArray());
-
-
     }
 
     @Test
@@ -294,8 +285,5 @@ public class InMemoryPlaneRepositoryTest {
         List<Plane> result = planeRepository.sortPlanesByZCoordinateOfFirstDot();
         assertEquals(expectedResult.size(), result.size());
         assertArrayEquals(expectedResult.toArray(), result.toArray());
-
-
     }
-
 }

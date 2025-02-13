@@ -1,7 +1,6 @@
 package com.epam.jwd.repository;
 
 import com.epam.jwd.exception.PlaneCalculationResultNotFoundException;
-import com.epam.jwd.exception.PlaneNotFoundException;
 import com.epam.jwd.model.Plane;
 import com.epam.jwd.model.PlaneCalculationResults;
 import com.epam.jwd.observer.Subscriber;
@@ -13,7 +12,6 @@ import java.util.List;
 
 public class InMemoryPlaneCalculationResultsRepository implements Subscriber {
 
-
     private static final String PLANE_CALCULATION_RESULT_NOT_FOUND_BY_ID_MSG = "Plane calculation result for plane with id %s not found";
     private static final Logger LOG = LogManager.getLogger(InMemoryPlaneCalculationResultsRepository.class);
 
@@ -23,7 +21,6 @@ public class InMemoryPlaneCalculationResultsRepository implements Subscriber {
     private InMemoryPlaneCalculationResultsRepository() {
         this.planeCalculationResultsHolder = new ArrayList<>();
     }
-
 
     public static InMemoryPlaneCalculationResultsRepository getInstance() {
         if (instance == null) {
@@ -44,13 +41,11 @@ public class InMemoryPlaneCalculationResultsRepository implements Subscriber {
         planeCalculationResultsHolder.add(entity);
     }
 
-
     private void update(PlaneCalculationResults entity) {
         final PlaneCalculationResults savedPlaneCalculationResults = read(entity.getPlaneId());
         final int planeCalculationResultsIndex = planeCalculationResultsHolder.indexOf(savedPlaneCalculationResults);
         planeCalculationResultsHolder.set(planeCalculationResultsIndex,entity);
     }
-
 
     private void delete(int id) {
         try {
@@ -65,7 +60,6 @@ public class InMemoryPlaneCalculationResultsRepository implements Subscriber {
     private void clear() {
         planeCalculationResultsHolder.clear();
     }
-
 
     private PlaneCalculationResults findPlaneCalculationResultsById(int id)  {
         for (PlaneCalculationResults planeCalculationResults : planeCalculationResultsHolder) {

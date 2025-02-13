@@ -11,9 +11,7 @@ public class DotValidator {
     private static final int QUANTITY_OF_REQUIRED_PARAMETERS = 9;
     private static DotValidator instance;
 
-    private DotValidator() {
-
-    }
+    private DotValidator() {}
 
     public static DotValidator getInstance() {
         if (instance == null) {
@@ -27,6 +25,4 @@ public class DotValidator {
             throw new IllegalDotCoordinatesException("Invalid dot"+ coordinates);
         }
     }
-
-
 }

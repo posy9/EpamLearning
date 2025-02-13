@@ -30,13 +30,11 @@ public class DotCreatorTest {
     @Mock
     private DotValidator mockDotValidator;
 
-
     @InjectMocks
     private DotCreator dotCreator;
 
     @Test
-    public void createDots_shouldReturnListOfListOfDotsOfCorrectSize_whenAllCoordinatesAreValid()
-            throws IllegalDotCoordinatesException {
+    public void createDots_shouldReturnListOfListOfDotsOfCorrectSize_whenAllCoordinatesAreValid() throws IllegalDotCoordinatesException {
         List<List<BigDecimal>> mockCoordinatesList = Arrays.asList(
                 Arrays.asList(
                         new BigDecimal("7"), new BigDecimal("4"), new BigDecimal("5"),
@@ -49,40 +47,29 @@ public class DotCreatorTest {
                         new BigDecimal("54"), new BigDecimal("33"), new BigDecimal("18")
                 )
         );
-
         lenient().doNothing().when(mockDotValidator).isValidDot(anyList());
         List<List<Dot>> result = dotCreator.createDots(mockCoordinatesList);
         assertEquals(mockCoordinatesList.size(), result.size());
     }
 
     @Test
-    public void createDots_shouldReturnListOfDotsWithCorrectCoordinates_whenAllCoordinatesAreValid()
-            throws IllegalDotCoordinatesException {
-
-
+    public void createDots_shouldReturnListOfDotsWithCorrectCoordinates_whenAllCoordinatesAreValid() throws IllegalDotCoordinatesException {
         List<List<BigDecimal>> input = List.of(Arrays.asList(
                 new BigDecimal("7"), new BigDecimal("4"), new BigDecimal("5"),
                 new BigDecimal("11"), new BigDecimal("16"), new BigDecimal("23"),
                 new BigDecimal("42"), new BigDecimal("34"), new BigDecimal("5")
         ));
-
         List<List<Dot>> expectedResult = List.of(Arrays.asList(new Dot(new BigDecimal("7"), new BigDecimal("4"), new BigDecimal("5")),
                 new Dot(new BigDecimal("11"), new BigDecimal("16"), new BigDecimal("23")),
                 new Dot(new BigDecimal("42"), new BigDecimal("34"), new BigDecimal("5"))
         ));
-
-
         List<List<Dot>> result = dotCreator.createDots(input);
-
-
         assertEquals(expectedResult.size(), result.size());
         assertArrayEquals(expectedResult.toArray(), result.toArray());
-
     }
 
     @Test
     void createDots_shouldReturnListOfListOfDotsOfCorrectSize_whenSomeCoordinatesAreValid() throws IllegalDotCoordinatesException {
-
         List<List<BigDecimal>> mockCoordinatesList = Arrays.asList(
                 Arrays.asList(
                         new BigDecimal("1"), new BigDecimal("2"), new BigDecimal("3"),
@@ -95,27 +82,20 @@ public class DotCreatorTest {
                         new BigDecimal("16"), new BigDecimal("17")
                 )
         );
-
-
-        lenient().doNothing().when(mockDotValidator).isValidDot(eq(mockCoordinatesList.get(0)));
+        lenient().doNothing()
+                .when(mockDotValidator).isValidDot(eq(mockCoordinatesList.get(0)));
         lenient().doThrow(new IllegalDotCoordinatesException("Invalid coordinates"))
                 .when(mockDotValidator).isValidDot(eq(mockCoordinatesList.get(1)));
-
         List<List<Dot>> result = dotCreator.createDots(mockCoordinatesList);
-
         assertEquals(1, result.size());
     }
 
     @ParameterizedTest
     @MethodSource("mockDotListAndCorrectSizeProvider")
     void createDots_shouldReturnEmptyList_whenAllCoordinatesAreNotValid(List<List<BigDecimal>> mockDotList, int expectedAnswer) throws IllegalDotCoordinatesException {
-
-
         lenient().doThrow(new IllegalDotCoordinatesException("Invalid coordinates"))
                 .when(mockDotValidator).isValidDot(anyList());
-
         List<List<Dot>> result = dotCreator.createDots(mockDotList);
-
         assertEquals(expectedAnswer, result.size());
     }
 
@@ -127,6 +107,4 @@ public class DotCreatorTest {
                 arguments(List.of(), 0)
         );
     }
-
-
 }
