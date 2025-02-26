@@ -1,31 +1,26 @@
 package com.epam.jwd.model;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ParagraphComponent implements Component {
 
-    private final List<Component> paragraphComponents = new ArrayList<>();
+    private static final String SPACE_SEPARATOR = " ";
 
-    @Override
-    public void add(Component component) {
-        paragraphComponents.add(component);
+    private final List<Component> paragraphComponents;
 
+    public ParagraphComponent(List<Component> paragraphComponents) {
+        this.paragraphComponents = paragraphComponents;
     }
 
     @Override
-    public List<Component> getChild() {
+    public String getText() {
+        return  paragraphComponents.stream()
+                .map(Component::getText)
+                .collect(Collectors.joining(SPACE_SEPARATOR));
+    }
+
+    public List<Component> getComponents() {
         return paragraphComponents;
     }
-
-    @Override
-    public boolean hasChild() {
-        return true;
-    }
-
-    @Override
-    public String getName() {
-        return "ParagraphComponent";
-    }
-
 }

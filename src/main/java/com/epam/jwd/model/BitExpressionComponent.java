@@ -1,38 +1,23 @@
 package com.epam.jwd.model;
 
+import com.epam.jwd.calculator.ExpressionCalculator;
 import java.util.List;
 
-public class BitExpressionComponent implements LeafComponent {
+public class BitExpressionComponent implements Component {
 
-    private  String content;
+    private final String content;
 
-    @Override
-    public void add(Component component) {
-        throw new UnsupportedOperationException("Add is not allowed for Leaf component");
-    }
-
-    @Override
-    public List<Component> getChild() {
-        throw new UnsupportedOperationException("Get child is not allowed for Leaf component");
-    }
-
-    @Override
-    public boolean hasChild() {
-        return false;
-    }
-
-    @Override
-    public String getName() {
-        return "BitExpressionComponent";
-    }
-
-    @Override
-    public void setContent(String content){
+    public BitExpressionComponent(String content) {
         this.content = content;
     }
 
     @Override
-    public String getContent() {
-        return content;
+    public String getText() {
+        return ExpressionCalculator.getInstance().calculate(content);
+    }
+
+    @Override
+    public List<Component> getComponents() {
+        throw new UnsupportedOperationException("Leaf component does not have components");
     }
 }

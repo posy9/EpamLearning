@@ -1,29 +1,25 @@
 package com.epam.jwd.model;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LexemeComponent implements Component {
 
-    private final List<Component> lexemeComponents = new ArrayList<>();
+    private final List<Component> lexemeComponents;
 
-    @Override
-    public void add(Component component) {
-        lexemeComponents.add(component);
+    public LexemeComponent(List<Component> lexemeComponents) {
+        this.lexemeComponents = lexemeComponents;
     }
 
     @Override
-    public List<Component> getChild() {
+    public String getText() {
+        return  lexemeComponents.stream()
+                .map(Component::getText)
+                .collect(Collectors.joining());
+    }
+
+    @Override
+    public List<Component> getComponents() {
         return lexemeComponents;
-    }
-
-    @Override
-    public boolean hasChild() {
-        return true;
-    }
-
-    @Override
-    public String getName() {
-        return "LexemeComponent";
     }
 }

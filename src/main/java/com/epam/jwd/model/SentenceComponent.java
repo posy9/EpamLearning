@@ -1,29 +1,27 @@
 package com.epam.jwd.model;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SentenceComponent implements Component {
 
-    private final List<Component> sentenceComponents = new ArrayList<>();
+    private static final String SPACE_SEPARATOR = " ";
 
-    @Override
-    public void add(Component component) {
-        sentenceComponents.add(component);
+    private final List<Component> sentenceComponents;
+
+    public SentenceComponent(List<Component> sentenceComponents) {
+        this.sentenceComponents = sentenceComponents;
     }
 
     @Override
-    public List<Component> getChild() {
+    public String getText() {
+        return  sentenceComponents.stream()
+                .map(Component::getText)
+                .collect(Collectors.joining(SPACE_SEPARATOR));
+    }
+
+    @Override
+    public List<Component> getComponents() {
         return sentenceComponents;
-    }
-
-    @Override
-    public boolean hasChild() {
-        return true;
-    }
-
-    @Override
-    public String getName() {
-        return "SentenceComponent";
     }
 }

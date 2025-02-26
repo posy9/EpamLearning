@@ -4,5 +4,6 @@ import com.epam.jwd.model.Component;
 
 public interface Parser {
 
-    void handle(Component component, String text);
+    Component handle(String text);
+
 }

@@ -1,17 +1,17 @@
 package com.epam.jwd.parser;
 
-import com.epam.jwd.factory.ComponentFactory;
 import com.epam.jwd.model.Component;
+import com.epam.jwd.model.TextComponent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TextToParagraphParser implements Parser {
 
     private final Parser nextHandler = ParagraphToSentenceParser.getInstance();
-    private static final Pattern PATTERN_TO_FIND_PARAGRAPH = Pattern.compile("\\t([^\\t]*)(?=\\t|$)"); ;
-    private static final String CONTEXT_FOR_PARAGRAPH_COMPONENT_CREATION = "ParagraphComponent";
+    private static final Pattern PATTERN_TO_FIND_PARAGRAPH = Pattern.compile("\\t([^\\t]*)(?=\\t|$)");
     private static TextToParagraphParser instance;
-    private final ComponentFactory componentFactory = ComponentFactory.getInstance();
 
     private TextToParagraphParser() {}
 
@@ -23,13 +23,15 @@ public class TextToParagraphParser implements Parser {
     }
 
     @Override
-    public void handle(Component component, String text) {
+    public Component handle(String text) {
         Matcher matcher = PATTERN_TO_FIND_PARAGRAPH.matcher(text);
+        List<Component> textComponents = new ArrayList<>();
         while (matcher.find()) {
-            String paragraph = matcher.group().trim() + "\n";
-            Component paragraphComponent =  componentFactory.newInstanceOf(CONTEXT_FOR_PARAGRAPH_COMPONENT_CREATION);
-            component.add(paragraphComponent);
-            nextHandler.handle(paragraphComponent, paragraph);
+            String paragraph = matcher.group().trim();
+            Component paragraphComponent = nextHandler.handle(paragraph);
+            textComponents.add(paragraphComponent);
+
         }
+        return new TextComponent(textComponents);
     }
 }

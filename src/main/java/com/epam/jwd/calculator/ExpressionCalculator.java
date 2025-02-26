@@ -1,4 +1,4 @@
-package com.epam.jwd.action;
+package com.epam.jwd.calculator;
 
 import com.epam.jwd.interpreter.Expression;
 import com.epam.jwd.interpreter.ExpressionParser;
@@ -16,11 +16,9 @@ public class ExpressionCalculator {
         return instance;
     }
 
-    public int calculate(String expression) {
+    public String calculate(String expression) {
         ExpressionParser parser = ExpressionParser.reversePolishNotation();
         Expression parsedExpression = parser.parse(expression);
-        return parsedExpression.result();
+        return parsedExpression.result().toString();
     }
-
-
 }

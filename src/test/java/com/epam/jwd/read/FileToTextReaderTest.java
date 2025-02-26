@@ -3,16 +3,13 @@ package com.epam.jwd.read;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 
 public class FileToTextReaderTest {
 
     private static final String PATH_TO_FILE = "testText.txt";
+    private static final String WRONG_PATH_TO_FILE = "Path.txt";
 
     private FileToTextReader fileReader;
 
@@ -32,10 +29,16 @@ public class FileToTextReaderTest {
         assertTrue(equalsIgnoreLineSeparators(expectedResult, result));
     }
 
+    @Test
+    public void readFileToText_shouldReturnEmptyString_whenPathDoesNotExists() {
+        String expectedResult = "";
+        String result = fileReader.readFileToText(WRONG_PATH_TO_FILE);
+        assertEquals(expectedResult,result);
+    }
+
     private boolean equalsIgnoreLineSeparators(String text1, String text2) {
         String normalizedText1 = text1.replaceAll("\\r\\n|\\r|\\n", "");
         String normalizedText2 = text2.replaceAll("\\r\\n|\\r|\\n", "");
         return normalizedText1.equals(normalizedText2);
     }
-
 }

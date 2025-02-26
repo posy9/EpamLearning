@@ -2,7 +2,6 @@ package com.epam.jwd.read;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import java.nio.file.*;
 import java.io.IOException;
 

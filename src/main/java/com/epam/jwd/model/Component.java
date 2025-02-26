@@ -4,12 +4,7 @@ import java.util.List;
 
 public interface Component  {
 
-    void add(Component component);
+    String getText();
 
-    List<Component> getChild();
-
-    boolean hasChild();
-
-    String getName();
-
+    List<Component> getComponents();
 }

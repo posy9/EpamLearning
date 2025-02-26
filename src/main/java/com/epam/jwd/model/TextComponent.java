@@ -1,29 +1,27 @@
 package com.epam.jwd.model;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TextComponent implements Component {
 
-    private final List<Component> textComponents = new ArrayList<>();
+    private static final String TABULATION_SEPARATOR = "\t";
+    private static final String NEXT_LINE_SEPARATOR = "\n";
 
-    @Override
-    public void add(Component component) {
-        textComponents.add(component);
+    private final List<Component> textComponents;
+
+    public TextComponent(List<Component> textComponents) {
+        this.textComponents = textComponents;
     }
 
     @Override
-    public List<Component> getChild() {
+    public String getText() {
+        return  textComponents.stream()
+                .map(component -> TABULATION_SEPARATOR + component.getText())
+                .collect(Collectors.joining(NEXT_LINE_SEPARATOR));
+    }
+
+    public List<Component> getComponents() {
         return textComponents;
-    }
-
-    @Override
-    public boolean hasChild() {
-        return true;
-    }
-
-    @Override
-    public String getName() {
-        return "TextComponent";
     }
 }
