@@ -2,27 +2,42 @@ package com.epam.jwd.controller;
 
 import java.io.*;
 
+import com.epam.jwd.command.Command;
+import com.epam.jwd.command.CommandResponse;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@WebServlet(name = "helloServlet", value = "/hello-servlet")
+@WebServlet("/controller")
 public class Controller extends HttpServlet {
-    private String message;
 
-    public void init() {
-        message = "Hello World!";
+private static final Logger LOG = LogManager.getLogger(Controller.class);
+
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+       proceed(request, response);
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html");
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {}
 
-        // Hello
-        PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        out.println("<h1>" + message + "</h1>");
-        out.println("</body></html>");
+    private void proceed(HttpServletRequest request, HttpServletResponse response) {
+        final String commandName = request.getParameter("command");
+        Command command = Command.of(commandName);
+        CommandResponse commandResponse = command.execute(null);
+        try {
+            RequestDispatcher dispatcher = request.getRequestDispatcher(commandResponse.getPath());
+            dispatcher.forward(request,response);
+
+        } catch (ServletException e) {
+            LOG.error("Servlet exception", e);
+        } catch (IOException e) {
+            LOG.error("IO exception", e);
+        }
     }
 
-    public void destroy() {
-    }
+
 }
