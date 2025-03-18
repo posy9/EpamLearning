@@ -1,4 +1,4 @@
-package epam.final_project;
+package com.epam.jwd.controller;
 
 import java.io.*;
 
@@ -6,7 +6,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 @WebServlet(name = "helloServlet", value = "/hello-servlet")
-public class HelloServlet extends HttpServlet {
+public class Controller extends HttpServlet {
     private String message;
 
     public void init() {
