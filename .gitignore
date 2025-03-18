@@ -3,6 +3,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .mvn
+
+mvnw
+mvnw.cmd
 ### IntelliJ IDEA ###
 .idea
 .idea/modules.xml
