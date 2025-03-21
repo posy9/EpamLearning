@@ -3,23 +3,25 @@ package com.epam.jwd.command;
 import com.epam.jwd.controller.ResponseFactory;
 import com.epam.jwd.controller.SimpleCommandResponseFactory;
 
-public class ShowMainPageCommand implements Command {
+public class ShowLoginPageCommand implements Command {
 
-    public static final String PATH_TO_MAIN_PAGE = "/WEB-INF/jsp/main.jsp";
+    public static final String PATH_TO_LOGIN_PAGE = "/WEB-INF/jsp/login.jsp";
     private final ResponseFactory responseFactory = SimpleCommandResponseFactory.getInstance();
 
-    private ShowMainPageCommand() {}
+    private ShowLoginPageCommand() {}
 
     private static class Holder {
-        private static final ShowMainPageCommand INSTANCE = new ShowMainPageCommand();
+        private static final ShowLoginPageCommand INSTANCE = new ShowLoginPageCommand();
     }
 
-    static ShowMainPageCommand getInstance() {
+    static ShowLoginPageCommand getInstance() {
         return Holder.INSTANCE;
     }
 
+
+
     @Override
     public CommandResponse execute(CommandRequest request) {
-        return responseFactory.createCommandResponse(PATH_TO_MAIN_PAGE);
+        return responseFactory.createCommandResponse(PATH_TO_LOGIN_PAGE);
     }
 }
