@@ -1,8 +1,7 @@
-package com.epam.jwd.controller;
+package com.epam.jwd.factory;
 
 import com.epam.jwd.command.CommandResponse;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

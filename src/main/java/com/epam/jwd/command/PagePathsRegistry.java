@@ -6,7 +6,7 @@ public enum PagePathsRegistry {
     MEDICAMENT("/WEB-INF/jsp/medicament.jsp"),
     LOGIN("/WEB-INF/jsp/login.jsp"),
     SIGNUP("/WEB-INF/jsp/signup.jsp"),
-    ERROR("/WEB-INF/jsp/error.jsp");
+    ERROR("/WEB-INF/jsp/errorPage.jsp");
 
     private final String path;
 

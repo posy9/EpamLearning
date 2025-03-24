@@ -1,7 +1,7 @@
 package com.epam.jwd.command;
 
-import com.epam.jwd.controller.ResponseFactory;
-import com.epam.jwd.controller.SimpleCommandResponseFactory;
+import com.epam.jwd.factory.ResponseFactory;
+import com.epam.jwd.factory.SimpleCommandResponseFactory;
 import com.epam.jwd.model.User;
 import com.epam.jwd.service.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -9,8 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
-import static com.epam.jwd.command.PagePathsRegistry.INDEX;
-import static com.epam.jwd.command.PagePathsRegistry.LOGIN;
+import static com.epam.jwd.command.PagePathsRegistry.*;
 import static com.epam.jwd.command.ParameterNameRegistry.LOGIN_PARAMETER_NAME;
 import static com.epam.jwd.command.ParameterNameRegistry.PASSWORD_PARAMETER_NAME;
 import static com.epam.jwd.command.RequestAttributeRegistry.ERROR_LOGIN_PASSWORD;
@@ -43,7 +42,7 @@ public class LoginCommand implements Command {
 
         if (commandRequest.sessionExists() && commandRequest.retrieveFromSession(USER.getName()).isPresent()) {
             LOG.error(USER_ALREADY_LOGGED_IN_MSG);
-            return responseFactory.createRedirectResponse(INDEX.getPath());
+            return responseFactory.createForwardResponse(ERROR.getPath());
         }
 
         String login = commandRequest.getParameter(LOGIN_PARAMETER_NAME.getName());

@@ -1,10 +1,11 @@
 package com.epam.jwd.command;
 
-import com.epam.jwd.controller.ResponseFactory;
-import com.epam.jwd.controller.SimpleCommandResponseFactory;
+import com.epam.jwd.factory.ResponseFactory;
+import com.epam.jwd.factory.SimpleCommandResponseFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static com.epam.jwd.command.PagePathsRegistry.ERROR;
 import static com.epam.jwd.command.PagePathsRegistry.INDEX;
 import static com.epam.jwd.command.SessionAttributeRegistry.USER;
 
@@ -30,8 +31,7 @@ public class LogoutCommand implements Command {
     public CommandResponse execute(CommandRequest commandRequest) {
         if (noLoggedInUserPresent(commandRequest)) {
             LOG.error(LOG_OUT_FAILURE_MSG);
-            //todo: error - no user found cannot logout
-            return null;
+            return responseFactory.createForwardResponse(ERROR.getPath());
         }
         commandRequest.clearSession();
         LOG.trace(LOG_OUT_SUCCESSFUL_MSG);

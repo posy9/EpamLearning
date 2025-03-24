@@ -6,5 +6,5 @@
 </head>
 <body>
 
-<jsp:forward page="/controller"/>
+<jsp:forward page="/controller?command=show_main"/>
 </body>

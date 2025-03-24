@@ -7,16 +7,22 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class MedicamentDao extends CommonDao<Medicament> {
 
-    private static final String STATEMENT_FOR_COUNTING_ALL = "select count(id) as quantity from medicament";
-    private static final String STATEMENT_FOR_FINDING_WITH_OFFSET_AND_LIMIT = "SELECT m_name, m_price, category_name, country_name, m_information, m_amount FROM medicament m JOIN category c ON m.category_id = c.id JOIN country co ON m.country_id = co.id LIMIT ? OFFSET ?;";
+    private static final String SELECT_COMMAND = "SELECT %s ";
+    private static final List<String> FIELDS = Arrays.asList(
+            "m_name", "m_price", "category_name", "country_name", "m_information", "m_amount"
+    );
+    private static final String STATEMENT_FOR_COUNTING_ALL = String.format(SELECT_COMMAND,"count(id)") + "as quantity from medicament";
+    public static final String COMMA = ",";
+    private static final String STATEMENT_FOR_FINDING_WITH_OFFSET_AND_LIMIT = String.format(SELECT_COMMAND, String.join(COMMA, FIELDS))
+            + "FROM medicament m " +
+            "JOIN category c ON m.category_id = c.id " +
+            "JOIN country co ON m.country_id = co.id LIMIT ? OFFSET ?;";
     private final ConnectionPool connectionPool;
+
 
     private MedicamentDao(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;

@@ -6,25 +6,26 @@ import com.epam.jwd.command.Command;
 import com.epam.jwd.command.CommandRequest;
 import com.epam.jwd.command.CommandResponse;
 import com.epam.jwd.dbconnection.ConnectionPool;
+import com.epam.jwd.factory.RequestFactory;
 import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static com.epam.jwd.command.ParameterNameRegistry.COMMAND_PARAMETER_NAME;
+
 @WebServlet("/controller")
 public class Controller extends HttpServlet {
 
-    public static final String COMMAND_PARAMETER_NAME = "command";
+
     private static final Logger LOG = LogManager.getLogger(Controller.class);
 
     private static final RequestFactory requestFactory = RequestFactory.getInstance();
 
     @Override
-    public void init() {
-        LOG.trace("initializing controller");
+    public void init(){
         ConnectionPool.instance().init();
     }
 
@@ -39,13 +40,12 @@ public class Controller extends HttpServlet {
     }
 
     @Override
-    public void destroy() {
-        LOG.trace("destroying controller");
+    public void destroy(){
         ConnectionPool.instance().shutDown();
     }
 
     private static void process(HttpServletRequest request, HttpServletResponse response) {
-        final String commandName = request.getParameter(COMMAND_PARAMETER_NAME);
+        final String commandName = request.getParameter(COMMAND_PARAMETER_NAME.getName());
         Command command = Command.of(commandName);
         CommandRequest commandRequest = requestFactory.createCommandRequest(request);
         CommandResponse commandResponse = command.execute(commandRequest);

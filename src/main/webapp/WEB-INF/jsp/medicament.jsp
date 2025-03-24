@@ -9,7 +9,7 @@
 <fmt:message bundle="${medicament}" key="label.country" var="countryMessage"/>
 <fmt:message bundle="${medicament}" key="label.information" var="informationMessage"/>
 <fmt:message bundle="${medicament}" key="label.amount" var="amountMessage"/>
-<fmt:message bundle="${medicament}" key="label.link.page" var="pageMessage"/>
+<fmt:message bundle="${medicament}" key="label.page" var="pageMessage"/>
 <fmt:message bundle="${medicament}" key="label.link.previous" var="previousPageMessage"/>
 <fmt:message bundle="${medicament}" key="label.link.next" var="nextPageMessage"/>
 

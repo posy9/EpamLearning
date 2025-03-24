@@ -1,4 +1,4 @@
-package com.epam.jwd.controller;
+package com.epam.jwd.factory;
 
 import com.epam.jwd.command.CommandResponse;
 

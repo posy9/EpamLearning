@@ -1,7 +1,7 @@
 package com.epam.jwd.command;
 
-import com.epam.jwd.controller.ResponseFactory;
-import com.epam.jwd.controller.SimpleCommandResponseFactory;
+import com.epam.jwd.factory.ResponseFactory;
+import com.epam.jwd.factory.SimpleCommandResponseFactory;
 import com.epam.jwd.model.Medicament;
 import com.epam.jwd.service.MedicamentService;
 import org.apache.logging.log4j.LogManager;
@@ -70,7 +70,7 @@ public class ShowMedicamentPageCommand implements Command {
         } catch (NumberFormatException e) {
             currentPage = 0;
         }
-        if (currentPage!=0 && currentPage <= numberOfPages) {
+        if (currentPage>0 && currentPage <= numberOfPages) {
             request.addSessionAttribute(CURRENT_PAGE.getName(), currentPage);
         }
         else {

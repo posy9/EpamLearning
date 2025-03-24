@@ -4,15 +4,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public enum CommandRegistry {
-    SHOW_MAIN_PAGE(ShowMainPageCommand.getInstance(), "show_main"),
-    SHOW_MEDICAMENT_PAGE(ShowMedicamentPageCommand.getInstance(), "show_medicament"),
-    SHOW_LOGIN_PAGE(ShowLoginPageCommand.getInstance(), "show_login"),
-    SHOW_ERROR_PAGE(ShowErrorPageCommand.getInstance(), "show_error"),
-    LOGIN(LoginCommand.getInstance(), "login"),
-    LOGOUT(LogoutCommand.getInstance(),"logout"),
+    SHOW_MAIN_PAGE_COMMAND(ShowMainPageCommand.getInstance(), "show_main"),
+    SHOW_MEDICAMENT_PAGE_COMMAND(ShowMedicamentPageCommand.getInstance(), "show_medicament"),
+    SHOW_LOGIN_PAGE_COMMAND(ShowLoginPageCommand.getInstance(), "show_login"),
+    LOGIN_COMMAND(LoginCommand.getInstance(), "login"),
+    LOGOUT_COMMAND(LogoutCommand.getInstance(),"logout"),
     SHOW_SIGNUP_PAGE(ShowSignupPageCommand.getInstance(), "show_signup"),
     SIGNUP_COMMAND(SignupCommand.getInstance(), "signup"),
-    DEFAULT(ShowMainPageCommand.getInstance(), "");
+    ERROR_COMMAND(ShowErrorPageCommand.getInstance(), "show_error");
 
     private static final Logger LOG = LogManager.getLogger(CommandRegistry.class);
     private static final String SEARCHING_FOR_COMMAND_MSG = "Searching for command {}";
@@ -36,6 +35,6 @@ public enum CommandRegistry {
             }
         }
         LOG.warn(COMMAND_NOT_FOUND_MSG, name);
-        return DEFAULT.command;
+        return ERROR_COMMAND.command;
     }
 }

@@ -1,7 +1,7 @@
 package com.epam.jwd.command;
 
-import com.epam.jwd.controller.ResponseFactory;
-import com.epam.jwd.controller.SimpleCommandResponseFactory;
+import com.epam.jwd.factory.ResponseFactory;
+import com.epam.jwd.factory.SimpleCommandResponseFactory;
 
 import static com.epam.jwd.command.PagePathsRegistry.MAIN;
 
