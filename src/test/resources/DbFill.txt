@@ -1,0 +1,38 @@
+-- 1. Создание временной таблицы с числами от 1 до 1000
+WITH RECURSIVE numbers AS (
+    SELECT 1 AS id
+    UNION ALL
+    SELECT id + 1 FROM numbers WHERE id < 1000
+)
+SELECT * FROM numbers;  -- Нужно выполнить отдельно!
+
+-- 2. Заполнение таблицы category (1000 строк)
+INSERT INTO category (category_name)
+SELECT CONCAT('Category ', id) FROM (WITH RECURSIVE numbers AS (
+    SELECT 1 AS id
+    UNION ALL
+    SELECT id + 1 FROM numbers WHERE id < 1000
+) SELECT * FROM numbers) AS n;
+
+-- 3. Заполнение таблицы country (1000 строк)
+INSERT INTO country (country_name)
+SELECT CONCAT('Country ', id) FROM (WITH RECURSIVE numbers AS (
+    SELECT 1 AS id
+    UNION ALL
+    SELECT id + 1 FROM numbers WHERE id < 1000
+) SELECT * FROM numbers) AS n;
+
+-- 4. Заполнение таблицы medicament (1000 строк)
+INSERT INTO medicament (m_name, m_price, category_id, country_id, m_information, m_amount)
+SELECT
+    CONCAT('Medicament ', id),
+    ROUND(RAND() * 100, 2),
+    FLOOR(1 + RAND() * 1000),
+    FLOOR(1 + RAND() * 1000),
+    CONCAT('Information about Medicament ', id),
+    FLOOR(RAND() * 500)
+FROM (WITH RECURSIVE numbers AS (
+    SELECT 1 AS id
+    UNION ALL
+    SELECT id + 1 FROM numbers WHERE id < 1000
+) SELECT * FROM numbers) AS n;
