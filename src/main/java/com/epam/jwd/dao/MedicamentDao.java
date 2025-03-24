@@ -53,7 +53,7 @@ public class MedicamentDao extends CommonDao<Medicament> {
         }
     }
 
-    public List<Medicament> findWithLimitAndOffset(int limit, int offset) throws InterruptedException {
+    public List<Medicament> findWithLimitAndOffset(int limit, int offset) {
         List<Medicament> resultMedicamentList = new ArrayList<>();
         try (Connection connection = connectionPool.takeConnection()) {
             PreparedStatement findingPrepared = connection.prepareStatement(STATEMENT_FOR_FINDING_WITH_OFFSET_AND_LIMIT);
@@ -70,7 +70,7 @@ public class MedicamentDao extends CommonDao<Medicament> {
                        ));
            }
            return resultMedicamentList;
-        } catch (SQLException e) {
+        } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

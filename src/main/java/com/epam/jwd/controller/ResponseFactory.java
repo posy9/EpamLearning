@@ -4,5 +4,7 @@ import com.epam.jwd.command.CommandResponse;
 
 public interface ResponseFactory {
 
-    CommandResponse createCommandResponse(String path);
+    CommandResponse createForwardResponse(String path);
+
+    CommandResponse createRedirectResponse(String path);
 }

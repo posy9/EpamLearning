@@ -18,10 +18,17 @@ public class SimpleCommandResponseFactory implements ResponseFactory {
         return Holder.INSTANCE;
     }
 
-    private final Map<String, CommandResponse> existingResponses= new ConcurrentHashMap<>();
+    private final Map<String, CommandResponse> existingForwardResponses= new ConcurrentHashMap<>();
+    private final Map<String, CommandResponse> existingRedirectResponses= new ConcurrentHashMap<>();
+
 
     @Override
-    public CommandResponse createCommandResponse(String path) {
-        return existingResponses.computeIfAbsent(path, k -> new SimpleCommandResponse(path));
+    public CommandResponse createRedirectResponse(String path) {
+        return existingRedirectResponses.computeIfAbsent(path, k -> new SimpleCommandResponse(path,true));
+    }
+
+    @Override
+    public CommandResponse createForwardResponse(String path) {
+        return existingForwardResponses.computeIfAbsent(path, k -> new SimpleCommandResponse(path,false));
     }
 }

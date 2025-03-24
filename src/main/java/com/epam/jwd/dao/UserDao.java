@@ -29,13 +29,13 @@ public class UserDao extends CommonDao<User> {
     }
 
     @Override
-    public Optional<User> create(User user) throws InterruptedException {
+    public Optional<User> create(User user) {
         try (Connection connection = connectionPool.takeConnection()) {
             PreparedStatement creationPrepared = connection.prepareStatement(STATEMENT_FOR_CREATION);
             creationPrepared.setString(1, user.getLogin());
             creationPrepared.setString(2, user.getPassword());
             creationPrepared.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
         return readUserByLogin(user.getLogin());
@@ -46,7 +46,7 @@ public class UserDao extends CommonDao<User> {
         return List.of();
     }
 
-    public Optional<User> readUserByLogin(String login) throws InterruptedException {
+    public Optional<User> readUserByLogin(String login)  {
         try (Connection connection = connectionPool.takeConnection()) {
             PreparedStatement readingPrepared = connection.prepareStatement(STATEMENT_FOR_READING_BY_LOGIN);
             readingPrepared.setString(1, login);
@@ -54,7 +54,7 @@ public class UserDao extends CommonDao<User> {
             if (resultSet.next()) {
                 return Optional.of(new User(resultSet.getString("login"), resultSet.getString("pass")).withId(resultSet.getInt("id")));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
         return Optional.empty();

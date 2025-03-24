@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 @WebServlet("/controller")
 public class Controller extends HttpServlet {
 
-    private static final String COMMAND_PARAM_NAME = "command";
+    public static final String COMMAND_PARAMETER_NAME = "command";
     private static final Logger LOG = LogManager.getLogger(Controller.class);
 
     private static final RequestFactory requestFactory = RequestFactory.getInstance();
@@ -45,13 +45,17 @@ public class Controller extends HttpServlet {
     }
 
     private static void process(HttpServletRequest request, HttpServletResponse response) {
-        final String commandName = request.getParameter(COMMAND_PARAM_NAME);
+        final String commandName = request.getParameter(COMMAND_PARAMETER_NAME);
         Command command = Command.of(commandName);
         CommandRequest commandRequest = requestFactory.createCommandRequest(request);
         CommandResponse commandResponse = command.execute(commandRequest);
         try {
-            RequestDispatcher dispatcher = request.getRequestDispatcher(commandResponse.getPath());
-            dispatcher.forward(request, response);
+            if (commandResponse.isRedirect()){
+                response.sendRedirect(commandResponse.getPath());
+            } else {
+                RequestDispatcher dispatcher = request.getRequestDispatcher(commandResponse.getPath());
+                dispatcher.forward(request, response);
+            }
         } catch (ServletException e) {
             LOG.error("Servlet exception", e);
         } catch (IOException e) {

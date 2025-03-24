@@ -4,19 +4,25 @@ import com.epam.jwd.controller.ResponseFactory;
 import com.epam.jwd.controller.SimpleCommandResponseFactory;
 import com.epam.jwd.model.User;
 import com.epam.jwd.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
+import static com.epam.jwd.command.PagePathsRegistry.INDEX;
+import static com.epam.jwd.command.PagePathsRegistry.LOGIN;
 import static com.epam.jwd.command.ParameterNameRegistry.LOGIN_PARAMETER_NAME;
 import static com.epam.jwd.command.ParameterNameRegistry.PASSWORD_PARAMETER_NAME;
-import static com.epam.jwd.command.ShowMainPageCommand.PATH_TO_MAIN_PAGE;
-
+import static com.epam.jwd.command.RequestAttributeRegistry.ERROR_LOGIN_PASSWORD;
+import static com.epam.jwd.command.SessionAttributeRegistry.USER;
 
 public class LoginCommand implements Command {
 
-    private static final String ERROR_LOGIN_PASS_ATTRIBUTE_NAME = "errorLoginPassMessage";
     private static final String ERROR_LOGIN_PASS_ATTRIBUTE_VALUE = "Wrong password or login";
-    private static final String USER_SESSION_ATTRIBUTE_NAME = "user";
+    private static final String USER_ALREADY_LOGGED_IN_MSG = "User already logged in";
+    private static final String USER_AUTHENTICATION_MSG = "Authenticating user";
+    private static final String USER_NOT_AUTHENTICATED_MSG = "User not authenticated";
+    private static final Logger LOG = LogManager.getLogger(LoginCommand.class);
 
     private final ResponseFactory responseFactory = SimpleCommandResponseFactory.getInstance();
 
@@ -34,23 +40,25 @@ public class LoginCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest commandRequest) {
-        if (commandRequest.sessionExists() && commandRequest.retrieveFromSession(USER_SESSION_ATTRIBUTE_NAME).isPresent()) {
-            return responseFactory.createCommandResponse(PATH_TO_MAIN_PAGE);
+
+        if (commandRequest.sessionExists() && commandRequest.retrieveFromSession(USER.getName()).isPresent()) {
+            LOG.error(USER_ALREADY_LOGGED_IN_MSG);
+            return responseFactory.createRedirectResponse(INDEX.getPath());
         }
-        final String login = commandRequest.getParameter(LOGIN_PARAMETER_NAME.getName());
-        final String password = commandRequest.getParameter(PASSWORD_PARAMETER_NAME.getName());
-        final Optional<User> user;
-        try {
-            user = userService.authenticate(login, password);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
+        String login = commandRequest.getParameter(LOGIN_PARAMETER_NAME.getName());
+        String password = commandRequest.getParameter(PASSWORD_PARAMETER_NAME.getName());
+
+        LOG.trace(USER_AUTHENTICATION_MSG);
+        Optional<User> user = userService.authenticate(login, password);
+
         if (user.isEmpty()) {
-            commandRequest.addRequestAttribute(ERROR_LOGIN_PASS_ATTRIBUTE_NAME, ERROR_LOGIN_PASS_ATTRIBUTE_VALUE);
-            return responseFactory.createCommandResponse(ShowLoginPageCommand.PATH_TO_LOGIN_PAGE);
+            LOG.error(USER_NOT_AUTHENTICATED_MSG);
+            commandRequest.addRequestAttribute(ERROR_LOGIN_PASSWORD.getName(), ERROR_LOGIN_PASS_ATTRIBUTE_VALUE);
+            return responseFactory.createForwardResponse(LOGIN.getPath());
         }
         commandRequest.createSession();
-        commandRequest.addSessionAttribute(USER_SESSION_ATTRIBUTE_NAME, user.get());
-        return responseFactory.createCommandResponse(ShowMainPageCommand.PATH_TO_MAIN_PAGE);
+        commandRequest.addSessionAttribute(USER.getName(), user.get());
+        return responseFactory.createRedirectResponse(INDEX.getPath());
     }
 }

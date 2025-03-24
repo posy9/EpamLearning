@@ -15,7 +15,7 @@ public class UserService {
     private static final Logger LOG = LogManager.getLogger(UserService.class);
     private final UserDao userDao = UserDao.getInstance();
 
-    public Optional<User> createUser(User user) throws InterruptedException {
+    public Optional<User> createUser(User user)  {
         if(userDao.readUserByLogin(user.getLogin()).isPresent()) {
             return Optional.empty();
         }
@@ -25,7 +25,7 @@ public class UserService {
         }
     }
 
-    public Optional<User> authenticate(String login, String password) throws InterruptedException {
+    public Optional<User> authenticate(String login, String password)  {
         LOG.trace("authenticating user");
         if (login == null || password == null) {
             return Optional.empty();

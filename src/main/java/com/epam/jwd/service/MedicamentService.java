@@ -13,7 +13,7 @@ public class MedicamentService {
         return medicamentDao.countAll();
     }
 
-    public List<Medicament> findForNextPage(int pageNumber) throws InterruptedException {
+    public List<Medicament> findForNextPage(int pageNumber)  {
         int offset = (pageNumber-1)*QUANTITY_OF_MEDICAMENT_ON_PAGE;
         return medicamentDao.findWithLimitAndOffset(QUANTITY_OF_MEDICAMENT_ON_PAGE,offset);
     }

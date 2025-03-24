@@ -3,9 +3,10 @@ package com.epam.jwd.command;
 import com.epam.jwd.controller.ResponseFactory;
 import com.epam.jwd.controller.SimpleCommandResponseFactory;
 
+import static com.epam.jwd.command.PagePathsRegistry.MAIN;
+
 public class ShowMainPageCommand implements Command {
 
-    public static final String PATH_TO_MAIN_PAGE = "/WEB-INF/jsp/main.jsp";
     private final ResponseFactory responseFactory = SimpleCommandResponseFactory.getInstance();
 
     private ShowMainPageCommand() {}
@@ -20,6 +21,6 @@ public class ShowMainPageCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest request) {
-        return responseFactory.createCommandResponse(PATH_TO_MAIN_PAGE);
+        return responseFactory.createForwardResponse(MAIN.getPath());
     }
 }

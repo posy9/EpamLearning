@@ -3,9 +3,10 @@ package com.epam.jwd.command;
 import com.epam.jwd.controller.ResponseFactory;
 import com.epam.jwd.controller.SimpleCommandResponseFactory;
 
-public class ShowSignupPageCommand implements Command {
+import static com.epam.jwd.command.PagePathsRegistry.SIGNUP;
 
-    public static final String PATH_TO_SIGNUP_PAGE = "/WEB-INF/jsp/signup.jsp";
+
+public class ShowSignupPageCommand implements Command {
 
     private final ResponseFactory responseFactory = SimpleCommandResponseFactory.getInstance();
 
@@ -21,6 +22,6 @@ public class ShowSignupPageCommand implements Command {
 
     @Override
     public CommandResponse execute(CommandRequest request) {
-        return responseFactory.createCommandResponse(PATH_TO_SIGNUP_PAGE);
+        return responseFactory.createForwardResponse(SIGNUP.getPath());
     }
 }
