@@ -6,7 +6,7 @@ public class MainWebInitializer extends AbstractAnnotationConfigDispatcherServle
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[0];
+        return new Class[]{DataSourceConfig.class};
     }
 
     @Override

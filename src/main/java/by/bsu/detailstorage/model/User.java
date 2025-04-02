@@ -1,0 +1,22 @@
+package by.bsu.detailstorage.model;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "user")
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "login", length = 30, nullable = false, unique = true)
+    private String login;
+
+    @Column(name = "pass", length = 100, nullable = false)
+    private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+}

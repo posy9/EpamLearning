@@ -1,0 +1,20 @@
+package by.bsu.detailstorage.model;
+
+import jakarta.persistence.*;
+
+import java.util.List;
+
+@Entity
+@Table(name = "role")
+public class Role {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name", length = 15, nullable = false, unique = true)
+    private String name;
+
+    @OneToMany(mappedBy = "role")
+    private List<User> users;
+}
