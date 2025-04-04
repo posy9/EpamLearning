@@ -1,13 +1,14 @@
 package by.bsu.detailstorage.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "brand")
-@Getter
+@Data
 public class Brand {
 
     @Id

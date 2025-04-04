@@ -1,7 +1,9 @@
 plugins {
     id 'java'
     id 'war'
+    id("io.freefair.lombok") version "8.13.1"
 }
+
 
 group = 'by.bsu'
 version = '1.0-SNAPSHOT'
@@ -26,7 +28,15 @@ dependencies {
     implementation 'org.springframework:spring-tx:6.2.5'
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
     implementation 'org.springframework.data:spring-data-jpa:3.4.4'
+    implementation 'org.modelmapper:modelmapper:3.2.2'
     compileOnly 'org.projectlombok:lombok:1.18.36'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.18.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
+    implementation 'org.hibernate.validator:hibernate-validator:8.0.2.Final'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << "-parameters"
 }
 
 test {

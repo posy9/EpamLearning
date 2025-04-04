@@ -1,11 +1,13 @@
 package by.bsu.detailstorage.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
 
 @Entity
 @Table(name = "category")
+@Data
 public class Category {
 
     @Id
