@@ -21,8 +21,8 @@ public final class DeviceRepository extends CommonRepository<Device> {
             DEVICE.getEntityName(), DEVICE_ALIAS);
 
     @Override
-    public Device findById(Long id) {
-        return entityManager.find(Device.class, id);
+    public Optional<Device> findById(Long id) {
+        return Optional.of(entityManager.find(Device.class, id));
     }
 
     @Override

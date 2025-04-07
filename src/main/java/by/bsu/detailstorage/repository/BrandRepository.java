@@ -5,13 +5,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public final class BrandRepository extends CommonRepository<Brand> {
 
     @Override
-    public Brand findById(Long id) {
-        return entityManager.find(Brand.class, id);
+    public Optional<Brand> findById(Long id) {
+        return Optional.of(entityManager.find(Brand.class, id));
     }
 
     @Override

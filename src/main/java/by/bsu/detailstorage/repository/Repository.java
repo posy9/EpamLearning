@@ -13,7 +13,7 @@ public interface Repository<T> {
     T create(T entity);
 
 
-    T findById(Long id);
+    Optional<T> findById(Long id);
 
 
     T update(T entity);

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static by.bsu.detailstorage.registry.EntityNameRegistry.DETAIL;
 import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.ENTITY_NOT_FOUND;
@@ -30,9 +31,9 @@ public class DetailService {
     }
 
     public Detail findById(Long id) {
-        Detail detail = detailRepository.findById(id);
-        if (detail != null) {
-            return detailRepository.findById(id);
+        Optional<Detail> foundDetail = detailRepository.findById(id);
+        if (foundDetail.isPresent()) {
+            return foundDetail.get();
         }
         else {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), DETAIL.getEntityName(), id));
@@ -52,7 +53,7 @@ public class DetailService {
     }
 
     public Detail updateDetail(long id, Detail detail) {
-        if (detailRepository.findById(id) != null) {
+        if (detailRepository.findById(id).isPresent()) {
             detail.setId(id);
             return detailRepository.update(detail);
         }
@@ -63,9 +64,9 @@ public class DetailService {
     }
 
     public void deleteDetail(long id) {
-        Detail detailForDelete = detailRepository.findById(id);
-        if (detailForDelete != null) {
-            detailRepository.delete(detailForDelete);
+        Optional<Detail> detailForDelete = detailRepository.findById(id);
+        if (detailForDelete.isPresent()) {
+            detailRepository.delete(detailForDelete.get());
         }
         else {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), DETAIL.getEntityName(), id));

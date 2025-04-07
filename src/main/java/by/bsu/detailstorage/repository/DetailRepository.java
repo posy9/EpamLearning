@@ -21,8 +21,8 @@ public final class DetailRepository extends CommonRepository<Detail> {
             DETAIL.getEntityName(), DETAIL_ALIAS);
 
     @Override
-    public Detail findById(Long id) {
-        return entityManager.find(Detail.class, id);
+    public Optional<Detail> findById(Long id) {
+        return Optional.of(entityManager.find(Detail.class, id));
     }
 
     @Override
