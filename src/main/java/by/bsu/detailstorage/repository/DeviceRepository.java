@@ -1,6 +1,6 @@
 package by.bsu.detailstorage.repository;
 
-import by.bsu.detailstorage.model.Detail;
+import by.bsu.detailstorage.model.Device;
 import jakarta.persistence.TypedQuery;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -10,25 +10,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static by.bsu.detailstorage.registry.EntityNameRegistry.DETAIL;
+import static by.bsu.detailstorage.registry.EntityNameRegistry.DEVICE;
 
 @Repository
-public final class DetailRepository extends CommonRepository<Detail> {
+public final class DeviceRepository extends CommonRepository<Device> {
 
-    private static final String DETAIL_ALIAS = "d";
-    private static final String FIELD_NAME = "name";
-    private static final String SELECT_DETAIL_STATEMENT = String.format(SELECT_FROM,DETAIL_ALIAS,
-            DETAIL.getEntityName(), DETAIL_ALIAS);
+
+    private static final String DEVICE_ALIAS = "d";
+    private static final String SELECT_DEVICE_STATEMENT = String.format(SELECT_FROM,DEVICE_ALIAS,
+            DEVICE.getEntityName(), DEVICE_ALIAS);
 
     @Override
-    public Detail findById(Long id) {
-        return entityManager.find(Detail.class, id);
+    public Device findById(Long id) {
+        return entityManager.find(Device.class, id);
     }
 
     @Override
-    public List<Detail>  readMultiple(Pageable pageable) {
+    public List<Device>  readMultiple(Pageable pageable) {
         String resultStatementPrepared = getResultStatement(pageable);
-        TypedQuery<Detail> query = entityManager.createQuery(resultStatementPrepared, Detail.class)
+        TypedQuery<Device> query = entityManager.createQuery(resultStatementPrepared, Device.class)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize());
         return query.getResultList();
@@ -39,16 +39,15 @@ public final class DetailRepository extends CommonRepository<Detail> {
             return makeStatementWithGroupBy(pageable);
         }
         else{
-            return SELECT_DETAIL_STATEMENT;
+            return SELECT_DEVICE_STATEMENT;
         }
     }
 
     private String makeStatementWithGroupBy(Pageable pageable) {
         List<String> orders = new ArrayList<>();
         for (Sort.Order sort : pageable.getSort()) {
-            orders.add(DETAIL_ALIAS + DOT + sort.getProperty() + SPACE + sort.getDirection());
+            orders.add(DEVICE_ALIAS + DOT + sort.getProperty() + SPACE + sort.getDirection());
         }
-        return SELECT_DETAIL_STATEMENT + SPACE + ORDER_BY + SPACE + String.join(COMMA + SPACE, orders);
+        return SELECT_DEVICE_STATEMENT + SPACE + ORDER_BY + SPACE + String.join(COMMA + SPACE, orders);
     }
-
 }

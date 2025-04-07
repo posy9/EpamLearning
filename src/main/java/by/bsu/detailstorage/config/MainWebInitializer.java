@@ -18,4 +18,5 @@ public class MainWebInitializer extends AbstractAnnotationConfigDispatcherServle
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
+
 }

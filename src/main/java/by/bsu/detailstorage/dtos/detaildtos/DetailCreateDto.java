@@ -4,7 +4,6 @@ import by.bsu.detailstorage.dtos.countrydtos.CountryReadDto;
 import by.bsu.detailstorage.dtos.devicedtos.DeviceReadDto;
 import by.bsu.detailstorage.dtos.typedtos.TypeReadDto;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
