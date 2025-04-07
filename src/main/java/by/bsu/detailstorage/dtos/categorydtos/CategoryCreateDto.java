@@ -8,5 +8,4 @@ public class CategoryCreateDto {
 
     @NotBlank(message = "should not be empty")
     private String name;
-
 }

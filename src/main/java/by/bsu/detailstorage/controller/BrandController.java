@@ -5,6 +5,7 @@ import by.bsu.detailstorage.dtos.branddtos.BrandReadDto;
 import by.bsu.detailstorage.model.Brand;
 import by.bsu.detailstorage.service.BrandService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,15 +16,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/brands")
+@RequiredArgsConstructor
 public class BrandController {
     private final BrandService brandService;
     private final ModelMapper modelMapper;
-
-    @Autowired
-    public BrandController(BrandService brandService, ModelMapper modelMapper) {
-        this.brandService = brandService;
-        this.modelMapper = modelMapper;
-    }
 
     @GetMapping
     List<BrandReadDto> getAllBrands() {

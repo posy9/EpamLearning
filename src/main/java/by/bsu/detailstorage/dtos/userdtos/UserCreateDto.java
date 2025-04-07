@@ -1,6 +1,5 @@
 package by.bsu.detailstorage.dtos.userdtos;
 
-import by.bsu.detailstorage.dtos.roledtos.RoleCreateDto;
 import by.bsu.detailstorage.dtos.roledtos.RoleReadDto;
 import lombok.Data;
 

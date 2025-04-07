@@ -3,8 +3,6 @@ package by.bsu.detailstorage.dtos.branddtos;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-
-
 @Data
 public class BrandReadDto {
 
@@ -12,5 +10,4 @@ public class BrandReadDto {
     private Long id;
 
     private String name;
-
 }

@@ -1,10 +1,11 @@
 package by.bsu.detailstorage.service;
 
-import by.bsu.detailstorage.exception.IllegalEntityRemovingException;
+import by.bsu.detailstorage.exception.IllegalEntityRemoveException;
 import by.bsu.detailstorage.model.Brand;
 import by.bsu.detailstorage.repository.BrandRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +18,10 @@ import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class BrandService implements AbstractUtilityEntitiesService<Brand> {
 
     private final BrandRepository brandRepository;
-
-    public BrandService(BrandRepository brandRepository) {
-        this.brandRepository = brandRepository;
-    }
 
     @Override
     public Brand findById(long id) {
@@ -66,7 +64,7 @@ public class BrandService implements AbstractUtilityEntitiesService<Brand> {
             if (!hasDependencies(brand)) {
                 brandRepository.delete(brand);
             } else {
-                throw new IllegalEntityRemovingException(String.format(ENTITY_WITH_DEPENDENCIES
+                throw new IllegalEntityRemoveException(String.format(ENTITY_WITH_DEPENDENCIES
                         .getMessage(), brand.getName(), brand.getId()));
             }
         } else {
@@ -87,5 +85,4 @@ public class BrandService implements AbstractUtilityEntitiesService<Brand> {
     private boolean hasDependencies(Brand brand) {
         return !brand.getDevices().isEmpty();
     }
-
 }

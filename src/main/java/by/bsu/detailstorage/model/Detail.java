@@ -3,7 +3,6 @@ package by.bsu.detailstorage.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-
 @Entity
 @Table(name="detail")
 @Data
@@ -30,8 +29,4 @@ public class Detail {
 
     @Column(name = "amount", nullable = false)
     private int amount;
-
-
-
-
 }

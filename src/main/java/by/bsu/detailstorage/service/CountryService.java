@@ -1,10 +1,11 @@
 package by.bsu.detailstorage.service;
 
-import by.bsu.detailstorage.exception.IllegalEntityRemovingException;
+import by.bsu.detailstorage.exception.IllegalEntityRemoveException;
 import by.bsu.detailstorage.model.Country;
 import by.bsu.detailstorage.repository.CountryRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +18,10 @@ import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class CountryService implements AbstractUtilityEntitiesService<Country> {
 
     private final CountryRepository countryRepository;
-
-    public CountryService(CountryRepository countryRepository) {
-        this.countryRepository = countryRepository;
-    }
 
     @Override
     public Country findById(long id) {
@@ -66,7 +64,7 @@ public class CountryService implements AbstractUtilityEntitiesService<Country> {
             if (!hasDependencies(country)) {
                 countryRepository.delete(country);
             } else {
-                throw new IllegalEntityRemovingException(String.format(ENTITY_WITH_DEPENDENCIES
+                throw new IllegalEntityRemoveException(String.format(ENTITY_WITH_DEPENDENCIES
                         .getMessage(), country.getName(), country.getId()));
             }
         } else {

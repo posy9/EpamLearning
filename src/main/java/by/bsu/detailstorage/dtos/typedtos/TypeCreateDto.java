@@ -8,5 +8,4 @@ public class TypeCreateDto {
 
     @NotBlank(message = "should not be empty")
     private String name;
-
 }

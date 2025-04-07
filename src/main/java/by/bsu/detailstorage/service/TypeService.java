@@ -1,10 +1,11 @@
 package by.bsu.detailstorage.service;
 
-import by.bsu.detailstorage.exception.IllegalEntityRemovingException;
+import by.bsu.detailstorage.exception.IllegalEntityRemoveException;
 import by.bsu.detailstorage.model.Type;
 import by.bsu.detailstorage.repository.TypeRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +18,10 @@ import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class TypeService implements AbstractUtilityEntitiesService<Type> {
 
     private final TypeRepository typeRepository;
-
-    public TypeService(TypeRepository typeRepository) {
-        this.typeRepository = typeRepository;
-    }
 
     @Override
     public Type findById(long id) {
@@ -66,7 +64,7 @@ public class TypeService implements AbstractUtilityEntitiesService<Type> {
             if (!hasDependencies(type)) {
                 typeRepository.delete(type);
             } else {
-                throw new IllegalEntityRemovingException(String.format(ENTITY_WITH_DEPENDENCIES
+                throw new IllegalEntityRemoveException(String.format(ENTITY_WITH_DEPENDENCIES
                         .getMessage(), type.getName(), type.getId()));
             }
         } else {

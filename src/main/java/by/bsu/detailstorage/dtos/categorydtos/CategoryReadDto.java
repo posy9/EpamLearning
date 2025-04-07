@@ -8,5 +8,4 @@ public class CategoryReadDto {
     private Long id;
 
     private String name;
-
 }

@@ -2,7 +2,6 @@ package by.bsu.detailstorage.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 
 import java.util.List;
 
@@ -20,5 +19,4 @@ public class Brand {
 
     @OneToMany(mappedBy = "brand")
     private List<Device> devices;
-
 }

@@ -26,5 +26,4 @@ public final class TypeRepository extends CommonRepository<Type> {
         TypedQuery<Type> query = entityManager.createQuery(SELECT_TYPE_STATEMENT, Type.class);
         return query.getResultList();
     }
-
 }

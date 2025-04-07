@@ -26,6 +26,4 @@ public final class CategoryRepository extends CommonRepository<Category> {
         TypedQuery<Category> query = entityManager.createQuery(SELECT_CATEGORY_STATEMENT, Category.class);
         return query.getResultList();
     }
-
-
 }

@@ -5,6 +5,7 @@ import by.bsu.detailstorage.dtos.categorydtos.CategoryReadDto;
 import by.bsu.detailstorage.model.Category;
 import by.bsu.detailstorage.service.CategoryService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,15 +16,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/categories")
+@RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
     private final ModelMapper modelMapper;
-
-    @Autowired
-    public CategoryController(CategoryService categoryService, ModelMapper modelMapper) {
-        this.categoryService = categoryService;
-        this.modelMapper = modelMapper;
-    }
 
     @GetMapping
     List<CategoryReadDto> getAllCategories() {

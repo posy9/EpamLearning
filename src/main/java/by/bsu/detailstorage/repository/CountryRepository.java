@@ -26,5 +26,4 @@ public final class CountryRepository extends CommonRepository<Country> {
         TypedQuery<Country> query = entityManager.createQuery(SELECT_COUNTRY_STATEMENT, Country.class);
         return query.getResultList();
     }
-
 }

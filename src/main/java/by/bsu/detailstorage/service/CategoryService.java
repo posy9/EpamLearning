@@ -1,10 +1,11 @@
 package by.bsu.detailstorage.service;
 
-import by.bsu.detailstorage.exception.IllegalEntityRemovingException;
+import by.bsu.detailstorage.exception.IllegalEntityRemoveException;
 import by.bsu.detailstorage.model.Category;
 import by.bsu.detailstorage.repository.CategoryRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +18,10 @@ import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class CategoryService implements AbstractUtilityEntitiesService<Category> {
 
     private final CategoryRepository categoryRepository;
-
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
 
     @Override
     public Category findById(long id) {
@@ -68,7 +66,7 @@ public class CategoryService implements AbstractUtilityEntitiesService<Category>
             if(!hasDependencies(category)){
                 categoryRepository.delete(category);
             } else {
-                throw new IllegalEntityRemovingException(String.format(ENTITY_WITH_DEPENDENCIES
+                throw new IllegalEntityRemoveException(String.format(ENTITY_WITH_DEPENDENCIES
                         .getMessage(),category.getName(),category.getId()));
             }
         }
@@ -91,5 +89,4 @@ public class CategoryService implements AbstractUtilityEntitiesService<Category>
     private boolean hasDependencies(Category category) {
         return !category.getDevices().isEmpty();
     }
-
 }

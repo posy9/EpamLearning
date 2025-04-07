@@ -19,5 +19,4 @@ public class DeviceCreateDto {
 
     @NotNull(message = "should not be null")
     private CategoryReadDto category;
-
 }

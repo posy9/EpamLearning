@@ -6,6 +6,4 @@ import lombok.Data;
 public class BrandCreateDto {
 
     private String name;
-
-
 }

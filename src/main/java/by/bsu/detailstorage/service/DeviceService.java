@@ -1,22 +1,19 @@
 package by.bsu.detailstorage.service;
 
-import by.bsu.detailstorage.exception.IllegalEntityRemovingException;
+import by.bsu.detailstorage.exception.IllegalEntityRemoveException;
 import by.bsu.detailstorage.model.Brand;
-import by.bsu.detailstorage.model.Category;
-import by.bsu.detailstorage.model.Detail;
 import by.bsu.detailstorage.model.Device;
 import by.bsu.detailstorage.repository.BrandRepository;
 import by.bsu.detailstorage.repository.DeviceRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,18 +22,12 @@ import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class DeviceService implements AbstractService<Device> {
 
     private static final String SPACE = " ";
     private final DeviceRepository deviceRepository;
     private final BrandRepository brandRepository;
-
-    @Autowired
-    public DeviceService(DeviceRepository deviceRepository, BrandRepository brandRepository) {
-        this.deviceRepository = deviceRepository;
-        this.brandRepository = brandRepository;
-    }
-
 
     @Override
     public Device createEntity(Device device) {
@@ -70,7 +61,7 @@ public class DeviceService implements AbstractService<Device> {
             if(!hasDependencies(device)) {
                 deviceRepository.delete(device);
             } else {
-                throw new IllegalEntityRemovingException(String.format(ENTITY_WITH_DEPENDENCIES
+                throw new IllegalEntityRemoveException(String.format(ENTITY_WITH_DEPENDENCIES
                         .getMessage(), device.getBrand().getName() + SPACE + device.getModel(), device.getId()));
             }
         }

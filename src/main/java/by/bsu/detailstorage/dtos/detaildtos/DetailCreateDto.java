@@ -9,8 +9,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
-
-
 @Data
 public class DetailCreateDto {
 
@@ -31,8 +29,4 @@ public class DetailCreateDto {
 
     @PositiveOrZero(message = "should be non-negative")
     private int amount;
-
-
-
-
 }

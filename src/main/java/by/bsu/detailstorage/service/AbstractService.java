@@ -1,7 +1,5 @@
 package by.bsu.detailstorage.service;
 
-import jakarta.transaction.Transactional;
-
 public interface AbstractService<T> {
 
     T findById(long id);

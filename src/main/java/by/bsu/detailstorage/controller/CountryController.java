@@ -5,6 +5,7 @@ import by.bsu.detailstorage.dtos.countrydtos.CountryReadDto;
 import by.bsu.detailstorage.model.Country;
 import by.bsu.detailstorage.service.CountryService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,15 +16,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/countries")
+@RequiredArgsConstructor
 public class CountryController {
     private final CountryService countryService;
     private final ModelMapper modelMapper;
-
-    @Autowired
-    public CountryController(CountryService countryService, ModelMapper modelMapper) {
-        this.countryService = countryService;
-        this.modelMapper = modelMapper;
-    }
 
     @GetMapping
     List<CountryReadDto> getAllCountries() {

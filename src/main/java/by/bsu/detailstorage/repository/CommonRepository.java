@@ -1,14 +1,9 @@
 package by.bsu.detailstorage.repository;
 
-import by.bsu.detailstorage.model.Detail;
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
 
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.dao.DataIntegrityViolationException;
-
 
 public abstract class CommonRepository<T> implements Repository<T> {
 
@@ -21,7 +16,6 @@ public abstract class CommonRepository<T> implements Repository<T> {
     protected static final String COMMA = ",";
     protected static final String ORDER_BY = "ORDER BY";
     protected static final String DOT = ".";
-    protected static final String EQUALS = "=";
 
     @Override
     public T create(T entity) throws ConstraintViolationException {

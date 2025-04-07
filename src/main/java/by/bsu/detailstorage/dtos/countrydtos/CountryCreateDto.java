@@ -8,5 +8,4 @@ public class CountryCreateDto {
 
     @NotBlank(message = "should not be empty")
     private String name;
-
 }

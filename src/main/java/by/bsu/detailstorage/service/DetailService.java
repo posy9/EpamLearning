@@ -5,6 +5,7 @@ import by.bsu.detailstorage.model.Detail;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,15 +22,10 @@ import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class DetailService implements AbstractService<Detail> {
 
     private final DetailRepository detailRepository;
-
-
-    @Autowired
-    public DetailService(DetailRepository detailRepository) {
-        this.detailRepository = detailRepository;
-    }
 
     @Override
     public Detail findById(long id) {

@@ -1,6 +1,5 @@
 package by.bsu.detailstorage.repository;
 
-import by.bsu.detailstorage.model.Category;
 import by.bsu.detailstorage.model.Device;
 import jakarta.persistence.TypedQuery;
 import org.springframework.data.domain.Pageable;

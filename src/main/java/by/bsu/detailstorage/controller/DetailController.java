@@ -19,7 +19,6 @@ import java.util.List;
 @RequestMapping(value ="/details",consumes = {"application/json"}, produces = {"application/json"})
 @RequiredArgsConstructor
 public class DetailController {
-
     private final DetailService detailService;
     private final ModelMapper modelMapper;
 
@@ -58,6 +57,4 @@ public class DetailController {
         detailService.deleteEntity(id);
         return ResponseEntity.noContent().build();
     }
-
-
 }

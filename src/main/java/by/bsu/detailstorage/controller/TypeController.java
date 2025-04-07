@@ -5,6 +5,7 @@ import by.bsu.detailstorage.dtos.typedtos.TypeReadDto;
 import by.bsu.detailstorage.model.Type;
 import by.bsu.detailstorage.service.TypeService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,15 +16,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/types")
+@RequiredArgsConstructor
 public class TypeController {
     private final TypeService typeService;
     private final ModelMapper modelMapper;
-
-    @Autowired
-    public TypeController(TypeService typeService, ModelMapper modelMapper) {
-        this.typeService = typeService;
-        this.modelMapper = modelMapper;
-    }
 
     @GetMapping
     List<TypeReadDto> getAllTypes() {

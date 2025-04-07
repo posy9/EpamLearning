@@ -1,6 +1,5 @@
 package by.bsu.detailstorage.dtos.countrydtos;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -11,5 +10,4 @@ public class CountryReadDto {
     private Long id;
 
     private String name;
-
 }

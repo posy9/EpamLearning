@@ -3,7 +3,6 @@ package by.bsu.detailstorage.dtos.devicedtos;
 import by.bsu.detailstorage.dtos.branddtos.BrandReadDto;
 import by.bsu.detailstorage.dtos.categorydtos.CategoryReadDto;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -19,5 +18,4 @@ public class DeviceReadDto {
     private String model;
 
     private CategoryReadDto category;
-
 }

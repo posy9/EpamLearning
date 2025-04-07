@@ -19,7 +19,6 @@ import java.util.List;
 @RequestMapping("/devices")
 @RequiredArgsConstructor
 public class DeviceController {
-
     private final DeviceService deviceService;
     private final ModelMapper modelMapper;
 
@@ -58,5 +57,4 @@ public class DeviceController {
         deviceService.deleteEntity(id);
         return ResponseEntity.noContent().build();
     }
-
 }

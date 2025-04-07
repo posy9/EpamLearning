@@ -5,7 +5,6 @@ import by.bsu.detailstorage.dtos.devicedtos.DeviceReadDto;
 import by.bsu.detailstorage.dtos.typedtos.TypeReadDto;
 import lombok.Data;
 
-
 @Data
 public class DetailReadDto {
 
@@ -20,8 +19,4 @@ public class DetailReadDto {
     private CountryReadDto country;
 
     private int amount;
-
-
-
-
 }

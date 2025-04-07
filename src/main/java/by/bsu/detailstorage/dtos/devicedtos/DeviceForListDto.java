@@ -14,5 +14,4 @@ public class DeviceForListDto {
     private String model;
 
     private CategoryReadDto category;
-
 }
