@@ -7,7 +7,11 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum EntityNameRegistry {
     DETAIL("Detail"),
-    DEVICE("Device");
+    DEVICE("Device"),
+    CATEGORY("Category"),
+    TYPE("Type"),
+    COUNTRY("Country"),
+    BRAND("Brand"),;
 
     private final String entityName;
 }

@@ -7,6 +7,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,12 +16,12 @@ import java.util.List;
 import java.util.Optional;
 
 import static by.bsu.detailstorage.registry.EntityNameRegistry.DETAIL;
-import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.ENTITY_NOT_FOUND;
+import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
 
 @Service
 @Transactional
-public class DetailService {
+public class DetailService implements AbstractService<Detail> {
 
     private final DetailRepository detailRepository;
 
@@ -30,7 +31,8 @@ public class DetailService {
         this.detailRepository = detailRepository;
     }
 
-    public Detail findById(Long id) {
+    @Override
+    public Detail findById(long id) {
         Optional<Detail> foundDetail = detailRepository.findById(id);
         if (foundDetail.isPresent()) {
             return foundDetail.get();
@@ -40,22 +42,30 @@ public class DetailService {
         }
     }
 
-
-    public Detail createDetail(Detail detail) {
+    @Override
+    public Detail createEntity(Detail detail) {
         detail.setName(detail.getName().trim().toLowerCase());
         try {
             detailRepository.create(detail);
             return detail;
         }
         catch (ConstraintViolationException e){
-            throw new EntityExistsException(String.format(ENTITY_NOT_FOUND.getMessage(), DETAIL.getEntityName(), detail.getName()));
+            throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(), DETAIL.getEntityName(), detail.getName()));
         }
     }
 
-    public Detail updateDetail(long id, Detail detail) {
+    @Override
+    public Detail updateEntity(long id, Detail detail) {
         if (detailRepository.findById(id).isPresent()) {
             detail.setId(id);
-            return detailRepository.update(detail);
+            try {
+                return detailRepository.update(detail);
+            }
+            catch (DataIntegrityViolationException e){
+                throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
+                        DETAIL.getEntityName(), detail.getName()));
+            }
+
         }
         else {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), DETAIL.getEntityName(), id));
@@ -63,7 +73,8 @@ public class DetailService {
 
     }
 
-    public void deleteDetail(long id) {
+    @Override
+    public void deleteEntity(long id) {
         Optional<Detail> detailForDelete = detailRepository.findById(id);
         if (detailForDelete.isPresent()) {
             detailRepository.delete(detailForDelete.get());
@@ -74,6 +85,10 @@ public class DetailService {
     }
 
     public List<Detail> findMultipleDetails(Pageable pageable) {
-       return detailRepository.readMultiple(pageable);
+        List<Detail> foundDetails = detailRepository.readMultiple(pageable);
+        if(!foundDetails.isEmpty()) {
+            return foundDetails;
+        }
+        else throw new EntityNotFoundException(ENTITIES_NOT_FOUND.getMessage());
     }
 }

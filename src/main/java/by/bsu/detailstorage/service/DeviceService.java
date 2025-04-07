@@ -1,6 +1,8 @@
 package by.bsu.detailstorage.service;
 
+import by.bsu.detailstorage.exception.IllegalEntityRemovingException;
 import by.bsu.detailstorage.model.Brand;
+import by.bsu.detailstorage.model.Category;
 import by.bsu.detailstorage.model.Detail;
 import by.bsu.detailstorage.model.Device;
 import by.bsu.detailstorage.repository.BrandRepository;
@@ -9,22 +11,21 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
+import java.io.Serializable;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 import static by.bsu.detailstorage.registry.EntityNameRegistry.DEVICE;
-import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.ENTITY_EXISTS;
-import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.ENTITY_NOT_FOUND;
+import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
 @Service
 @Transactional
-public class DeviceService {
+public class DeviceService implements AbstractService<Device> {
 
     private static final String SPACE = " ";
     private final DeviceRepository deviceRepository;
@@ -36,8 +37,54 @@ public class DeviceService {
         this.brandRepository = brandRepository;
     }
 
+
+    @Override
+    public Device createEntity(Device device) {
+        Optional<Brand> brand = brandRepository.findById(device.getBrand().getId());
+        device.setModel(device.getModel().trim().toLowerCase());
+        try {
+            return deviceRepository.create(device);
+        }
+        catch (ConstraintViolationException e) {
+            throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
+                    DEVICE.getEntityName(), brand.get().getName() + SPACE + device.getModel()));
+        }
+    }
+
+    @Override
+    public Device updateEntity(long id, Device device) {
+        if (deviceRepository.findById(id).isPresent()) {
+            device.setId(id);
+            return deviceRepository.update(device);
+        }
+        else {
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), DEVICE.getEntityName(), id));
+        }
+    }
+
+    @Override
+    public void deleteEntity(long id) {
+        Optional<Device> deviceForDelete = deviceRepository.findById(id);
+        if (deviceForDelete.isPresent()) {
+            Device device = deviceForDelete.get();
+            if(!hasDependencies(device)) {
+                deviceRepository.delete(device);
+            } else {
+                throw new IllegalEntityRemovingException(String.format(ENTITY_WITH_DEPENDENCIES
+                        .getMessage(), device.getBrand().getName() + SPACE + device.getModel(), device.getId()));
+            }
+        }
+        else {
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), DEVICE.getEntityName(), id));
+        }
+    }
+
     public List<Device> findMultipleDevices(Pageable pageable) {
-        return deviceRepository.readMultiple(pageable);
+        List<Device> foundDevices = deviceRepository.readMultiple(pageable);
+        if(!foundDevices.isEmpty()) {
+            return foundDevices;
+        }
+        else throw new EntityNotFoundException(ENTITIES_NOT_FOUND.getMessage());
     }
 
     public Device findById(long id) {
@@ -50,36 +97,9 @@ public class DeviceService {
         }
     }
 
-    public Device createDevice(Device device) {
-        Optional<Brand> brand = brandRepository.findById(device.getBrand().getId());
-        device.setModel(device.getModel().trim().toLowerCase());
-        try {
-            return deviceRepository.create(device);
-        }
-        catch (ConstraintViolationException e) {
-            throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
-                    DEVICE.getEntityName(), brand.get().getName() + SPACE + device.getModel()));
-        }
-    }
 
-    public Device updateDevice(long id, Device device) {
-        if (deviceRepository.findById(id).isPresent()) {
-            device.setId(id);
-            return deviceRepository.update(device);
-        }
-        else {
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), DEVICE.getEntityName(), id));
-        }
-    }
-
-    public void deleteDevice(long id) {
-        Optional<Device> deviceForDelete = deviceRepository.findById(id);
-        if (deviceForDelete.isPresent()) {
-            deviceRepository.delete(deviceForDelete.get());
-        }
-        else {
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), DEVICE.getEntityName(), id));
-        }
+    private boolean hasDependencies(Device device) {
+        return !device.getDetails().isEmpty();
     }
 
 }

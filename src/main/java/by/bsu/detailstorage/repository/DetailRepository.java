@@ -1,6 +1,7 @@
 package by.bsu.detailstorage.repository;
 
 import by.bsu.detailstorage.model.Detail;
+import by.bsu.detailstorage.model.Device;
 import jakarta.persistence.TypedQuery;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,10 +14,9 @@ import java.util.Optional;
 import static by.bsu.detailstorage.registry.EntityNameRegistry.DETAIL;
 
 @Repository
-public final class DetailRepository extends CommonRepository<Detail> {
+public final class DetailRepository extends CommonRepository<Detail> implements PageableEntitiesRepository<Detail> {
 
     private static final String DETAIL_ALIAS = "d";
-    private static final String FIELD_NAME = "name";
     private static final String SELECT_DETAIL_STATEMENT = String.format(SELECT_FROM,DETAIL_ALIAS,
             DETAIL.getEntityName(), DETAIL_ALIAS);
 
@@ -51,4 +51,9 @@ public final class DetailRepository extends CommonRepository<Detail> {
         return SELECT_DETAIL_STATEMENT + SPACE + ORDER_BY + SPACE + String.join(COMMA + SPACE, orders);
     }
 
+    @Override
+    public List<Detail> findAll() {
+        TypedQuery<Detail> query = entityManager.createQuery(SELECT_DETAIL_STATEMENT, Detail.class);
+        return query.getResultList();
+    }
 }

@@ -21,7 +21,5 @@ public interface Repository<T> {
 
     void delete(T entity);
 
-
-    List<T> readMultiple(Pageable pageable);
-
+    List<T> findAll();
 }

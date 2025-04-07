@@ -4,7 +4,7 @@ import by.bsu.detailstorage.dtos.typedtos.TypeReadDto;
 import lombok.Data;
 
 @Data
-public class DetailForListRedDto {
+public class DetailForListDto {
 
     private Long id;
 

@@ -14,9 +14,10 @@ public class DeviceCreateDto {
     @NotNull(message = "should not be null")
     private BrandReadDto brand;
 
-    @NotBlank(message = "")
+    @NotBlank(message = "should not be empty")
     private String model;
 
+    @NotNull(message = "should not be null")
     private CategoryReadDto category;
 
 }

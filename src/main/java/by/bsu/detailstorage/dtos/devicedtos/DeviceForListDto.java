@@ -7,6 +7,8 @@ import lombok.Data;
 @Data
 public class DeviceForListDto {
 
+    private Long id;
+
     private BrandReadDto brand;
 
     private String model;

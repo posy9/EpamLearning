@@ -1,5 +1,6 @@
 package by.bsu.detailstorage.repository;
 
+import by.bsu.detailstorage.model.Category;
 import by.bsu.detailstorage.model.Device;
 import jakarta.persistence.TypedQuery;
 import org.springframework.data.domain.Pageable;
@@ -13,8 +14,7 @@ import java.util.Optional;
 import static by.bsu.detailstorage.registry.EntityNameRegistry.DEVICE;
 
 @Repository
-public final class DeviceRepository extends CommonRepository<Device> {
-
+public final class DeviceRepository extends CommonRepository<Device> implements PageableEntitiesRepository<Device> {
 
     private static final String DEVICE_ALIAS = "d";
     private static final String SELECT_DEVICE_STATEMENT = String.format(SELECT_FROM,DEVICE_ALIAS,
@@ -23,6 +23,12 @@ public final class DeviceRepository extends CommonRepository<Device> {
     @Override
     public Optional<Device> findById(Long id) {
         return Optional.of(entityManager.find(Device.class, id));
+    }
+
+    @Override
+    public List<Device> findAll() {
+        TypedQuery<Device> query = entityManager.createQuery(SELECT_DEVICE_STATEMENT, Device.class);
+        return query.getResultList();
     }
 
     @Override

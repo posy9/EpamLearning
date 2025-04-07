@@ -1,7 +1,10 @@
 package by.bsu.detailstorage.controller;
 
+import by.bsu.detailstorage.exception.IllegalEntityRemovingException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,6 +16,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.SAME_ENTITY_EXISTS;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -52,6 +57,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public Map<String, String> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex) {
+        return Map.of(MESSAGE_FIELD_NAME, ex.getMessage());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        return Map.of(MESSAGE_FIELD_NAME, SAME_ENTITY_EXISTS.getMessage());
+    }
+
+    @ExceptionHandler(IllegalEntityRemovingException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleIllegalEntityRemovingException(IllegalEntityRemovingException ex) {
         return Map.of(MESSAGE_FIELD_NAME, ex.getMessage());
     }
 

@@ -1,7 +1,7 @@
 package by.bsu.detailstorage.controller;
 
 import by.bsu.detailstorage.dtos.detaildtos.DetailCreateDto;
-import by.bsu.detailstorage.dtos.detaildtos.DetailForListRedDto;
+import by.bsu.detailstorage.dtos.detaildtos.DetailForListDto;
 import by.bsu.detailstorage.dtos.detaildtos.DetailReadDto;
 import by.bsu.detailstorage.model.Detail;
 import by.bsu.detailstorage.service.DetailService;
@@ -24,10 +24,10 @@ public class DetailController {
     private final ModelMapper modelMapper;
 
     @GetMapping
-    List<DetailForListRedDto> getAllDetails(Pageable pageable) {
+    List<DetailForListDto> getAllDetails(Pageable pageable) {
        List<Detail> details = detailService.findMultipleDetails(pageable);
         return details.stream()
-                .map(detail -> modelMapper.map(detail, DetailForListRedDto.class))
+                .map(detail -> modelMapper.map(detail, DetailForListDto.class))
                 .toList();
     }
 
@@ -41,21 +41,21 @@ public class DetailController {
     @ResponseStatus(HttpStatus.CREATED)
     public DetailReadDto createDetail(@Valid @RequestBody DetailCreateDto detailCreateDto) {
         Detail detail = modelMapper.map(detailCreateDto, Detail.class);
-        detailService.createDetail(detail);
+        detailService.createEntity(detail);
         Detail createdDetail = detailService.findById(detail.getId());
         return modelMapper.map(createdDetail, DetailReadDto.class);
     }
 
     @PutMapping(value = "/{id}")
     DetailReadDto updateDetail(@PathVariable long id, @RequestBody DetailCreateDto detailCreateDto) {
-        detailService.updateDetail(id, modelMapper.map(detailCreateDto, Detail.class));
+        detailService.updateEntity(id, modelMapper.map(detailCreateDto, Detail.class));
         Detail updatedDetail = detailService.findById(id);
         return modelMapper.map(updatedDetail, DetailReadDto.class);
     }
 
     @DeleteMapping(value = "/{id}")
     ResponseEntity<Void> deleteDetail(@PathVariable long id) {
-        detailService.deleteDetail(id);
+        detailService.deleteEntity(id);
         return ResponseEntity.noContent().build();
     }
 
