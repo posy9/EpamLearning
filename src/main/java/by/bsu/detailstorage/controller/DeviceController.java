@@ -24,7 +24,7 @@ public class DeviceController {
 
     @GetMapping
     List<DeviceForListDto> getAllDevices(Pageable pageable) {
-        List<Device> devices = deviceService.findMultipleDevices(pageable);
+        List<Device> devices = deviceService.findMultiple(pageable);
         return devices.stream()
                 .map(device -> modelMapper.map(device, DeviceForListDto.class))
                 .toList();

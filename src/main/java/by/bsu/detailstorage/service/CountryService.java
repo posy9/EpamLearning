@@ -7,6 +7,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,7 @@ import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CountryService implements AbstractUtilityEntitiesService<Country> {
+public class CountryService implements AbstractService<Country> {
 
     private final CountryRepository countryRepository;
 
@@ -73,8 +74,8 @@ public class CountryService implements AbstractUtilityEntitiesService<Country> {
     }
 
     @Override
-    public List<Country> findAll() {
-        List<Country> foundCountries = countryRepository.findAll();
+    public List<Country> findMultiple(Pageable pageable) {
+        List<Country> foundCountries = countryRepository.readMultiple(pageable);
         if (!foundCountries.isEmpty()) {
             return foundCountries;
         } else {

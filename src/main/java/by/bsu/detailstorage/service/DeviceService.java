@@ -70,7 +70,8 @@ public class DeviceService implements AbstractService<Device> {
         }
     }
 
-    public List<Device> findMultipleDevices(Pageable pageable) {
+    @Override
+    public List<Device> findMultiple(Pageable pageable) {
         List<Device> foundDevices = deviceRepository.readMultiple(pageable);
         if(!foundDevices.isEmpty()) {
             return foundDevices;

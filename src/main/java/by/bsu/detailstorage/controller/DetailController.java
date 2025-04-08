@@ -24,7 +24,7 @@ public class DetailController {
 
     @GetMapping
     List<DetailForListDto> getAllDetails(Pageable pageable) {
-       List<Detail> details = detailService.findMultipleDetails(pageable);
+       List<Detail> details = detailService.findMultiple(pageable);
         return details.stream()
                 .map(detail -> modelMapper.map(detail, DetailForListDto.class))
                 .toList();

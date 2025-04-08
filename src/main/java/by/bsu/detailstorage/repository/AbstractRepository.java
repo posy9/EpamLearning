@@ -1,9 +1,11 @@
 package by.bsu.detailstorage.repository;
 
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 
-public interface Repository<T> {
+public interface AbstractRepository<T> {
 
     T create(T entity);
 
@@ -13,5 +15,5 @@ public interface Repository<T> {
 
     void delete(T entity);
 
-    List<T> findAll();
+    List<T> readMultiple(Pageable pageable);
 }

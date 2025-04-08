@@ -7,7 +7,6 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ import java.util.Optional;
 
 import static by.bsu.detailstorage.registry.EntityNameRegistry.DETAIL;
 import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
-
 
 @Service
 @Transactional
@@ -80,7 +78,8 @@ public class DetailService implements AbstractService<Detail> {
         }
     }
 
-    public List<Detail> findMultipleDetails(Pageable pageable) {
+    @Override
+    public List<Detail> findMultiple(Pageable pageable) {
         List<Detail> foundDetails = detailRepository.readMultiple(pageable);
         if(!foundDetails.isEmpty()) {
             return foundDetails;

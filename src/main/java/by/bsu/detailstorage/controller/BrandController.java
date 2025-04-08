@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,8 @@ public class BrandController {
     private final ModelMapper modelMapper;
 
     @GetMapping
-    List<BrandReadDto> getAllBrands() {
-        List<Brand> brands = brandService.findAll();
+    List<BrandReadDto> getAllBrands(Pageable pageable) {
+        List<Brand> brands = brandService.findMultiple(pageable);
         return brands.stream()
                 .map(brand -> modelMapper.map(brand, BrandReadDto.class))
                 .toList();

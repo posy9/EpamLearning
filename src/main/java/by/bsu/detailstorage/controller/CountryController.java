@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,8 @@ public class CountryController {
     private final ModelMapper modelMapper;
 
     @GetMapping
-    List<CountryReadDto> getAllCountries() {
-        List<Country> countries = countryService.findAll();
+    List<CountryReadDto> getAllCountries(Pageable pageable) {
+        List<Country> countries = countryService.findMultiple(pageable);
         return countries.stream()
                 .map(country -> modelMapper.map(country, CountryReadDto.class))
                 .toList();

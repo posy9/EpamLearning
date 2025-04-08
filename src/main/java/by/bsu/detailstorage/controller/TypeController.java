@@ -7,7 +7,7 @@ import by.bsu.detailstorage.service.TypeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +22,8 @@ public class TypeController {
     private final ModelMapper modelMapper;
 
     @GetMapping
-    List<TypeReadDto> getAllTypes() {
-        List<Type> types = typeService.findAll();
+    List<TypeReadDto> getAllTypes(Pageable pageable) {
+        List<Type> types = typeService.findMultiple(pageable);
         return types.stream()
                 .map(type -> modelMapper.map(type, TypeReadDto.class))
                 .toList();

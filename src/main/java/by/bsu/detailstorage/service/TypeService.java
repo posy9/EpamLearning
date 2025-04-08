@@ -7,6 +7,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,7 @@ import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class TypeService implements AbstractUtilityEntitiesService<Type> {
+public class TypeService implements AbstractService<Type> {
 
     private final TypeRepository typeRepository;
 
@@ -73,8 +74,8 @@ public class TypeService implements AbstractUtilityEntitiesService<Type> {
     }
 
     @Override
-    public List<Type> findAll() {
-        List<Type> foundTypes = typeRepository.findAll();
+    public List<Type> findMultiple(Pageable pageable) {
+        List<Type> foundTypes = typeRepository.readMultiple(pageable);
         if (!foundTypes.isEmpty()) {
             return foundTypes;
         } else {

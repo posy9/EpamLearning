@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +23,8 @@ public class CategoryController {
     private final ModelMapper modelMapper;
 
     @GetMapping
-    List<CategoryReadDto> getAllCategories() {
-        List<Category> categories = categoryService.findAll();
+    List<CategoryReadDto> getAllCategories(Pageable pageable) {
+        List<Category> categories = categoryService.findMultiple(pageable);
         return categories.stream()
                 .map(category -> modelMapper.map(category, CategoryReadDto.class))
                 .toList();

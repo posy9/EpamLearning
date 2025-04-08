@@ -1,24 +1,20 @@
 package by.bsu.detailstorage.repository;
 
-import by.bsu.detailstorage.model.Brand;
 import by.bsu.detailstorage.model.Category;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-import static by.bsu.detailstorage.registry.EntityNameRegistry.CATEGORY;
-
 @Repository
 public final class CategoryRepository extends CommonRepository<Category> {
 
-    private static final String CATEGORY_ALIAS = "c";
-    private static final String SELECT_CATEGORY_STATEMENT = String.format(SELECT_FROM,CATEGORY_ALIAS,
-            CATEGORY.getEntityName(), CATEGORY_ALIAS);
+    private static final List<String> fields = List.of("name");
 
     @Override
     public Optional<Category> findById(Long id) {
@@ -26,12 +22,14 @@ public final class CategoryRepository extends CommonRepository<Category> {
     }
 
     @Override
-    public List<Category> findAll() {
+    public List<Category> readMultiple(Pageable pageable) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Category> cq = cb.createQuery(Category.class);
-        Root<Category> category = cq.from(Category.class);
-        CriteriaQuery<Category> select = cq.select(category);
-        TypedQuery<Category> query = entityManager.createQuery(select) ;
+        Root<Category> root = cq.from(Category.class);
+        addOrderBy(pageable, root, cb, cq, fields);
+        TypedQuery<Category> query = entityManager.createQuery(cq)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize());
         return query.getResultList();
     }
 }

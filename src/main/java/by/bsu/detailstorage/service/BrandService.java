@@ -7,6 +7,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,7 @@ import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class BrandService implements AbstractUtilityEntitiesService<Brand> {
+public class BrandService implements AbstractService<Brand> {
 
     private final BrandRepository brandRepository;
 
@@ -73,8 +74,8 @@ public class BrandService implements AbstractUtilityEntitiesService<Brand> {
     }
 
     @Override
-    public List<Brand> findAll() {
-        List<Brand> foundBrands = brandRepository.findAll();
+    public List<Brand> findMultiple(Pageable pageable) {
+        List<Brand> foundBrands = brandRepository.readMultiple(pageable);
         if (!foundBrands.isEmpty()) {
             return foundBrands;
         } else {

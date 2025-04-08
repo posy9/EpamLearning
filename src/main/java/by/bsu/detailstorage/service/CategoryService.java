@@ -7,6 +7,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,7 @@ import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CategoryService implements AbstractUtilityEntitiesService<Category> {
+public class CategoryService implements AbstractService<Category> {
 
     private final CategoryRepository categoryRepository;
 
@@ -76,8 +77,8 @@ public class CategoryService implements AbstractUtilityEntitiesService<Category>
     }
 
     @Override
-    public List<Category> findAll() {
-        List<Category> foundCategories = categoryRepository.findAll();
+    public List<Category> findMultiple(Pageable pageable) {
+        List<Category> foundCategories = categoryRepository.readMultiple(pageable);
         if (!foundCategories.isEmpty()) {
             return foundCategories;
         }
