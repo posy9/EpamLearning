@@ -1,7 +1,11 @@
 package by.bsu.detailstorage.repository;
 
+import by.bsu.detailstorage.model.Brand;
 import by.bsu.detailstorage.model.Country;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,7 +27,11 @@ public final class CountryRepository extends CommonRepository<Country> {
 
     @Override
     public List<Country> findAll() {
-        TypedQuery<Country> query = entityManager.createQuery(SELECT_COUNTRY_STATEMENT, Country.class);
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Country> cq = cb.createQuery(Country.class);
+        Root<Country> country = cq.from(Country.class);
+        CriteriaQuery<Country> select = cq.select(country);
+        TypedQuery<Country> query = entityManager.createQuery(select) ;
         return query.getResultList();
     }
 }

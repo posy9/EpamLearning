@@ -1,7 +1,11 @@
 package by.bsu.detailstorage.repository;
 
+import by.bsu.detailstorage.model.Brand;
 import by.bsu.detailstorage.model.Category;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,7 +27,11 @@ public final class CategoryRepository extends CommonRepository<Category> {
 
     @Override
     public List<Category> findAll() {
-        TypedQuery<Category> query = entityManager.createQuery(SELECT_CATEGORY_STATEMENT, Category.class);
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Category> cq = cb.createQuery(Category.class);
+        Root<Category> category = cq.from(Category.class);
+        CriteriaQuery<Category> select = cq.select(category);
+        TypedQuery<Category> query = entityManager.createQuery(select) ;
         return query.getResultList();
     }
 }

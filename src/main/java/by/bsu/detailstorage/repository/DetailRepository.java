@@ -1,7 +1,11 @@
 package by.bsu.detailstorage.repository;
 
+import by.bsu.detailstorage.model.Brand;
 import by.bsu.detailstorage.model.Detail;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
@@ -35,14 +39,14 @@ public final class DetailRepository extends CommonRepository<Detail> implements 
 
     private String getResultStatement(Pageable pageable) {
         if(pageable.getSort().isSorted()){
-            return makeStatementWithGroupBy(pageable);
+            return makeStatementWithOrderBy(pageable);
         }
         else{
             return SELECT_DETAIL_STATEMENT;
         }
     }
 
-    private String makeStatementWithGroupBy(Pageable pageable) {
+    private String makeStatementWithOrderBy(Pageable pageable) {
         List<String> orders = new ArrayList<>();
         for (Sort.Order sort : pageable.getSort()) {
             orders.add(DETAIL_ALIAS + DOT + sort.getProperty() + SPACE + sort.getDirection());
@@ -52,7 +56,11 @@ public final class DetailRepository extends CommonRepository<Detail> implements 
 
     @Override
     public List<Detail> findAll() {
-        TypedQuery<Detail> query = entityManager.createQuery(SELECT_DETAIL_STATEMENT, Detail.class);
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Detail> cq = cb.createQuery(Detail.class);
+        Root<Detail> detail = cq.from(Detail.class);
+        CriteriaQuery<Detail> select = cq.select(detail);
+        TypedQuery<Detail> query = entityManager.createQuery(select) ;
         return query.getResultList();
     }
 }

@@ -1,7 +1,11 @@
 package by.bsu.detailstorage.repository;
 
 import by.bsu.detailstorage.model.Device;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
@@ -26,7 +30,11 @@ public final class DeviceRepository extends CommonRepository<Device> implements 
 
     @Override
     public List<Device> findAll() {
-        TypedQuery<Device> query = entityManager.createQuery(SELECT_DEVICE_STATEMENT, Device.class);
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Device> cq = cb.createQuery(Device.class);
+        Root<Device> device = cq.from(Device.class);
+        CriteriaQuery<Device> select = cq.select(device);
+        TypedQuery<Device> query = entityManager.createQuery(select) ;
         return query.getResultList();
     }
 
@@ -41,14 +49,14 @@ public final class DeviceRepository extends CommonRepository<Device> implements 
 
     private String getResultStatement(Pageable pageable) {
         if(pageable.getSort().isSorted()){
-            return makeStatementWithGroupBy(pageable);
+            return makeStatementWithOrderBy(pageable);
         }
         else{
             return SELECT_DEVICE_STATEMENT;
         }
     }
 
-    private String makeStatementWithGroupBy(Pageable pageable) {
+    private String makeStatementWithOrderBy(Pageable pageable) {
         List<String> orders = new ArrayList<>();
         for (Sort.Order sort : pageable.getSort()) {
             orders.add(DEVICE_ALIAS + DOT + sort.getProperty() + SPACE + sort.getDirection());

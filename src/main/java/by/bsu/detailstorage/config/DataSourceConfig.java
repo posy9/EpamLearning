@@ -16,20 +16,25 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class DataSourceConfig {
 
+    private static final String DB_LINK_ROOT = "DB_LINK";
+    private static final String DB_DRIVER_ROOT = "org.postgresql.Driver";
+    private static final String DB_USER_ROOT = "DB_USER";
+    private static final String DB_PASSWORD_ROOT = "DB_PASSWORD";
+
     @Bean
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
-        config.setDriverClassName("org.postgresql.Driver");
-        config.setJdbcUrl(System.getenv("DB_LINK"));
-        config.setUsername(System.getenv("DB_USER"));
-        config.setPassword(System.getenv("DB_PASSWORD"));
+        config.setDriverClassName(DB_DRIVER_ROOT);
+        config.setJdbcUrl(System.getenv(DB_LINK_ROOT));
+        config.setUsername(System.getenv(DB_USER_ROOT));
+        config.setPassword(System.getenv(DB_PASSWORD_ROOT));
         return new HikariDataSource(config);
     }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setGenerateDdl(true);
+        vendorAdapter.setGenerateDdl(false);
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("by.bsu.detailstorage.model");

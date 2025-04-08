@@ -1,7 +1,12 @@
 package by.bsu.detailstorage.repository;
 
 import by.bsu.detailstorage.model.Brand;
+import by.bsu.detailstorage.model.Device;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,7 +28,11 @@ public final class BrandRepository extends CommonRepository<Brand> {
 
     @Override
     public List<Brand> findAll() {
-        TypedQuery<Brand> query = entityManager.createQuery(SELECT_BRAND_STATEMENT, Brand.class);
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Brand> cq = cb.createQuery(Brand.class);
+        Root<Brand> brand = cq.from(Brand.class);
+        CriteriaQuery<Brand> select = cq.select(brand);
+        TypedQuery<Brand> query = entityManager.createQuery(select) ;
         return query.getResultList();
     }
 }
