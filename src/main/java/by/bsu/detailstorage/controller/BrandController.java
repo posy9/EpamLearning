@@ -6,8 +6,8 @@ import by.bsu.detailstorage.model.Brand;
 import by.bsu.detailstorage.service.BrandService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/brands")
 @RequiredArgsConstructor
+@Slf4j
 public class BrandController {
     private final BrandService brandService;
     private final ModelMapper modelMapper;

@@ -1,7 +1,7 @@
 package by.bsu.detailstorage.dtos.countrydtos;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import org.apache.logging.log4j.core.config.plugins.validation.constraints.NotBlank;
 
 @Data
 public class CountryCreateDto {

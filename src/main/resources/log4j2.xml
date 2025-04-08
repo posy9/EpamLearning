@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="warn">
+<Configuration status="WARN">
+    <Properties>
+        <Property name="log.pattern">
+            %style{%d{HH:mm:ss.SSS}}{cyan} %highlight{%-5level} [%style{%t}{magenta}] %style{%c{1.}}{blue} - %msg%n%throwable
+        </Property>
+    </Properties>
+
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d %-5level [%t] %c{1.}.%M(%L): %msg%n"/>
+            <PatternLayout pattern="${log.pattern}" disableAnsi="false"/>
         </Console>
     </Appenders>
-    
+
     <Loggers>
-        <Root level="TRACE">
+        <Logger name="org.springframework" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <Root level="trace">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
