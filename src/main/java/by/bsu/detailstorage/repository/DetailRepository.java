@@ -1,5 +1,6 @@
 package by.bsu.detailstorage.repository;
 
+import by.bsu.detailstorage.model.Country;
 import by.bsu.detailstorage.model.Detail;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
@@ -16,7 +17,7 @@ public final class DetailRepository extends CommonRepository<Detail> {
 
     @Override
     public Optional<Detail> findById(Long id) {
-        return Optional.of(entityManager.find(Detail.class, id));
+        return Optional.ofNullable(entityManager.find(Detail.class, id));
     }
 
     @Override
@@ -29,5 +30,15 @@ public final class DetailRepository extends CommonRepository<Detail> {
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize());
         return query.getResultList();
+    }
+
+    public Optional<Detail> findByName(String name) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Detail> cq = cb.createQuery(Detail.class);
+        Root<Detail> root = cq.from(Detail.class);
+        cq.where(cb.equal(root.get("name"), name));
+        TypedQuery<Detail> query = entityManager.createQuery(cq);
+        List<Detail> result = query.getResultList();
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.getFirst());
     }
 }

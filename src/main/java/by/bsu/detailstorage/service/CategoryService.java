@@ -50,13 +50,19 @@ public class CategoryService implements AbstractService<Category> {
 
     @Override
     public Category updateEntity(long id, Category category) {
-            if (categoryRepository.findById(id).isPresent()) {
-                category.setId(id);
-                return categoryRepository.update(category);
-            } else {
-                throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(),
-                        CATEGORY.getEntityName(), id));
-            }
+        if(categoryRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(),
+                    CATEGORY.getEntityName(), id));
+
+        }
+        category.setName(category.getName().trim().toLowerCase());
+        if (categoryRepository.findByName(category.getName()).isEmpty()) {
+            category.setId(id);
+            return categoryRepository.update(category);
+        } else {
+            throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
+                    CATEGORY.getEntityName(), category.getName()));
+        }
     }
 
     @Override

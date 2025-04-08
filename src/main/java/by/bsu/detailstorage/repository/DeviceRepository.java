@@ -1,5 +1,7 @@
 package by.bsu.detailstorage.repository;
 
+import by.bsu.detailstorage.model.Brand;
+import by.bsu.detailstorage.model.Detail;
 import by.bsu.detailstorage.model.Device;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -17,7 +19,7 @@ public final class DeviceRepository extends CommonRepository<Device> implements 
 
     @Override
     public Optional<Device> findById(Long id) {
-        return Optional.of(entityManager.find(Device.class, id));
+        return Optional.ofNullable(entityManager.find(Device.class, id));
     }
 
     @Override
@@ -30,5 +32,15 @@ public final class DeviceRepository extends CommonRepository<Device> implements 
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize());
         return query.getResultList();
+    }
+
+    public Optional<Device> findByUniqueCouple(String model, Brand brand) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Device> cq = cb.createQuery(Device.class);
+        Root<Device> root = cq.from(Device.class);
+        cq.where(cb.and(cb.equal(root.get("model"), model), cb.equal(root.get("brand"), brand)));
+        TypedQuery<Device> query = entityManager.createQuery(cq);
+        List<Device> result = query.getResultList();
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.getFirst());
     }
 }

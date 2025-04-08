@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static by.bsu.detailstorage.registry.EntityNameRegistry.BRAND;
+import static by.bsu.detailstorage.registry.EntityNameRegistry.CATEGORY;
 import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
 @Service
@@ -48,12 +49,17 @@ public class BrandService implements AbstractService<Brand> {
 
     @Override
     public Brand updateEntity(long id, Brand brand) {
-        if (brandRepository.findById(id).isPresent()) {
+        if(brandRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(),
+                    BRAND.getEntityName(), id));
+        }
+        brand.setName(brand.getName().trim().toLowerCase());
+        if (brandRepository.findByName(brand.getName()).isEmpty()) {
             brand.setId(id);
             return brandRepository.update(brand);
         } else {
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(),
-                    BRAND.getEntityName(), id));
+            throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
+                    BRAND.getEntityName(), brand.getName()));
         }
     }
 

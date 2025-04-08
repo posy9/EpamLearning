@@ -18,7 +18,7 @@ public final class CategoryRepository extends CommonRepository<Category> {
 
     @Override
     public Optional<Category> findById(Long id) {
-        return Optional.of(entityManager.find(Category.class,id));
+        return Optional.ofNullable(entityManager.find(Category.class,id));
     }
 
     @Override
@@ -31,5 +31,15 @@ public final class CategoryRepository extends CommonRepository<Category> {
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize());
         return query.getResultList();
+    }
+
+    public Optional<Category> findByName(String name) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Category> cq = cb.createQuery(Category.class);
+        Root<Category> root = cq.from(Category.class);
+        cq.where(cb.equal(root.get("name"), name));
+        TypedQuery<Category> query = entityManager.createQuery(cq);
+        List<Category> result = query.getResultList();
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.getFirst());
     }
 }

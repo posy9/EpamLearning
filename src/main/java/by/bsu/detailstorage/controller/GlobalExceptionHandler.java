@@ -58,17 +58,9 @@ public class GlobalExceptionHandler {
         return Map.of(MESSAGE_FIELD_NAME, ex.getMessage());
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        return Map.of(MESSAGE_FIELD_NAME, SAME_ENTITY_EXISTS.getMessage());
-    }
-
     @ExceptionHandler(IllegalEntityRemoveException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleIllegalEntityRemovingException(IllegalEntityRemoveException ex) {
         return Map.of(MESSAGE_FIELD_NAME, ex.getMessage());
     }
-
-
 }

@@ -1,5 +1,6 @@
 package by.bsu.detailstorage.repository;
 
+import by.bsu.detailstorage.model.Category;
 import by.bsu.detailstorage.model.Country;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -18,7 +19,7 @@ public final class CountryRepository extends CommonRepository<Country> {
 
     @Override
     public Optional<Country> findById(Long id) {
-        return Optional.of(entityManager.find(Country.class, id));
+        return Optional.ofNullable(entityManager.find(Country.class, id));
     }
 
     @Override
@@ -31,5 +32,15 @@ public final class CountryRepository extends CommonRepository<Country> {
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize());
         return query.getResultList();
+    }
+
+    public Optional<Country> findByName(String name) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Country> cq = cb.createQuery(Country.class);
+        Root<Country> root = cq.from(Country.class);
+        cq.where(cb.equal(root.get("name"), name));
+        TypedQuery<Country> query = entityManager.createQuery(cq);
+        List<Country> result = query.getResultList();
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.getFirst());
     }
 }

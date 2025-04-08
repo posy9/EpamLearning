@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static by.bsu.detailstorage.registry.EntityNameRegistry.COUNTRY;
 import static by.bsu.detailstorage.registry.EntityNameRegistry.TYPE;
 import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
@@ -48,12 +49,17 @@ public class TypeService implements AbstractService<Type> {
 
     @Override
     public Type updateEntity(long id, Type type) {
-        if (typeRepository.findById(id).isPresent()) {
+        if(typeRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(),
+                    TYPE.getEntityName(), id));
+        }
+        type.setName(type.getName().trim().toLowerCase());
+        if (typeRepository.findByName(type.getName()).isEmpty()) {
             type.setId(id);
             return typeRepository.update(type);
         } else {
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(),
-                    TYPE.getEntityName(), id));
+            throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
+                    TYPE.getEntityName(), type.getName()));
         }
     }
 

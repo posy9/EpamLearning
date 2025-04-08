@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static by.bsu.detailstorage.registry.EntityNameRegistry.DETAIL;
 import static by.bsu.detailstorage.registry.EntityNameRegistry.DEVICE;
 import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
@@ -44,12 +45,18 @@ public class DeviceService implements AbstractService<Device> {
 
     @Override
     public Device updateEntity(long id, Device device) {
-        if (deviceRepository.findById(id).isPresent()) {
+        if(deviceRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), DEVICE.getEntityName(), id));
+        }
+        device.setModel(device.getModel().trim().toLowerCase());
+        if (deviceRepository.findByUniqueCouple(device.getModel(),device.getBrand()).isEmpty()) {
             device.setId(id);
             return deviceRepository.update(device);
         }
         else {
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), DEVICE.getEntityName(), id));
+            Optional<Brand> brand = brandRepository.findById(device.getBrand().getId());
+            throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
+                    DEVICE.getEntityName(), brand.get().getName()+ SPACE + device.getModel()));
         }
     }
 
@@ -89,9 +96,7 @@ public class DeviceService implements AbstractService<Device> {
         }
     }
 
-
     private boolean hasDependencies(Device device) {
         return !device.getDetails().isEmpty();
     }
-
 }

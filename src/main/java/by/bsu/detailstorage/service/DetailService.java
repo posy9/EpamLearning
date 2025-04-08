@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static by.bsu.detailstorage.registry.EntityNameRegistry.COUNTRY;
 import static by.bsu.detailstorage.registry.EntityNameRegistry.DETAIL;
 import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
@@ -50,21 +51,18 @@ public class DetailService implements AbstractService<Detail> {
 
     @Override
     public Detail updateEntity(long id, Detail detail) {
-        if (detailRepository.findById(id).isPresent()) {
-            detail.setId(id);
-            try {
-                return detailRepository.update(detail);
-            }
-            catch (DataIntegrityViolationException e){
-                throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
-                        DETAIL.getEntityName(), detail.getName()));
-            }
-
-        }
-        else {
+        if(detailRepository.findById(id).isEmpty()) {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), DETAIL.getEntityName(), id));
         }
-
+        detail.setName(detail.getName().trim().toLowerCase());
+        if (detailRepository.findByName(detail.getName()).isEmpty()) {
+            detail.setId(id);
+            return detailRepository.update(detail);
+        }
+        else {
+            throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
+                    DETAIL.getEntityName(), detail.getName()));
+        }
     }
 
     @Override

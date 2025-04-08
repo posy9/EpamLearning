@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static by.bsu.detailstorage.registry.EntityNameRegistry.CATEGORY;
 import static by.bsu.detailstorage.registry.EntityNameRegistry.COUNTRY;
 import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
@@ -48,12 +49,17 @@ public class CountryService implements AbstractService<Country> {
 
     @Override
     public Country updateEntity(long id, Country country) {
-        if (countryRepository.findById(id).isPresent()) {
+        if(countryRepository.findById(id).isEmpty()) {
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(),
+                    COUNTRY.getEntityName(), id));
+        }
+        country.setName(country.getName().trim().toLowerCase());
+        if (countryRepository.findByName(country.getName()).isEmpty()) {
             country.setId(id);
             return countryRepository.update(country);
         } else {
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(),
-                    COUNTRY.getEntityName(), id));
+            throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
+                    COUNTRY.getEntityName(), country.getName()));
         }
     }
 

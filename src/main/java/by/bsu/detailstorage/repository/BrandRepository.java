@@ -18,7 +18,7 @@ public final class BrandRepository extends CommonRepository<Brand> {
 
     @Override
     public Optional<Brand> findById(Long id) {
-        return Optional.of(entityManager.find(Brand.class, id));
+        return Optional.ofNullable(entityManager.find(Brand.class, id));
     }
 
     @Override
@@ -31,5 +31,15 @@ public final class BrandRepository extends CommonRepository<Brand> {
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize());
         return query.getResultList();
+    }
+
+    public Optional<Brand> findByName(String name) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Brand> cq = cb.createQuery(Brand.class);
+        Root<Brand> root = cq.from(Brand.class);
+        cq.where(cb.equal(root.get("name"), name));
+        TypedQuery<Brand> query = entityManager.createQuery(cq);
+        List<Brand> result = query.getResultList();
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.getFirst());
     }
 }
