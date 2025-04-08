@@ -1,13 +1,11 @@
 package by.bsu.detailstorage.service;
 
-import by.bsu.detailstorage.repository.DetailRepository;
 import by.bsu.detailstorage.model.Detail;
-
+import by.bsu.detailstorage.repository.DetailRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static by.bsu.detailstorage.registry.EntityNameRegistry.COUNTRY;
 import static by.bsu.detailstorage.registry.EntityNameRegistry.DETAIL;
 import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
