@@ -8,13 +8,15 @@ import jakarta.persistence.criteria.Root;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import javax.print.attribute.standard.MediaSize;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public final class BrandRepository extends CommonRepository<Brand> {
 
-    private static final List<String> fields = List.of("name");
+    private static final String NAME_FIELD = "name";
+    private static final List<String> fields = List.of(NAME_FIELD);
 
     @Override
     public Optional<Brand> findById(Long id) {
@@ -37,7 +39,7 @@ public final class BrandRepository extends CommonRepository<Brand> {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Brand> cq = cb.createQuery(Brand.class);
         Root<Brand> root = cq.from(Brand.class);
-        cq.where(cb.equal(root.get("name"), name));
+        cq.where(cb.equal(root.get(NAME_FIELD), name));
         TypedQuery<Brand> query = entityManager.createQuery(cq);
         List<Brand> result = query.getResultList();
         return result.isEmpty() ? Optional.empty() : Optional.of(result.getFirst());

@@ -13,7 +13,8 @@ import java.util.Optional;
 @Repository
 public final class DetailRepository extends CommonRepository<Detail> {
 
-    private static final List<String> fields = List.of("name", "device", "country", "amount", "type");
+    private static final String NAME_FIELD = "name";
+    private static final List<String> fields = List.of(NAME_FIELD, "device", "country", "amount", "type");
 
     @Override
     public Optional<Detail> findById(Long id) {
@@ -36,7 +37,7 @@ public final class DetailRepository extends CommonRepository<Detail> {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Detail> cq = cb.createQuery(Detail.class);
         Root<Detail> root = cq.from(Detail.class);
-        cq.where(cb.equal(root.get("name"), name));
+        cq.where(cb.equal(root.get(NAME_FIELD), name));
         TypedQuery<Detail> query = entityManager.createQuery(cq);
         List<Detail> result = query.getResultList();
         return result.isEmpty() ? Optional.empty() : Optional.of(result.getFirst());

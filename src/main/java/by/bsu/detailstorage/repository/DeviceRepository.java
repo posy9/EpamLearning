@@ -1,7 +1,6 @@
 package by.bsu.detailstorage.repository;
 
 import by.bsu.detailstorage.model.Brand;
-import by.bsu.detailstorage.model.Detail;
 import by.bsu.detailstorage.model.Device;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -15,7 +14,9 @@ import java.util.*;
 @Repository
 public final class DeviceRepository extends CommonRepository<Device> implements AbstractRepository<Device> {
 
-    private static final List<String> fields = List.of("brand", "model", "category");
+    private static final String MODEL_FIELD = "model";
+    private static final String BRAND_FIELD = "brand";
+    private static final List<String> fields = List.of(BRAND_FIELD, MODEL_FIELD, "category");
 
     @Override
     public Optional<Device> findById(Long id) {
@@ -38,7 +39,7 @@ public final class DeviceRepository extends CommonRepository<Device> implements 
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Device> cq = cb.createQuery(Device.class);
         Root<Device> root = cq.from(Device.class);
-        cq.where(cb.and(cb.equal(root.get("model"), model), cb.equal(root.get("brand"), brand)));
+        cq.where(cb.and(cb.equal(root.get(MODEL_FIELD), model), cb.equal(root.get(BRAND_FIELD), brand)));
         TypedQuery<Device> query = entityManager.createQuery(cq);
         List<Device> result = query.getResultList();
         return result.isEmpty() ? Optional.empty() : Optional.of(result.getFirst());

@@ -15,7 +15,8 @@ import java.util.Optional;
 @Repository
 public final class TypeRepository extends CommonRepository<Type> {
 
-    private static final List<String> fields = List.of("name");
+    private static final String NAME_FIELD = "name";
+    private static final List<String> fields = List.of(NAME_FIELD);
 
     @Override
     public Optional<Type> findById(Long id) {
@@ -38,7 +39,7 @@ public final class TypeRepository extends CommonRepository<Type> {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Type> cq = cb.createQuery(Type.class);
         Root<Type> root = cq.from(Type.class);
-        cq.where(cb.equal(root.get("name"), name));
+        cq.where(cb.equal(root.get(NAME_FIELD), name));
         TypedQuery<Type> query = entityManager.createQuery(cq);
         List<Type> result = query.getResultList();
         return result.isEmpty() ? Optional.empty() : Optional.of(result.getFirst());
