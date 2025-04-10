@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public final class BrandRepository extends CommonRepository<Brand> {
+public class BrandRepository extends CommonRepository<Brand> {
 
     private static final String NAME_FIELD = "name";
     private static final List<String> fields = List.of(NAME_FIELD);

@@ -1,6 +1,5 @@
 package by.bsu.detailstorage.repository;
 
-import by.bsu.detailstorage.model.Country;
 import by.bsu.detailstorage.model.Detail;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
@@ -11,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public final class DetailRepository extends CommonRepository<Detail> {
+public class DetailRepository extends CommonRepository<Detail> {
 
     private static final String NAME_FIELD = "name";
     private static final List<String> fields = List.of(NAME_FIELD, "device", "country", "amount", "type");

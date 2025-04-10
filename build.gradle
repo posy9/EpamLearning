@@ -16,34 +16,19 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.17.0'
-
-    implementation group: 'com.zaxxer', name: 'HikariCP', version: '6.3.0'
-
-    implementation 'org.apache.logging.log4j:log4j-core:2.24.3'
-    implementation 'org.apache.logging.log4j:log4j-slf4j2-impl:2.24.3'
-    implementation 'org.apache.logging.log4j:log4j-api:2.24.3'
-
-    implementation 'org.springframework:spring-context:6.2.5'
-    implementation 'org.springframework:spring-core:6.2.5'
-    implementation 'org.springframework:spring-beans:6.2.5'
-    implementation 'org.springframework:spring-webmvc:6.2.5'
-    implementation 'org.springframework:spring-tx:6.2.5'
-    implementation 'org.springframework.data:spring-data-jpa:3.4.4'
-
-    implementation 'org.hibernate.orm:hibernate-core:6.6.12.Final'
-    implementation 'org.hibernate.validator:hibernate-validator:8.0.2.Final'
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.4.4'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.4.4'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:3.4.4'
+    modules {
+        module("org.springframework.boot:spring-boot-starter-logging") {
+            replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
+        }
+    }
 
     implementation 'org.modelmapper:modelmapper:3.2.2'
 
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.18.3'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
-
-    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
     compileOnly 'org.projectlombok:lombok:1.18.36'
     compileOnly 'org.postgresql:postgresql:42.7.5'
-
-    runtimeOnly 'org.aspectj:aspectjweaver:1.9.23'
-    runtimeOnly 'org.aspectj:aspectjrt:1.9.23'
 
 }
 

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public final class DeviceRepository extends CommonRepository<Device> implements AbstractRepository<Device> {
+public class DeviceRepository extends CommonRepository<Device> implements AbstractRepository<Device> {
 
     private static final String MODEL_FIELD = "model";
     private static final String BRAND_FIELD = "brand";
