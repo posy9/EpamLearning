@@ -6,6 +6,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,7 @@ public class DetailService implements AbstractService<Detail> {
     public Detail createEntity(Detail detail) {
         detail.setName(detail.getName().trim().toLowerCase());
         try {
-            detailRepository.create(detail);
+            detailRepository.save(detail);
             return detail;
         }
         catch (ConstraintViolationException e){
@@ -52,14 +53,8 @@ public class DetailService implements AbstractService<Detail> {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), DETAIL.getEntityName(), id));
         }
         detail.setName(detail.getName().trim().toLowerCase());
-        if (detailRepository.findByName(detail.getName()).isEmpty()) {
-            detail.setId(id);
-            return detailRepository.update(detail);
-        }
-        else {
-            throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
-                    DETAIL.getEntityName(), detail.getName()));
-        }
+        detail.setId(id);
+        return detailRepository.save(detail);
     }
 
     @Override
@@ -75,9 +70,9 @@ public class DetailService implements AbstractService<Detail> {
 
     @Override
     public List<Detail> findMultiple(Pageable pageable) {
-        List<Detail> foundDetails = detailRepository.readMultiple(pageable);
+        Page<Detail> foundDetails = detailRepository.findAll(pageable);
         if(!foundDetails.isEmpty()) {
-            return foundDetails;
+            return foundDetails.getContent();
         }
         else throw new EntityNotFoundException(ENTITIES_NOT_FOUND.getMessage());
     }

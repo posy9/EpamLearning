@@ -16,7 +16,4 @@ public class Category {
 
     @Column(name = "name", length = 50, nullable = false, unique = true)
     private String name;
-
-    @OneToMany(mappedBy = "category")
-    private List<Device> devices;
 }

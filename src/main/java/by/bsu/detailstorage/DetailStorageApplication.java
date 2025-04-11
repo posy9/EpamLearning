@@ -1,11 +1,11 @@
-package by.bsu.detailstorage.main;
+package by.bsu.detailstorage;
 
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-@SpringBootApplication(scanBasePackages = "by.bsu.detailstorage")
+@SpringBootApplication
 @EntityScan(basePackages = "by.bsu.detailstorage.model")
 public class DetailStorageApplication {
 

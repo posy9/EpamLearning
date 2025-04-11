@@ -2,7 +2,6 @@ package by.bsu.detailstorage.service;
 
 
 import by.bsu.detailstorage.model.Detail;
-import by.bsu.detailstorage.repository.DetailRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.exception.ConstraintViolationException;

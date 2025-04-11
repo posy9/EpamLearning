@@ -1,6 +1,5 @@
 package by.bsu.detailstorage.controller;
 
-import by.bsu.detailstorage.exception.IllegalEntityRemoveException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,8 +13,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.SAME_ENTITY_EXISTS;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -58,9 +55,9 @@ public class GlobalExceptionHandler {
         return Map.of(MESSAGE_FIELD_NAME, ex.getMessage());
     }
 
-    @ExceptionHandler(IllegalEntityRemoveException.class)
+    @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleIllegalEntityRemovingException(IllegalEntityRemoveException ex) {
-        return Map.of(MESSAGE_FIELD_NAME, ex.getMessage());
+    public Map<String, String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        return Map.of(MESSAGE_FIELD_NAME, "Impossible action");
     }
 }

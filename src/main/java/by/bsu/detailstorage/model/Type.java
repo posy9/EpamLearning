@@ -16,7 +16,4 @@ public class Type {
 
     @Column(name = "name", length = 30, nullable = false, unique = true)
     private String name;
-
-    @OneToMany(mappedBy = "type")
-    private List<Detail> details;
 }

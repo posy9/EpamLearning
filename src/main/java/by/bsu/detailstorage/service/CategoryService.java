@@ -1,12 +1,13 @@
 package by.bsu.detailstorage.service;
 
-import by.bsu.detailstorage.exception.IllegalEntityRemoveException;
 import by.bsu.detailstorage.model.Category;
 import by.bsu.detailstorage.repository.CategoryRepository;
+import by.bsu.detailstorage.repository.DeviceRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 public class CategoryService implements AbstractService<Category> {
 
     private final CategoryRepository categoryRepository;
+    private final DeviceRepository deviceRepository;
 
     @Override
     public Category findById(long id) {
@@ -39,7 +41,7 @@ public class CategoryService implements AbstractService<Category> {
     public Category createEntity(Category category) {
         category.setName(category.getName().trim().toLowerCase());
         try {
-            categoryRepository.create(category);
+            categoryRepository.save(category);
             return category;
         }
         catch (ConstraintViolationException e){
@@ -53,16 +55,11 @@ public class CategoryService implements AbstractService<Category> {
         if(categoryRepository.findById(id).isEmpty()) {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(),
                     CATEGORY.getEntityName(), id));
-
         }
         category.setName(category.getName().trim().toLowerCase());
-        if (categoryRepository.findByName(category.getName()).isEmpty()) {
-            category.setId(id);
-            return categoryRepository.update(category);
-        } else {
-            throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
-                    CATEGORY.getEntityName(), category.getName()));
-        }
+        category.setId(id);
+        return categoryRepository.save(category);
+
     }
 
     @Override
@@ -70,12 +67,7 @@ public class CategoryService implements AbstractService<Category> {
         Optional<Category> categoryForDelete = categoryRepository.findById(id);
         if (categoryForDelete.isPresent()) {
              Category category = categoryForDelete.get();
-            if(!hasDependencies(category)){
-                categoryRepository.delete(category);
-            } else {
-                throw new IllegalEntityRemoveException(String.format(ENTITY_WITH_DEPENDENCIES
-                        .getMessage(),category.getName(),category.getId()));
-            }
+             categoryRepository.delete(category);
         }
         else {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), CATEGORY.getEntityName(), id));
@@ -84,16 +76,12 @@ public class CategoryService implements AbstractService<Category> {
 
     @Override
     public List<Category> findMultiple(Pageable pageable) {
-        List<Category> foundCategories = categoryRepository.readMultiple(pageable);
+        Page<Category> foundCategories = categoryRepository.findAll(pageable);
         if (!foundCategories.isEmpty()) {
-            return foundCategories;
+            return foundCategories.getContent();
         }
         else {
             throw new EntityNotFoundException(ENTITIES_NOT_FOUND.getMessage());
         }
-    }
-
-    private boolean hasDependencies(Category category) {
-        return !category.getDevices().isEmpty();
     }
 }

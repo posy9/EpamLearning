@@ -1,12 +1,13 @@
 package by.bsu.detailstorage.service;
 
-import by.bsu.detailstorage.exception.IllegalEntityRemoveException;
 import by.bsu.detailstorage.model.Country;
 import by.bsu.detailstorage.repository.CountryRepository;
+import by.bsu.detailstorage.repository.DetailRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static by.bsu.detailstorage.registry.EntityNameRegistry.CATEGORY;
 import static by.bsu.detailstorage.registry.EntityNameRegistry.COUNTRY;
 import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
@@ -39,7 +39,7 @@ public class CountryService implements AbstractService<Country> {
     public Country createEntity(Country country) {
         country.setName(country.getName().trim().toLowerCase());
         try {
-            countryRepository.create(country);
+            countryRepository.save(country);
             return country;
         } catch (ConstraintViolationException e) {
             throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
@@ -54,13 +54,9 @@ public class CountryService implements AbstractService<Country> {
                     COUNTRY.getEntityName(), id));
         }
         country.setName(country.getName().trim().toLowerCase());
-        if (countryRepository.findByName(country.getName()).isEmpty()) {
-            country.setId(id);
-            return countryRepository.update(country);
-        } else {
-            throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
-                    COUNTRY.getEntityName(), country.getName()));
-        }
+        country.setId(id);
+        return countryRepository.save(country);
+
     }
 
     @Override
@@ -68,12 +64,7 @@ public class CountryService implements AbstractService<Country> {
         Optional<Country> countryForDelete = countryRepository.findById(id);
         if (countryForDelete.isPresent()) {
             Country country = countryForDelete.get();
-            if (!hasDependencies(country)) {
-                countryRepository.delete(country);
-            } else {
-                throw new IllegalEntityRemoveException(String.format(ENTITY_WITH_DEPENDENCIES
-                        .getMessage(), country.getName(), country.getId()));
-            }
+            countryRepository.delete(country);
         } else {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), COUNTRY.getEntityName(), id));
         }
@@ -81,15 +72,11 @@ public class CountryService implements AbstractService<Country> {
 
     @Override
     public List<Country> findMultiple(Pageable pageable) {
-        List<Country> foundCountries = countryRepository.readMultiple(pageable);
+        Page<Country> foundCountries = countryRepository.findAll(pageable);
         if (!foundCountries.isEmpty()) {
-            return foundCountries;
+            return foundCountries.getContent();
         } else {
             throw new EntityNotFoundException(ENTITIES_NOT_FOUND.getMessage());
         }
-    }
-
-    private boolean hasDependencies(Country country) {
-        return !country.getDetails().isEmpty();
     }
 }

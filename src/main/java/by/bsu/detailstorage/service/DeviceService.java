@@ -1,15 +1,15 @@
 package by.bsu.detailstorage.service;
 
-import by.bsu.detailstorage.exception.IllegalEntityRemoveException;
 import by.bsu.detailstorage.model.Brand;
 import by.bsu.detailstorage.model.Device;
 import by.bsu.detailstorage.repository.BrandRepository;
+import by.bsu.detailstorage.repository.DetailRepository;
 import by.bsu.detailstorage.repository.DeviceRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static by.bsu.detailstorage.registry.EntityNameRegistry.DETAIL;
 import static by.bsu.detailstorage.registry.EntityNameRegistry.DEVICE;
 import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.*;
 
@@ -35,7 +34,7 @@ public class DeviceService implements AbstractService<Device> {
         Optional<Brand> brand = brandRepository.findById(device.getBrand().getId());
         device.setModel(device.getModel().trim().toLowerCase());
         try {
-            return deviceRepository.create(device);
+            return deviceRepository.save(device);
         }
         catch (ConstraintViolationException e) {
             throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
@@ -49,15 +48,8 @@ public class DeviceService implements AbstractService<Device> {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), DEVICE.getEntityName(), id));
         }
         device.setModel(device.getModel().trim().toLowerCase());
-        if (deviceRepository.findByUniqueCouple(device.getModel(),device.getBrand()).isEmpty()) {
-            device.setId(id);
-            return deviceRepository.update(device);
-        }
-        else {
-            Optional<Brand> brand = brandRepository.findById(device.getBrand().getId());
-            throw new EntityExistsException(String.format(ENTITY_EXISTS.getMessage(),
-                    DEVICE.getEntityName(), brand.get().getName()+ SPACE + device.getModel()));
-        }
+        device.setId(id);
+        return deviceRepository.save(device);
     }
 
     @Override
@@ -65,12 +57,7 @@ public class DeviceService implements AbstractService<Device> {
         Optional<Device> deviceForDelete = deviceRepository.findById(id);
         if (deviceForDelete.isPresent()) {
             Device device = deviceForDelete.get();
-            if(!hasDependencies(device)) {
-                deviceRepository.delete(device);
-            } else {
-                throw new IllegalEntityRemoveException(String.format(ENTITY_WITH_DEPENDENCIES
-                        .getMessage(), device.getBrand().getName() + SPACE + device.getModel(), device.getId()));
-            }
+            deviceRepository.delete(device);
         }
         else {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), DEVICE.getEntityName(), id));
@@ -79,9 +66,9 @@ public class DeviceService implements AbstractService<Device> {
 
     @Override
     public List<Device> findMultiple(Pageable pageable) {
-        List<Device> foundDevices = deviceRepository.readMultiple(pageable);
+        Page<Device> foundDevices = deviceRepository.findAll(pageable);
         if(!foundDevices.isEmpty()) {
-            return foundDevices;
+            return foundDevices.getContent();
         }
         else throw new EntityNotFoundException(ENTITIES_NOT_FOUND.getMessage());
     }
@@ -94,9 +81,5 @@ public class DeviceService implements AbstractService<Device> {
         else {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), DEVICE.getEntityName(), id));
         }
-    }
-
-    private boolean hasDependencies(Device device) {
-        return !device.getDetails().isEmpty();
     }
 }
