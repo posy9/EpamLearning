@@ -4,57 +4,15 @@ import by.bsu.detailstorage.dtos.countrydtos.CountryCreateDto;
 import by.bsu.detailstorage.dtos.countrydtos.CountryReadDto;
 import by.bsu.detailstorage.model.Country;
 import by.bsu.detailstorage.service.CountryService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/countries")
-@RequiredArgsConstructor
-public class CountryController {
-    private final CountryService countryService;
-    private final ModelMapper modelMapper;
+public class CountryController extends AbstractController<Country, CountryReadDto, CountryCreateDto> {
 
-    @GetMapping
-    List<CountryReadDto> getAllCountries(Pageable pageable) {
-        List<Country> countries = countryService.findMultiple(pageable);
-        return countries.stream()
-                .map(country -> modelMapper.map(country, CountryReadDto.class))
-                .toList();
-    }
-
-    @GetMapping(value = "/{id}")
-    CountryReadDto getCountryById(@PathVariable long id) {
-        Country country = countryService.findById(id);
-        return modelMapper.map(country, CountryReadDto.class);
-    }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CountryReadDto createCountry(@Valid @RequestBody CountryCreateDto countryCreateDto) {
-        Country country = modelMapper.map(countryCreateDto, Country.class);
-        countryService.createEntity(country);
-        Country createdCountry = countryService.findById(country.getId());
-        return modelMapper.map(createdCountry, CountryReadDto.class);
-    }
-
-    @PutMapping(value = "/{id}")
-    CountryReadDto updateCountry(@PathVariable long id, @RequestBody CountryCreateDto countryCreateDto) {
-        countryService.updateEntity(id, modelMapper.map(countryCreateDto, Country.class));
-        Country updatedCountry = countryService.findById(id);
-        return modelMapper.map(updatedCountry, CountryReadDto.class);
-    }
-
-    @DeleteMapping(value = "/{id}")
-    ResponseEntity<Void> deleteCountry(@PathVariable long id) {
-        countryService.deleteEntity(id);
-        return ResponseEntity.noContent().build();
+    public CountryController(ModelMapper modelMapper, CountryService service) {
+        super(modelMapper, service, Country.class, CountryReadDto.class);
     }
 }

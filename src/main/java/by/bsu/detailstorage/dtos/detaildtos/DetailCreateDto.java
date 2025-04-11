@@ -1,5 +1,6 @@
 package by.bsu.detailstorage.dtos.detaildtos;
 
+import by.bsu.detailstorage.dtos.CreateDto;
 import by.bsu.detailstorage.dtos.countrydtos.CountryReadDto;
 import by.bsu.detailstorage.dtos.devicedtos.DeviceReadDto;
 import by.bsu.detailstorage.dtos.typedtos.TypeReadDto;
@@ -10,7 +11,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 @Data
-public class DetailCreateDto {
+public class DetailCreateDto implements CreateDto {
 
     @NotBlank(message = "should not be empty")
     private String name;

@@ -59,7 +59,7 @@ public abstract class AbstractService<T extends DataEntity> {
 
     public List<T> findMultiple(Pageable pageable){
         Page<T> foundEntities = entityRepository.findAll(pageable);
-        if (foundEntities.isEmpty()) {
+        if (!foundEntities.isEmpty()) {
             return foundEntities.getContent();
         } else {
             throw new EntityNotFoundException(ENTITIES_NOT_FOUND.getMessage());
