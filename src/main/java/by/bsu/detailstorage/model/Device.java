@@ -3,14 +3,12 @@ package by.bsu.detailstorage.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Entity
 @Table(name = "device", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"brand_id","model"})
 })
 @Data
-public class Device {
+public class Device implements DataEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

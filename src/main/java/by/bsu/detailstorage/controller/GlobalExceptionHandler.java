@@ -37,12 +37,6 @@ public class GlobalExceptionHandler {
         return Map.of(MESSAGE_FIELD_NAME, ex.getMessage());
     }
 
-    @ExceptionHandler(EntityExistsException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleEntityExistsException(EntityExistsException ex) {
-        return Map.of(MESSAGE_FIELD_NAME, ex.getMessage());
-    }
-
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handleNoHandlerFound(NoHandlerFoundException ex) {

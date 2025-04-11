@@ -5,11 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DetailRepository extends JpaRepository<Detail, Long> {
 
-    boolean existsByName(String name);
-
-    long countByCountryId(long countryId);
-
-    long countByDeviceId(long deviceId);
-
-    long countByTypeId(long typeId);
 }

@@ -3,12 +3,10 @@ package by.bsu.detailstorage.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Entity
 @Table(name = "brand")
 @Data
-public class Brand {
+public class Brand implements DataEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

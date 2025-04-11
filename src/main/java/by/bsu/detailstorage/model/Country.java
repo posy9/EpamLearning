@@ -3,12 +3,10 @@ package by.bsu.detailstorage.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Entity
 @Table(name = "country")
 @Data
-public class Country {
+public class Country implements DataEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
