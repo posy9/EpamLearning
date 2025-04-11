@@ -54,7 +54,7 @@ public class AbstractController<T extends DataEntity,R extends ReadDto, C extend
     }
 
     @DeleteMapping(value = "/{id}")
-    ResponseEntity<Void> deleteBrand(@PathVariable long id) {
+    ResponseEntity<Void> deleteEntity(@PathVariable long id) {
         entityService.deleteEntity(id);
         return ResponseEntity.noContent().build();
     }
