@@ -1,34 +1,36 @@
 package by.bsu.detailstorage.controller;
 
 import by.bsu.detailstorage.dtos.CreateDto;
+import by.bsu.detailstorage.dtos.FilterDto;
 import by.bsu.detailstorage.dtos.ReadDto;
 import by.bsu.detailstorage.model.DataEntity;
 import by.bsu.detailstorage.service.AbstractService;
+import by.bsu.detailstorage.specification.SpecificationBuilder;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RequiredArgsConstructor
-public class AbstractController<T extends DataEntity,R extends ReadDto, C extends CreateDto> {
+public class AbstractController<T extends DataEntity,R extends ReadDto, C extends CreateDto, F extends FilterDto> {
 
     private final ModelMapper modelMapper;
     private final AbstractService<T> entityService;
     private final Class<T> entityClass;
     private final Class<R> readDtoClass;
+    private final SpecificationBuilder<T,F> entitySpecificationBuilder;
 
 
     @GetMapping
-    List<R> getAllEntities(Pageable pageable) {
-        List<T> entities = entityService.findMultiple(pageable);
-        return entities.stream()
-                .map(entity -> modelMapper.map(entity, readDtoClass))
-                .toList();
+    Page<R> getAllEntities(@ModelAttribute F filterDto, Pageable pageable) {
+        Specification<T> entitySpecification = entitySpecificationBuilder.build(filterDto);
+        Page<T> entities = entityService.findMultiple(entitySpecification, pageable);
+        return entities.map(entity -> modelMapper.map(entity, readDtoClass));
     }
 
     @GetMapping(value = "/{id}")

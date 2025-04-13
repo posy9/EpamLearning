@@ -1,6 +1,5 @@
 package by.bsu.detailstorage.service;
 
-
 import by.bsu.detailstorage.model.Type;
 import by.bsu.detailstorage.repository.TypeRepository;
 import org.springframework.stereotype.Service;

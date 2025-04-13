@@ -2,15 +2,15 @@ package by.bsu.detailstorage.service;
 
 import by.bsu.detailstorage.model.DataEntity;
 import by.bsu.detailstorage.registry.EntityNameRegistry;
+import by.bsu.detailstorage.repository.EntityRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Optional;
 
 import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.ENTITIES_NOT_FOUND;
@@ -19,7 +19,7 @@ import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.ENTITY_NOT_FOU
 @RequiredArgsConstructor
 public abstract class AbstractService<T extends DataEntity> {
 
-    private final JpaRepository<T,Long> entityRepository;
+    private final EntityRepository<T,Long> entityRepository;
     private final EntityNameRegistry EntityName;
 
     public T findById(long id){
@@ -57,10 +57,10 @@ public abstract class AbstractService<T extends DataEntity> {
         }
     }
 
-    public List<T> findMultiple(Pageable pageable){
-        Page<T> foundEntities = entityRepository.findAll(pageable);
+    public Page<T> findMultiple(Specification<T> specification, Pageable pageable){
+        Page<T> foundEntities = entityRepository.findAll(specification, pageable);
         if (!foundEntities.isEmpty()) {
-            return foundEntities.getContent();
+            return foundEntities;
         } else {
             throw new EntityNotFoundException(ENTITIES_NOT_FOUND.getMessage());
         }

@@ -1,10 +1,8 @@
 let currentPage = 0;
-let totalPages = 0;
 
 function loadDetails(page) {
-    $.ajax({
+    $.get({
         url: "/details?page=" + page + "&size=5",
-        method: "GET",
         success: function (data, status, xhr) {
             const listContainer = $("#detailsList");
             listContainer.empty(); // Очистить список перед добавлением новых данных
@@ -17,15 +15,9 @@ function loadDetails(page) {
                     </li>
                 `);
             });
-
             currentPage = page;
             $("#pageNumber").text("Страница: " + (currentPage + 1));
 
-            // Получаем количество страниц из заголовков
-            const totalPagesHeader = xhr.getResponseHeader("X-Total-Pages");
-            totalPages = totalPagesHeader ? parseInt(totalPagesHeader) : 0;
-
-            // Показываем/скрываем кнопки
             togglePaginationButtons();
         },
         error: function () {
@@ -40,18 +32,11 @@ function togglePaginationButtons() {
     } else {
         $("#prevPage").show();
     }
-
-    if (currentPage >= totalPages - 1) {
-        $("#nextPage").hide();
-    } else {
-        $("#nextPage").show();
-    }
 }
 
 function showDetail(detailId) {
-    $.ajax({
+    $.get({
         url: "/details/" + detailId,
-        method: "GET",
         success: function (data) {
             $("#detailInfo").text(`
                 Название: ${data.name}
@@ -66,8 +51,8 @@ function showDetail(detailId) {
     });
 }
 
-$("#closeModal").click(function () {
-    $("#detailModal").hide();
+$(document).on("click", "#closeModal", function () {
+    $("#detailModal").fadeOut();
 });
 
 $(document).ready(function () {
@@ -80,7 +65,7 @@ $(document).ready(function () {
     });
 
     $("#nextPage").click(function () {
-        if (currentPage < totalPages - 1) {
+        if (currentPage >= 0) {
             loadDetails(currentPage + 1);
         }
     });
