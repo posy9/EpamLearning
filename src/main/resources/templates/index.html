@@ -10,6 +10,25 @@
 <body>
 
 <div>
+    <h1>Фильтры:</h1>
+    <form id="filterForm">
+        <label for="type">Категория:</label>
+        <select id="type" class="detailType" name="type">
+            <option value=""></option>
+        </select>
+        <label for="device">Устройство:</label>
+        <select id="device" class="detailDevice" name="device">
+            <option value=""></option>
+        </select>
+        <label for="country">Страна</label>
+        <select id="country" class="detailCountry" name="country">
+            <option value=""></option>
+        </select>
+        <label for="name">Поиск по имени:</label>
+        <input type="text" id="name" placeholder="Введите название детали...">
+    </form>
+    <div id="filterFormError" style="color: red; margin-top: 10px; display: none;"></div>
+
     <h1>Список деталей</h1>
 
     <ul id="detailsList">
@@ -17,12 +36,77 @@
     </ul>
     <button id="prevPage">Предыдущая</button>
     <button id="nextPage">Следующая</button>
+    <button id="addingButton">Добавить</button>
 
     <div id="detailModal" style="display: none;">
         <h2>Детали</h2>
         <p id="detailInfo"></p>
-        <button id="closeModal">Закрыть</button>
+        <button onclick="closeModal('detailModal')">Закрыть</button>
     </div>
+
+    <div id="editModal" class="modal" style="display: none">
+        <div class="modal-content">
+            <h2>Редактировать деталь</h2>
+            <form id="editForm">
+                <label for="detailName">Имя:</label>
+                <input type="text" id="detailName" class="detailName" name="name" required>
+
+                <label for="detailType">Тип:</label>
+                <select id="detailType" class="detailType" name="type" required>
+                    <!-- Здесь будут элементы типа -->
+                </select>
+
+                <label for="detailDevice">Устройство:</label>
+                <select id="detailDevice" class="detailDevice" name="device" required>
+                    <!-- Здесь будут элементы устройства -->
+                </select>
+
+                <label for="detailCountry">Страна:</label>
+                <select id="detailCountry" class="detailCountry" name="country" required>
+                    <!-- Здесь будут элементы страны -->
+                </select>
+
+                <label for="detailAmount">Количество:</label>
+                <input type="number" id="detailAmount" class="detailAmount" name="amount" required>
+                <div id="editFormError" style="color: red; margin-top: 10px; display: none;"></div>
+                <button type="submit">Сохранить</button>
+            </form>
+            <button onclick="closeModal('editModal')">Закрыть</button>
+        </div>
+    </div>
+
+    <div id="createModal" class="modal" style="display: none">
+        <div class="modal-content">
+            <h2>Новая деталь</h2>
+            <form id="createForm">
+                <label for="newDetailName">Имя:</label>
+                <input type="text" id="newDetailName" class="detailName" name="name" required>
+
+                <label for="newDetailType">Тип:</label>
+                <select id="newDetailType" class="detailType" name="type" required>
+                    <!-- Здесь будут элементы типа -->
+                </select>
+
+                <label for="newDetailDevice">Устройство:</label>
+                <select id="newDetailDevice" class="detailDevice" name="device" required>
+                    <!-- Здесь будут элементы устройства -->
+                </select>
+
+                <label for="newDetailCountry">Страна:</label>
+                <select id="newDetailCountry" class="detailCountry" name="country" required>
+                    <!-- Здесь будут элементы страны -->
+                </select>
+
+                <label for="newDetailAmount">Количество:</label>
+                <input type="number" id="newDetailAmount" class="detailAmount" name="amount" required>
+                <div id="createFormError" style="color: red; margin-top: 10px; display: none;"></div>
+                <button type="submit">Сохранить</button>
+            </form>
+            <button onclick="closeModal('createModal')">Закрыть</button>
+        </div>
+    </div>
+
+
 </div>
 
 </body>

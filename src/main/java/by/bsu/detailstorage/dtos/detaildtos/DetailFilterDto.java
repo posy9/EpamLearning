@@ -9,4 +9,8 @@ public class DetailFilterDto implements FilterDto {
     private Long type_id;
 
     private Long device_id;
+
+    private Long country_id;
+
+    private String name;
 }
