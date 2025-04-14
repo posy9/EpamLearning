@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class AbstractController<T extends DataEntity,R extends ReadDto, C extends CreateDto, F extends FilterDto> {
 

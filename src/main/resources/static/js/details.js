@@ -7,7 +7,7 @@ function loadDetails(page) {
             const listContainer = $("#detailsList");
             listContainer.empty(); // Очистить список перед добавлением новых данных
 
-            data.forEach(detail => {
+            data.content.forEach(detail => {
                 listContainer.append(`
                     <li>
                         ${detail.name} 
@@ -17,8 +17,7 @@ function loadDetails(page) {
             });
             currentPage = page;
             $("#pageNumber").text("Страница: " + (currentPage + 1));
-
-            togglePaginationButtons();
+            togglePaginationButtons(data.first,data.last);
         },
         error: function () {
             alert("Ошибка загрузки данных!");
@@ -26,11 +25,16 @@ function loadDetails(page) {
     });
 }
 
-function togglePaginationButtons() {
-    if (currentPage === 0) {
-        $("#prevPage").hide();
+function togglePaginationButtons(first, last) {
+    if (!first) {
+        $("#prevPage").show()
     } else {
-        $("#prevPage").show();
+        $("#prevPage").hide()
+    }
+    if (!last) {
+        $("#nextPage").show()
+    } else {
+        $("#nextPage").hide()
     }
 }
 
