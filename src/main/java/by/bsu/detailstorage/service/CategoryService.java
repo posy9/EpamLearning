@@ -9,7 +9,6 @@ import static by.bsu.detailstorage.registry.EntityNameRegistry.CATEGORY;
 
 @Service
 @Transactional
-
 public class CategoryService extends AbstractService<Category> {
 
     public CategoryService(CategoryRepository repository) {

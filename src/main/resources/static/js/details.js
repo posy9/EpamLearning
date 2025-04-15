@@ -2,10 +2,10 @@ let currentPage = 0;
 
 function loadDetails(page) {
 
-    const type = $("#type").val() || ""
-    const device = $("#device").val() || ""
-    const country = $("#country").val() || ""
-    const name = $("#name").val() || ""
+    const type = $("#filterType").val() || "";
+    const device = $("#filterDevice").val() || "";
+    const country = $("#filterCountry").val() || "";
+    const name = $("#filterName").val() || "";
 
     const url = "/details?page=" + page +
         "&size=5" +
@@ -13,93 +13,101 @@ function loadDetails(page) {
         "&type_id=" + encodeURIComponent(type) +
         "&device_id=" + encodeURIComponent(device) +
         "&country_id=" + encodeURIComponent(country) +
-        "&name=" + encodeURIComponent(name)
+        "&name=" + encodeURIComponent(name);
 
     $.get({
         url: url,
         contentType: "application/json",
         dataType: "json",
         success: function (data, status, xhr) {
-            $("#filterFormError").hide()
+            $("#filterFormError").hide();
             const listContainer = $("#detailsList");
-            listContainer.show()
+            listContainer.show();
             listContainer.empty(); // Очистить список перед добавлением новых данных
 
             data.content.forEach(detail => {
                 listContainer.append(`
-                    <li>
+                    <li class="list-group-item">
                         ${detail.name} 
-                        <button onclick="showDetail(${detail.id})">Подробнее</button>
-                        <button onclick="showUpdateForm(${detail.id})">обновить</button>
-                        <button onclick="deleteDetail(${detail.id})">удалить</button>
+                        <button class="btn btn-info btn-sm" onclick="showDetail(${detail.id})">Подробнее</button>
+                        <button class="btn btn-warning btn-sm" onclick="showUpdateForm(${detail.id})">Обновить</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteDetail(${detail.id})">Удалить</button>
                     </li>
                 `);
             });
             currentPage = page;
             $("#pageNumber").text("Страница: " + (currentPage + 1));
-            togglePaginationButtons(data.first,data.last);
+            togglePaginationButtons(data.first, data.last);
         },
         error: function (xhr) {
-            $("#filterFormError").text(xhr.responseJSON.message).show()
-            $("#detailsList").hide()
-    }
+            $("#filterFormError").text(xhr.responseJSON.message).show();
+            $("#detailsList").hide();
+        }
     });
 }
 
-function deleteDetail (detailId) {
+function deleteDetail(detailId) {
     $.ajax({
         url: "/details/" + detailId,
         type: "DELETE",
         success: function () {
-            loadDetails(currentPage)
-            closeModal('detailModal')
+            loadDetails(currentPage);
+            closeModal('detailModal');
         }
-    })
+    });
 }
 
 function togglePaginationButtons(first, last) {
     if (!first) {
-        $("#prevPage").show()
+        $("#prevPage").show();
     } else {
-        $("#prevPage").hide()
+        $("#prevPage").hide();
     }
     if (!last) {
-        $("#nextPage").show()
+        $("#nextPage").show();
     } else {
-        $("#nextPage").hide()
+        $("#nextPage").hide();
     }
 }
 
 function showUpdateForm(detailId) {
-    $(".detailDevice").empty();
-    $(".detailType").empty();
-    $(".detailCountry").empty();
-    openModal('editModal')
+
+    openModal('editModal');
+
+    $("#editFormError").hide().text(""); // Скрыть ошибку, если была
+
     $.get({
         url: "/details/" + detailId,
         success: function (data) {
-            $("#detailName").val(data.name)
-            $("#detailType").append(`<option value="${data.type.id}">${data.type.name}</option>`)
-            $("#detailDevice").append(`<option value="${data.device.id}">${data.device.brand.name} ${data.device.model}</option>`)
-            $("#detailCountry").append(`<option value="${data.country.id}">${data.country.name}</option>`)
-            $("#detailAmount").val(data.amount)
+            $("#editDetailName").val(data.name)
+            $("#editDetailType").append(`<option value="${data.type.id}">${data.type.name}</option>`)
+            $("#editDetailDevice").append(`<option value="${data.device.id}">${data.device.brand.name} ${data.device.model}</option>`)
+            $("#editDetailCountry").append(`<option value="${data.country.id}">${data.country.name}</option>`)
+            $("#editDetailAmount").val(data.amount)
+            $("#editDetailType").focus(function () { showTypes("#editDetailType") });
+            $("#editDetailDevice").focus(function () { showDevices("#editDetailDevice") });
+            $("#editDetailCountry").focus(function () { showCountries("#editDetailCountry") });
         }
-    })
+    });
+
+    $("#editForm").off("submit"); // Очищаем старые обработчики
+
     $("#editForm").submit(function (e) {
-        e.preventDefault()
+        e.preventDefault();
         const updateData = {
-            name : $("#detailName").val(),
-            type : {
-                id : $("#detailType").val()
+            name: $("#editDetailName").val(),
+            type: {
+                id: $("#editDetailType").val()
             },
-            device : {
-                id : $("#detailDevice").val()
+            device: {
+                id: $("#editDetailDevice").val()
             },
-            country : {
-                id : $("#detailCountry").val()
+            country: {
+                id: $("#editDetailCountry").val()
             },
-            amount: $("#detailAmount").val()
-        }
+            amount: $("#editDetailAmount").val()
+        };
+
         $.ajax({
             url: "/details/" + detailId,
             type: "PUT",
@@ -107,88 +115,126 @@ function showUpdateForm(detailId) {
             dataType: "json",
             data: JSON.stringify(updateData),
             success: function (response) {
-                closeModal('editModal')
-                showDetail(response.id)
-                loadDetails(currentPage)
+                closeModal('editModal');
+                showDetail(response.id);
+                loadDetails(currentPage);
             },
             error: function (xhr) {
-                $("#editFormError").text(xhr.responseJSON.message + ": detail with this name is already exists").show()
+                $("#editFormError").text(xhr.responseJSON.message + ": detail with this name is already exists").show();
             }
-        })
-    })
+        });
+    });
 }
 
-function showCreateForm() {
-    openModal('createModal')
+
+function showDetailCreateForm() {
+
+    openModal('createModal');
+
+    $("#createFormError").hide().text("");
+
+    $("#createForm").off("submit");
+
     $("#createForm").submit(function (e) {
-        e.preventDefault()
-        const createData= {
-            name : $("#newDetailName").val(),
-            type : {
-                id : $("#newDetailType").val()
+        e.preventDefault();
+        const createData = {
+            name: $("#newDetailName").val(),
+            type: {
+                id: $("#newDetailType").val()
             },
-            device : {
-                id : $("#newDetailDevice").val()
+            device: {
+                id: $("#newDetailDevice").val()
             },
-            country : {
-                id : $("#newDetailCountry").val()
+            country: {
+                id: $("#newDetailCountry").val()
             },
             amount: $("#newDetailAmount").val()
-        }
+        };
         $.post({
             url: "/details",
             contentType: "application/json",
             dataType: "json",
             data: JSON.stringify(createData),
             success: function (response) {
-                closeModal('createModal')
-                showDetail(response.id)
-                loadDetails(currentPage)
+                closeModal('createModal');
+                showDetail(response.id);
+                loadDetails(currentPage);
             },
             error: function (xhr) {
-                $("#createFormError").text(xhr.responseJSON.message + ": detail with this name is already exists").show()
+                $("#createFormError").text(xhr.responseJSON.message + ": detail with this name is already exists").show();
             }
-        })
-    })
+        });
+    });
 }
 
-function showDevices() {
-    let optionCount = $(".detailDevice option").length;
-    if (optionCount===1 || optionCount===0){
-    $.get({
-        url: "/devices",
-        success: function (data) {
-            data.content.forEach(function(device) {
-                $(".detailDevice").append(`<option value="${device.id}">${device.brand.name} ${device.model}</option>`);
-            });
-        }
-    })}
+function showDevices(selector) {
+    let optionCount = $(selector + " option").length;
+    if (optionCount === 1 || optionCount === 0) {
+        $.get({
+            url: "/devices",
+            success: function (data) {
+                data.content.forEach(function (device) {
+                    $(selector).append(`<option value="${device.id}">${device.brand.name} ${device.model}</option>`);
+                });
+            }
+        });
+    }
 }
 
-function showTypes() {
-    let optionCount = $(".detailType option").length;
-    if (optionCount===1 || optionCount===0){
-    $.get({
-        url: "/types",
-        success: function (data) {
-            data.content.forEach(function(type) {
-                $(".detailType").append(`<option value="${type.id}">${type.name}</option>`);
-            });
-        }
-    })}
+function showTypes(selector) {
+    let optionCount = $(selector + " option").length;
+    if (optionCount === 1 || optionCount === 0) {
+        $.get({
+            url: "/types",
+            success: function (data) {
+                data.content.forEach(function (type) {
+                    $(selector).append(`<option value="${type.id}">${type.name}</option>`);
+                });
+            }
+        });
+    }
 }
 
-function showCountries() {
-    let optionCount = $(".detailCountry option").length;
-    if (optionCount===1 || optionCount===0){
-    $.get({
-        url: "/countries",
-        success: function (data) {
-            data.content.forEach(function(country) {
-                $(".detailCountry").append(`<option value="${country.id}">${country.name}</option>`);
-            });
-        }
-    })}
+function showCountries(selector) {
+    let optionCount = $(selector + " option").length;
+    if (optionCount === 1 || optionCount === 0) {
+        $.get({
+            url: "/countries",
+            success: function (data) {
+                data.content.forEach(function (country) {
+                    $(selector).append(`<option value="${country.id}">${country.name}</option>`);
+                });
+            }
+        });
+    }
+}
+
+function showBrands(selector) {
+    let optionCount = $(selector + " option").length;
+    if (optionCount === 1 || optionCount === 0) {
+        $.get({
+            url: "/brands",
+            success: function (data) {
+                data.content.forEach(function (brand) {
+                    $(selector).append(`<option value="${brand.id}">${brand.name}</option>`);
+                });
+            }
+        });
+    }
+}
+
+function showCategories(selector) {
+    let optionCount = $(selector + " option").length;
+    if (optionCount === 1 || optionCount === 0) {
+        $.get({
+            url: "/categories",
+            success: function (data) {
+                data.content.forEach(function (category) {
+                    $(selector).append(`<option value="${category.id}">${category.name}</option>`);
+                });
+            }
+        });
+    }
 }
 
 function showDetail(detailId) {
@@ -196,58 +242,215 @@ function showDetail(detailId) {
         url: "/details/" + detailId,
         success: function (data) {
             $("#detailInfo").html(`
-                Название: ${data.name}
-                Категория: ${data.type.name}
-                Количество: ${data.amount}
-                Для устройства: ${data.device.brand.name} ${data.device.model}
-                Страна производитель: ${data.country.name}
-                <button onclick="showUpdateForm(${data.id})">обновить</button>
-                <button onclick="deleteDetail(${data.id})">удалить</button>
+                <strong>Название:</strong> ${data.name} <br>
+                <strong>Категория:</strong> ${data.type.name} <br>
+                <strong>Количество:</strong> ${data.amount} <br>
+                <strong>Для устройства:</strong> ${data.device.brand.name} ${data.device.model} <br>
+                <strong>Страна производитель:</strong> ${data.country.name} <br>
+                <button class="btn btn-warning btn-sm" onclick="showUpdateForm(${data.id})">Обновить</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteDetail(${data.id})">Удалить</button>
             `);
-            openModal('detailModal')
+            openModal('detailModal');
         }
     });
 }
 
+
+
 function closeModal(modalId) {
-   $("#"+modalId).fadeOut();
+    $("#" + modalId).modal('hide');
 }
 
 function openModal(modalId) {
-    $("#" + modalId).fadeIn();
+    $("#" + modalId).modal('show');
 }
 
+
+function showTypeCreateForm() {
+
+    openModal('createTypeModal')
+
+    $("#createTypeFormError").hide().text("");
+
+    $("#createTypeForm").off("submit");
+
+    $("#createTypeForm").submit(function (e) {
+        e.preventDefault();
+        const createData = {
+            name: $("#createTypeName").val(),
+        };
+        $.post({
+            url: "/types",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(createData),
+            success: function () {
+                closeModal('createTypeModal');
+                $("#filterType").empty().append(`<option value="">Все</option>`)
+                $("#newDetailType").empty()
+                $("#editDetailType").empty()
+            },
+            error: function (xhr) {
+                $("#createTypeFormError").text(xhr.responseJSON.message + ": type with this name is already exists").show();
+            }
+        });
+    });
+}
+
+function showCountryCreateForm() {
+    openModal('createCountryModal')
+
+    $("#createCountryFormError").hide().text("");
+
+    $("#createCountryForm").off("submit");
+
+    $("#createCountryForm").submit(function (e) {
+        e.preventDefault();
+        const createData = {
+            name: $("#createCountryName").val(),
+
+        };
+        $.post({
+            url: "/countries",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(createData),
+            success: function () {
+                closeModal('createCountryModal');
+                $("#filterCountry").empty().append(`<option value="">Все</option>`)
+                $("#newDetailCountry").empty()
+                $("#editDetailCountry").empty()
+            },
+            error: function (xhr) {
+                $("#createCountryFormError").text(xhr.responseJSON.message + ": country with this name is already exists").show();
+            }
+        });
+    });
+}
+
+function showBrandCreateForm() {
+    openModal('createBrandModal')
+
+    $("#createBrandFormError").hide().text("");
+
+    $("#createBrandForm").off("submit");
+
+    $("#createBrandForm").submit(function (e) {
+        e.preventDefault();
+        const createData = {
+            name: $("#createBrandName").val(),
+
+        };
+        $.post({
+            url: "/brands",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(createData),
+            success: function () {
+                closeModal('createBrandModal');
+                $("#createDeviceBrand").empty()
+            },
+            error: function (xhr) {
+                $("#createBrandFormError").text(xhr.responseJSON.message + ": brand with this name is already exists").show();
+            }
+        });
+    });
+}
+
+function showDeviceCreateForm() {
+    openModal('createDeviceModal')
+
+    $("#createDeviceFormError").hide().text("");
+
+    $("#createDeviceForm").off("submit");
+
+    $("#createDeviceForm").submit(function (e) {
+        e.preventDefault();
+        const createData = {
+            brand: {
+                id: $("#createDeviceBrand").val()
+            },
+            model: $("#createDeviceModel").val(),
+            category: {
+                id: $("#createDeviceCategory").val()
+            }
+        };
+        $.post({
+            url: "/devices",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(createData),
+            success: function () {
+                closeModal('createDeviceModal');
+                $("#filterDevice").empty().append(`<option value="">Все</option>`)
+                $("#newDetailDevice").empty()
+                $("#editDetailDevice").empty()
+            },
+            error: function (xhr) {
+                $("#createDeviceFormError").text(xhr.responseJSON.message + ": device with this brand and model is already exists").show();
+            }
+        });
+    });
+}
+
+
 $(document).ready(function () {
-    loadDetails(currentPage)
+    loadDetails(currentPage);
 
     $("#prevPage").click(function () {
         if (currentPage > 0) {
             loadDetails(currentPage - 1);
         }
-    })
+    });
 
     $("#nextPage").click(function () {
         if (currentPage >= 0) {
             loadDetails(currentPage + 1);
         }
+    });
+
+    $(".addTypeBtn").click(function () {
+        showTypeCreateForm()
     })
 
-    $(".detailType").focus(function (){showTypes()})
-    $(".detailDevice").focus(function (){showDevices()})
-    $(".detailCountry").focus(function (){showCountries()})
-
-
-    $("#addingButton").click(function (){
-        showCreateForm()
+    $(".addDeviceBtn").click(function () {
+        showDeviceCreateForm()
     })
 
-    $("#filterForm select").change(function () {
-        currentPage = 0
-        loadDetails(currentPage)
+    $(".addCountryBtn").click(function () {
+        showCountryCreateForm()
     })
+
+    $(".addBrandBtn").click(function () {
+        showBrandCreateForm()
+    })
+
+    $("#addCategoryBtn").click(function () {
+        showCategoryCreateForm()
+    })
+
+    $("#createDeviceBrand").focus(function () { showBrands("#createDeviceBrand")})
+    $("#createDeviceCategory").focus(function () { showCategories("#createDeviceCategory")})
+
+    $("#filterType").focus(function () { showTypes("#filterType") });
+    $("#filterDevice").focus(function () { showDevices("#filterDevice") });
+    $("#filterCountry").focus(function () { showCountries("#filterCountry") });
+
+    $("#newDetailType").focus(function () { showTypes("#newDetailType") });
+    $("#newDetailDevice").focus(function () { showDevices("#newDetailDevice") });
+    $("#newDetailCountry").focus(function () { showCountries("#newDetailCountry") });
+
+    $("#addingButton").click(function () {
+        showDetailCreateForm();
+    });
+
+    $("#filterForm div select").change(function () {
+        currentPage = 0;
+        loadDetails(currentPage);
+    });
 
     let nameInputTimeout;
-    $("#name").on("input", function () {
+    $("#filterName").on("input", function () {
         clearTimeout(nameInputTimeout);
         nameInputTimeout = setTimeout(() => {
             currentPage = 0;
