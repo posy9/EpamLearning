@@ -46,6 +46,16 @@
             <label for="filterName">Поиск по имени:</label>
             <input type="text" id="filterName" class="form-control" placeholder="Введите название детали...">
         </div>
+
+        <div class="form-group col-md-3">
+            <label for="sortAmount">Сортировать по количеству:</label>
+            <div class="input-group">
+                <select id="sortAmount" class="form-control" name="sortAmount">
+                    <option value="asc">по возрастанию</option>
+                    <option value="desc">по убыванию</option>
+                </select>
+            </div>
+        </div>
     </form>
 
     <div id="filterFormError" class="alert alert-danger" style="display: none;"></div>

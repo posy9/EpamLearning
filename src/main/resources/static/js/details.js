@@ -2,18 +2,23 @@ let currentPage = 0;
 
 function loadDetails(page) {
 
+    const rawSort = $("#sortAmount").val();
+    const sortAmount = rawSort === "asc" || rawSort === "desc" ? rawSort : "";
     const type = $("#filterType").val() || "";
     const device = $("#filterDevice").val() || "";
     const country = $("#filterCountry").val() || "";
     const name = $("#filterName").val() || "";
 
-    const url = "/details?page=" + page +
+    let url = "/details?page=" + page +
         "&size=5" +
-        "&sort=id,asc" +
         "&type_id=" + encodeURIComponent(type) +
         "&device_id=" + encodeURIComponent(device) +
         "&country_id=" + encodeURIComponent(country) +
         "&name=" + encodeURIComponent(name);
+    if (sortAmount) {
+        url += "&sort=amount," + sortAmount;
+    }
+    url += "&sort=id,asc";
 
     $.get({
         url: url,
@@ -28,7 +33,7 @@ function loadDetails(page) {
             data.content.forEach(detail => {
                 listContainer.append(`
                     <li class="list-group-item">
-                        ${detail.name} 
+                        ${detail.name}
                         <button class="btn btn-info btn-sm" onclick="showDetail(${detail.id})">Подробнее</button>
                         <button class="btn btn-warning btn-sm" onclick="showUpdateForm(${detail.id})">Обновить</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteDetail(${detail.id})">Удалить</button>
@@ -473,7 +478,7 @@ $(document).ready(function () {
         showDetailCreateForm();
     });
 
-    $("#filterForm div select").change(function () {
+    $("#filterForm select").change(function () {
         currentPage = 0;
         loadDetails(currentPage);
     });
