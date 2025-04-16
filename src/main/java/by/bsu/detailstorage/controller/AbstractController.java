@@ -48,7 +48,7 @@ public class AbstractController<T extends DataEntity,R extends ReadDto, C extend
     }
 
     @PutMapping(value = "/{id}")
-    R updateEntity(@PathVariable long id, @RequestBody C entityCreateDto) {
+    R updateEntity(@PathVariable long id, @Valid @RequestBody C entityCreateDto) {
         entityService.updateEntity(id, modelMapper.map(entityCreateDto, entityClass));
         T updatedEntity = entityService.findById(id);
         return modelMapper.map(updatedEntity, readDtoClass);

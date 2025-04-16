@@ -125,12 +125,22 @@ function showUpdateForm(detailId) {
                 loadDetails(currentPage);
             },
             error: function (xhr) {
-                $("#editFormError").text(xhr.responseJSON.message + ": detail with this name is already exists").show();
+                errorHandle(xhr, "#editFormError", "detail");
             }
         });
     });
 }
 
+
+function errorHandle(xhr, selector, entityName) {
+    if (!('message' in xhr.responseJSON)) {
+        Object.keys(xhr.responseJSON).forEach(key => {
+            $(selector).text(key + " is not valid").show();
+        });
+    } else {
+        $(selector).text(xhr.responseJSON.message + ": This " + entityName + " is already exists").show();
+    }
+}
 
 function showDetailCreateForm() {
 
@@ -166,7 +176,7 @@ function showDetailCreateForm() {
                 loadDetails(currentPage);
             },
             error: function (xhr) {
-                $("#createFormError").text(xhr.responseJSON.message + ": detail with this name is already exists").show();
+                errorHandle(xhr, "#createFormError", "detail");
             }
         });
     });
@@ -296,7 +306,7 @@ function showTypeCreateForm() {
                 $("#editDetailType").empty()
             },
             error: function (xhr) {
-                $("#createTypeFormError").text(xhr.responseJSON.message + ": type with this name is already exists").show();
+                errorHandle(xhr, "#createTypeFormError", "type");
             }
         });
     });
@@ -327,7 +337,7 @@ function showCountryCreateForm() {
                 $("#editDetailCountry").empty()
             },
             error: function (xhr) {
-                $("#createCountryFormError").text(xhr.responseJSON.message + ": country with this name is already exists").show();
+                errorHandle(xhr, "#createCountryFormError", "country");
             }
         });
     });
@@ -356,7 +366,7 @@ function showBrandCreateForm() {
                 $("#createDeviceBrand").empty()
             },
             error: function (xhr) {
-                $("#createBrandFormError").text(xhr.responseJSON.message + ": brand with this name is already exists").show();
+                errorHandle(xhr, "#createBrandFormError", "brand");
             }
         });
     });
@@ -392,7 +402,7 @@ function showDeviceCreateForm() {
                 $("#editDetailDevice").empty()
             },
             error: function (xhr) {
-                $("#createDeviceFormError").text(xhr.responseJSON.message + ": device with this brand and model is already exists").show();
+                errorHandle(xhr, "#createDeviceFormError", "device");
             }
         });
     });
@@ -421,7 +431,7 @@ function showCategoryCreateForm() {
                 $("#createDeviceCategory").empty()
             },
             error: function (xhr) {
-                $("#createCategoryFormError").text(xhr.responseJSON.message + ": category with this name is already exists").show();
+                errorHandle(xhr, "#createCategoryFormError", "category");
             }
         });
     });
