@@ -45,7 +45,7 @@ function loadDetails(page) {
             togglePaginationButtons(data.first, data.last);
         },
         error: function (xhr) {
-            $("#filterFormError").text(xhr.responseJSON.message).show();
+            $("#filterFormError").text("Details for your request are not found").show();
             $("#detailsList").hide();
         }
     });
