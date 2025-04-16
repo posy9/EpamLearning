@@ -207,7 +207,7 @@
                     </div>
                     <div id="createTypeFormError" class="alert alert-danger" style="display: none;"></div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
-                </form> <!-- Вот здесь не хватало закрытия -->
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="closeModal('createTypeModal')">Закрыть</button>
@@ -220,14 +220,19 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Создать тип</h5>
+                <h5 class="modal-title">Создать устройство</h5>
                 <button type="button" class="close" onclick="closeModal('createDeviceModal')">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="createDeviceForm">
                     <div class="form-group">
                         <label for="createDeviceBrand">Бренд:</label>
-                        <select id="createDeviceBrand" class="form-control" required></select>
+                        <div class="input-group">
+                            <select id="createDeviceBrand" class="form-control" required></select>
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-outline-success addBrandBtn">+</button>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="createDeviceModel">Модель:</label>
@@ -235,14 +240,67 @@
                     </div>
                     <div class="form-group">
                         <label for="createDeviceCategory">Категория:</label>
-                        <select id="createDeviceCategory" class="form-control" required></select>
+                        <div class="input-group">
+                            <select id="createDeviceCategory" class="form-control" required></select>
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-outline-success addCategoryBtn">+</button>
+                            </div>
+                        </div>
                     </div>
                     <div id="createDeviceFormError" class="alert alert-danger" style="display: none;"></div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
-                </form> <!-- Вот здесь не хватало закрытия -->
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="closeModal('createDeviceModal')">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="createCategoryModal" class="modal" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Создать Категорию</h5>
+                <button type="button" class="close" onclick="closeModal('createCategoryModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createCategoryForm">
+                    <div class="form-group">
+                        <label for="createCategoryName">Название:</label>
+                        <input type="text" id="createCategoryName" class="form-control" required>
+                    </div>
+                    <div id="createCategoryFormError" class="alert alert-danger" style="display: none;"></div>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('createCategoryModal')">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="createBrandModal" class="modal" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Создать бренд</h5>
+                <button type="button" class="close" onclick="closeModal('createBrandModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createBrandForm">
+                    <div class="form-group">
+                        <label for="createBrandName">Название:</label>
+                        <input type="text" id="createBrandName" class="form-control" required>
+                    </div>
+                    <div id="createBrandFormError" class="alert alert-danger" style="display: none;"></div>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('createBrandModal')">Закрыть</button>
             </div>
         </div>
     </div>
@@ -252,7 +310,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Создать тип</h5>
+                <h5 class="modal-title">Создать страну</h5>
                 <button type="button" class="close" onclick="closeModal('createCountryModal')">&times;</button>
             </div>
             <div class="modal-body">

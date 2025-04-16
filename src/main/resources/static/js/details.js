@@ -393,6 +393,35 @@ function showDeviceCreateForm() {
     });
 }
 
+function showCategoryCreateForm() {
+    openModal('createCategoryModal')
+
+    $("#createCategoryFormError").hide().text("");
+
+    $("#createCategoryForm").off("submit");
+
+    $("#createCategoryForm").submit(function (e) {
+        e.preventDefault();
+        const createData = {
+            name: $("#createCategoryName").val(),
+
+        };
+        $.post({
+            url: "/categories",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(createData),
+            success: function () {
+                closeModal('createCategoryModal');
+                $("#createDeviceCategory").empty()
+            },
+            error: function (xhr) {
+                $("#createCategoryFormError").text(xhr.responseJSON.message + ": category with this name is already exists").show();
+            }
+        });
+    });
+}
+
 
 $(document).ready(function () {
     loadDetails(currentPage);
@@ -425,7 +454,7 @@ $(document).ready(function () {
         showBrandCreateForm()
     })
 
-    $("#addCategoryBtn").click(function () {
+    $(".addCategoryBtn").click(function () {
         showCategoryCreateForm()
     })
 
