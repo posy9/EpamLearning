@@ -1,7 +1,6 @@
 let currentPage = 0;
 
 function loadDetails(page) {
-
     const rawSort = $("#sortAmount").val();
     const sortAmount = rawSort === "asc" || rawSort === "desc" ? rawSort : "";
     const type = $("#filterType").val() || "";
@@ -304,6 +303,7 @@ function showTypeCreateForm() {
                 $("#filterType").empty().append(`<option value="">Все</option>`)
                 $("#newDetailType").empty()
                 $("#editDetailType").empty()
+                loadEntities("#entitySelector", entitiesPage)
             },
             error: function (xhr) {
                 errorHandle(xhr, "#createTypeFormError", "type");
@@ -335,6 +335,7 @@ function showCountryCreateForm() {
                 $("#filterCountry").empty().append(`<option value="">Все</option>`)
                 $("#newDetailCountry").empty()
                 $("#editDetailCountry").empty()
+                loadEntities("#entitySelector", entitiesPage)
             },
             error: function (xhr) {
                 errorHandle(xhr, "#createCountryFormError", "country");
@@ -362,8 +363,9 @@ function showBrandCreateForm() {
             dataType: "json",
             data: JSON.stringify(createData),
             success: function () {
-                closeModal('createBrandModal');
+                closeModal('createBrandModal')
                 $("#createDeviceBrand").empty()
+                loadEntities("#entitySelector", entitiesPage)
             },
             error: function (xhr) {
                 errorHandle(xhr, "#createBrandFormError", "brand");
@@ -400,6 +402,7 @@ function showDeviceCreateForm() {
                 $("#filterDevice").empty().append(`<option value="">Все</option>`)
                 $("#newDetailDevice").empty()
                 $("#editDetailDevice").empty()
+                loadEntities("#entitySelector", entitiesPage)
             },
             error: function (xhr) {
                 errorHandle(xhr, "#createDeviceFormError", "device");
@@ -429,6 +432,7 @@ function showCategoryCreateForm() {
             success: function () {
                 closeModal('createCategoryModal');
                 $("#createDeviceCategory").empty()
+                loadEntities("#entitySelector", entitiesPage)
             },
             error: function (xhr) {
                 errorHandle(xhr, "#createCategoryFormError", "category");
@@ -439,66 +443,84 @@ function showCategoryCreateForm() {
 
 
 $(document).ready(function () {
-    loadDetails(currentPage);
-
-    $("#prevPage").click(function () {
-        if (currentPage > 0) {
-            loadDetails(currentPage - 1);
-        }
-    });
-
-    $("#nextPage").click(function () {
-        if (currentPage >= 0) {
-            loadDetails(currentPage + 1);
-        }
-    });
-
-    $(".addTypeBtn").click(function () {
-        showTypeCreateForm()
-    })
-
-    $(".addDeviceBtn").click(function () {
-        showDeviceCreateForm()
-    })
-
-    $(".addCountryBtn").click(function () {
-        showCountryCreateForm()
-    })
-
-    $(".addBrandBtn").click(function () {
-        showBrandCreateForm()
-    })
-
-    $(".addCategoryBtn").click(function () {
-        showCategoryCreateForm()
-    })
-
-    $("#createDeviceBrand").focus(function () { showBrands("#createDeviceBrand")})
-    $("#createDeviceCategory").focus(function () { showCategories("#createDeviceCategory")})
-
-    $("#filterType").focus(function () { showTypes("#filterType") });
-    $("#filterDevice").focus(function () { showDevices("#filterDevice") });
-    $("#filterCountry").focus(function () { showCountries("#filterCountry") });
-
-    $("#newDetailType").focus(function () { showTypes("#newDetailType") });
-    $("#newDetailDevice").focus(function () { showDevices("#newDetailDevice") });
-    $("#newDetailCountry").focus(function () { showCountries("#newDetailCountry") });
-
-    $("#addingButton").click(function () {
-        showDetailCreateForm();
-    });
-
-    $("#filterForm select").change(function () {
-        currentPage = 0;
+    if (window.location.pathname === "/") {
         loadDetails(currentPage);
-    });
 
-    let nameInputTimeout;
-    $("#filterName").on("input", function () {
-        clearTimeout(nameInputTimeout);
-        nameInputTimeout = setTimeout(() => {
+        $("#prevPage").click(function () {
+            if (currentPage > 0) {
+                loadDetails(currentPage - 1);
+            }
+        });
+
+        $("#nextPage").click(function () {
+            if (currentPage >= 0) {
+                loadDetails(currentPage + 1);
+            }
+        });
+
+        $(".addTypeBtn").click(function () {
+            showTypeCreateForm()
+        })
+
+        $(".addDeviceBtn").click(function () {
+            showDeviceCreateForm()
+        })
+
+        $(".addCountryBtn").click(function () {
+            showCountryCreateForm()
+        })
+
+        $(".addBrandBtn").click(function () {
+            showBrandCreateForm()
+        })
+
+        $(".addCategoryBtn").click(function () {
+            showCategoryCreateForm()
+        })
+
+        $("#createDeviceBrand").focus(function () {
+            showBrands("#createDeviceBrand")
+        })
+        $("#createDeviceCategory").focus(function () {
+            showCategories("#createDeviceCategory")
+        })
+
+        $("#filterType").focus(function () {
+            showTypes("#filterType")
+        });
+        $("#filterDevice").focus(function () {
+            showDevices("#filterDevice")
+        });
+        $("#filterCountry").focus(function () {
+            showCountries("#filterCountry")
+        });
+
+        $("#newDetailType").focus(function () {
+            showTypes("#newDetailType")
+        });
+        $("#newDetailDevice").focus(function () {
+            showDevices("#newDetailDevice")
+        });
+        $("#newDetailCountry").focus(function () {
+            showCountries("#newDetailCountry")
+        });
+
+        $("#addingButton").click(function () {
+            showDetailCreateForm();
+        });
+
+        $("#filterForm select").change(function () {
             currentPage = 0;
             loadDetails(currentPage);
-        }, 300); // задержка 300мс после последнего ввода
-    });
+        });
+
+        let nameInputTimeout;
+        $("#filterName").on("input", function () {
+            clearTimeout(nameInputTimeout);
+            nameInputTimeout = setTimeout(() => {
+                currentPage = 0;
+                loadDetails(currentPage);
+            }, 300); // задержка 300мс после последнего ввода
+        });
+    }
 });

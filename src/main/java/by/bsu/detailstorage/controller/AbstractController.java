@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class AbstractController<T extends DataEntity,R extends ReadDto, C extend
     private final SpecificationBuilder<T,F> entitySpecificationBuilder;
 
     @GetMapping
-    Page<R> getAllEntities(@ModelAttribute F filterDto, Pageable pageable) {
+    Page<R> getAllEntities(@ModelAttribute F filterDto, @PageableDefault(size = 50) Pageable pageable) {
         Specification<T> entitySpecification = entitySpecificationBuilder.build(filterDto);
         Page<T> entities = entityService.findMultiple(entitySpecification, pageable);
         return entities.map(entity -> modelMapper.map(entity, readDtoClass));
