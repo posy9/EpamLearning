@@ -491,6 +491,7 @@ $(document).ready(function () {
         $("#filterDevice").focus(function () {
             showDevices("#filterDevice")
         });
+
         $("#filterCountry").focus(function () {
             showCountries("#filterCountry")
         });
