@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
+
 @Configuration
 public class SecurityConfig {
 
@@ -24,8 +26,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository) {
-        return new UserService(userRepository);
+    public UserDetailsService userDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        return new UserService(userRepository, passwordEncoder);
     }
 
     @Bean
@@ -34,11 +36,9 @@ public class SecurityConfig {
                                                        UserDetailsService userDetailsService) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
-
         authenticationManagerBuilder
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder);
-
         return authenticationManagerBuilder.build();
     }
 
@@ -47,13 +47,16 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                        .requestMatchers("/js/details.js").authenticated()
+                        .requestMatchers("/js/adminPage.js").hasRole("ADMIN")
+                        .requestMatchers("/details/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/", "/brands/", "/devices", "/countries", "/types", "/categories").authenticated()
-                        .requestMatchers("/details").authenticated()
                         .requestMatchers("/login", "/logout").permitAll()
                         .requestMatchers("/**").hasRole("ADMIN")
                 )
                 .formLogin(Customizer.withDefaults())
                 .build();
     }
+
 }
 

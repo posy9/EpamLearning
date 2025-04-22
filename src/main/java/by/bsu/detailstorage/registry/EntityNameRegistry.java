@@ -11,7 +11,9 @@ public enum EntityNameRegistry {
     CATEGORY("Category"),
     TYPE("Type"),
     COUNTRY("Country"),
-    BRAND("Brand"),;
+    BRAND("Brand"),
+    USER("User"),
+    ROLE("Role");
 
     private final String entityName;
 }

@@ -23,6 +23,7 @@
         <option value="categories">Категории</option>
         <option value="countries">Страны</option>
         <option value="types">Типы</option>
+        <option value="users">Пользователи</option>
       </select>
   </div>
 </div>
@@ -164,11 +165,50 @@
             </div>
             <div id="createCountryFormError" class="alert alert-danger" style="display: none;"></div>
             <button type="submit" class="btn btn-primary">Сохранить</button>
-          </form> <!-- Вот здесь не хватало закрытия -->
+          </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="closeModal('createCountryModal')">Закрыть</button>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="createUserModal" class="modal" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Создать пользователя:</h5>
+        <button type="button" class="close" onclick="closeModal('createUserModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="createUserForm">
+          <div class="form-group">
+            <label for="newUserName">Имя:</label>
+            <input type="text" id="newUserName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="newUserPassword">Пароль:</label>
+            <div class="input-group">
+              <input type="text" id="newUserPassword" class="form-control" required>
+              <div class="input-group-append">
+                <button type="button" class="btn btn-outline-secondary" onclick="generatePassword()">Сгенерировать</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="newUserRole">Роль:</label>
+              <div class="input-group">
+                <select id="newUserRole" class="form-control" required></select>
+              </div>
+            </div>
+          </div>
+          <div id="createUserFormError" class="alert alert-danger" style="display: none;"></div>
+          <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('createUserModal')">Закрыть</button>
       </div>
     </div>
   </div>

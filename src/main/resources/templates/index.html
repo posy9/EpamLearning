@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Детали</title>
@@ -9,13 +9,16 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="/js/details.js"></script>
+    <script>
+        const isAdmin = /*[[${#authorization.expression('hasRole("ROLE_ADMIN")')}]]*/ false;
+    </script>
 </head>
 <body>
 
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="mb-4">Фильтры:</h1>
-        <a href="/adminPage" class="btn btn-outline-dark">Перейти на страницу администратора</a>
+        <a sec:authorize="hasRole('ROLE_ADMIN')" href="/adminPage" class="btn btn-outline-dark">Перейти на страницу администратора</a>
     </div>
 
     <form id="filterForm" class="form-row mb-4">
@@ -112,16 +115,16 @@
                             <label for="editDetailType">Тип:</label>
                             <div class="input-group">
                                 <select id="editDetailType" class="form-control" required></select>
-                                <div class="input-group-append">
+                                <div sec:authorize="hasRole('ROLE_ADMIN')" class="input-group-append">
                                     <button type="button" class="btn btn-outline-success addTypeBtn">+</button>
                                 </div>
+                                </div>
                             </div>
-                        </div>
                         <div class="form-group">
                             <label for="editDetailDevice">Устройство:</label>
                             <div class="input-group">
                                 <select id="editDetailDevice" class="form-control" required></select>
-                                <div class="input-group-append">
+                                <div sec:authorize="hasRole('ROLE_ADMIN')" class="input-group-append">
                                     <button type="button" class="btn btn-outline-success addDeviceBtn">+</button>
                                 </div>
                             </div>
@@ -130,7 +133,7 @@
                             <label for="editDetailCountry">Страна:</label>
                             <div class="input-group">
                                 <select id="editDetailCountry" class="form-control" required></select>
-                                <div class="input-group-append">
+                                <div sec:authorize="hasRole('ROLE_ADMIN')" class="input-group-append">
                                     <button type="button" class="btn btn-outline-success addCountryBtn">+</button>
                                 </div>
                             </div>
@@ -167,7 +170,7 @@
                             <label for="newDetailType">Тип:</label>
                             <div class="input-group">
                                 <select id="newDetailType" class="form-control" required></select>
-                                <div class="input-group-append">
+                                <div sec:authorize="hasRole('ROLE_ADMIN')" class="input-group-append">
                                     <button type="button" class="btn btn-outline-success addTypeBtn">+</button>
                                 </div>
                             </div>
@@ -176,7 +179,7 @@
                             <label for="newDetailDevice">Устройство:</label>
                             <div class="input-group">
                                 <select id="newDetailDevice" class="form-control" required></select>
-                                <div class="input-group-append">
+                                <div sec:authorize="hasRole('ADMIN')" class="input-group-append">
                                     <button type="button" class="btn btn-outline-success addDeviceBtn">+</button>
                                 </div>
                             </div>
@@ -185,7 +188,7 @@
                             <label for="newDetailCountry">Страна:</label>
                             <div class="input-group">
                                 <select id="newDetailCountry" class="form-control" required></select>
-                                <div class="input-group-append">
+                                <div sec:authorize="hasRole('ROLE_ADMIN')" class="input-group-append">
                                     <button type="button" class="btn btn-outline-success addCountryBtn">+</button>
                                 </div>
                             </div>
@@ -206,7 +209,7 @@
     </div>
 </div>
 
-<div id="createTypeModal" class="modal" style="display: none;">
+<div sec:authorize="hasRole('ROLE_ADMIN')" id="createTypeModal" class="modal" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -230,7 +233,7 @@
     </div>
 </div>
 
-<div id="createDeviceModal" class="modal" style="display: none;">
+<div sec:authorize="hasRole('ROLE_ADMIN')" id="createDeviceModal" class="modal" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -272,7 +275,7 @@
     </div>
 </div>
 
-<div id="createCategoryModal" class="modal" style="display: none;">
+<div sec:authorize="hasRole('ROLE_ADMIN')" id="createCategoryModal" class="modal" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -296,7 +299,7 @@
     </div>
 </div>
 
-<div id="createBrandModal" class="modal" style="display: none;">
+<div sec:authorize="hasRole('ROLE_ADMIN')" id="createBrandModal" class="modal" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -320,7 +323,7 @@
     </div>
 </div>
 
-<div id="createCountryModal" class="modal" style="display: none;">
+<div sec:authorize="hasRole('ROLE_ADMIN')" id="createCountryModal" class="modal" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
