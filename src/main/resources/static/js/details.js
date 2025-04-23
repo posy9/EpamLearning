@@ -1,5 +1,14 @@
 let currentPage = 0;
 
+$(function () {
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    $(document).ajaxSend(function (e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
+});
+
 function loadDetails(page) {
     const rawSort = $("#sortAmount").val();
     const sortAmount = rawSort === "asc" || rawSort === "desc" ? rawSort : "";
