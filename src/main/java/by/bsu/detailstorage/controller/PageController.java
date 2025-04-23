@@ -20,4 +20,10 @@ public class PageController {
     public String loginPage() {
         return "login";
     }
+
+    @GetMapping("/error")
+    public String errorPage() {
+        return "error";
+    }
+
 }

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>Ошибка</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex align-items-center justify-content-center vh-100">
+<div class="card shadow p-5 text-center">
+    <h1 class="display-1 text-danger" th:text="${status}">Ошибка</h1>
+    <p class="lead mt-3" th:text="${message}">Что-то пошло не так.</p>
+    <a href="/" class="btn btn-primary mt-4">Вернуться на главную</a>
+</div>
+</body>
+</html>

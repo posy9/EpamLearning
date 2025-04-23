@@ -71,7 +71,6 @@ function loadEntities(selector, page) {
 
                     currentPage = page
                     $("#pageNumber").text("Страница: " + (currentPage + 1))
-                    togglePaginationButtons(data.first, data.last)
                 },
                 error: function (xhr) {
                     $("#entitiesNotFoundError").text("Nothing was found").show()

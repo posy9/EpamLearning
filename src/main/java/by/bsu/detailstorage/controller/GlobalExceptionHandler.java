@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,4 +54,6 @@ public class GlobalExceptionHandler {
     public Map<String, String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         return Map.of(MESSAGE_FIELD_NAME, "Impossible action");
     }
+
 }
+

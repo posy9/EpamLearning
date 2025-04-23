@@ -1,8 +1,11 @@
 package by.bsu.detailstorage.config;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 
 @Configuration
 public class SecurityConfig {
@@ -34,6 +38,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .exceptionHandling(exception -> {
+                    exception.accessDeniedHandler((request, response, accessDeniedException) -> {
+                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                        request.setAttribute(RequestDispatcher.ERROR_STATUS_CODE, HttpServletResponse.SC_FORBIDDEN);
+                        request.setAttribute("message", "Доступ запрещён");
+                        request.getRequestDispatcher("/error").forward(request, response);
+                    });
+
+                })
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers("/logout").authenticated()
                         .requestMatchers(HttpMethod.GET, "/login").anonymous()
@@ -41,7 +54,7 @@ public class SecurityConfig {
                         .requestMatchers("/js/details.js").authenticated()
                         .requestMatchers("/js/adminPage.js").hasRole("ADMIN")
                         .requestMatchers("/details/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/", "/brands/", "/devices", "/countries", "/types", "/categories").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/", "/brands/", "/devices", "/countries", "/types", "/categories","/error").authenticated()
                         .requestMatchers("/**").hasRole("ADMIN")
                 )
                 .formLogin(form -> form
