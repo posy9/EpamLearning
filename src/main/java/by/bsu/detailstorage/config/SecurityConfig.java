@@ -1,21 +1,15 @@
 package by.bsu.detailstorage.config;
 
-import by.bsu.detailstorage.repository.UserRepository;
-import by.bsu.detailstorage.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-
 
 @Configuration
 public class SecurityConfig {
@@ -23,11 +17,6 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        return new UserService(userRepository, passwordEncoder);
     }
 
     @Bean
@@ -45,18 +34,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                        .requestMatchers("/logout").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/login").anonymous()
+                        .requestMatchers( "/logout").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/js/details.js").authenticated()
                         .requestMatchers("/js/adminPage.js").hasRole("ADMIN")
                         .requestMatchers("/details/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/", "/brands/", "/devices", "/countries", "/types", "/categories").authenticated()
-                        .requestMatchers("/login", "/logout").permitAll()
                         .requestMatchers("/**").hasRole("ADMIN")
                 )
-                .formLogin(Customizer.withDefaults())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                )
                 .build();
     }
-
 }
 

@@ -9,7 +9,7 @@ public class UserReadDto implements ReadDto {
 
     private Long id;
 
-    private String login;
+    private String username;
 
     private RoleReadDto role;
 }

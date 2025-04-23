@@ -17,7 +17,4 @@ public class DetailController extends AbstractController<Detail, DetailReadDto, 
     public DetailController(ModelMapper modelMapper, DetailService service, DetailSpecificationBuilder detailSpecificationBuilder) {
         super(modelMapper, service, Detail.class, DetailReadDto.class, detailSpecificationBuilder);
     }
-
-
-
 }

@@ -2,7 +2,6 @@ package by.bsu.detailstorage.service;
 
 import by.bsu.detailstorage.model.User;
 import by.bsu.detailstorage.repository.UserRepository;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,10 +21,10 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       return userRepository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException(username));
-    }
+     @Override
+   public User loadUserByUsername(String username) throws UsernameNotFoundException {
+         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+   }
 
     @Override
     public User createEntity(User user) {

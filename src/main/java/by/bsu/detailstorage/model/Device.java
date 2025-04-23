@@ -24,5 +24,4 @@ public class Device implements DataEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-
 }

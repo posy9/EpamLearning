@@ -14,11 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/devices")
 public class DeviceController extends AbstractController<Device, DeviceReadDto, DeviceCreateDto, DeviceFilterDto> {
 
-
-
     public DeviceController(ModelMapper modelMapper, DeviceService service, DeviceSpecificationBuilder deviceSpecificationBuilder) {
         super(modelMapper, service, Device.class, DeviceReadDto.class, deviceSpecificationBuilder);
     }
-
-
 }

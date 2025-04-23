@@ -10,11 +10,11 @@ import lombok.Data;
 public class UserCreateDto implements CreateDto {
 
     @NotBlank(message = "should not be empty")
-    private String login;
+    private String username;
 
     @NotBlank(message = "should not be empty")
     private String password;
 
-
+    @NotNull(message = "should not be null")
     private RoleReadDto role;
 }

@@ -19,7 +19,7 @@ public class User implements DataEntity, UserDetails {
     private Long id;
 
     @Column(name = "login", length = 30, nullable = false, unique = true)
-    private String login;
+    private String username;
 
     @Column(name = "pass", length = 100, nullable = false)
     private String password;
@@ -35,6 +35,6 @@ public class User implements DataEntity, UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return username;
     }
 }

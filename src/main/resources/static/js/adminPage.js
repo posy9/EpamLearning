@@ -92,7 +92,7 @@ function loadEntities(selector, page) {
                 data.content.forEach(foundEntity => {
                     listContainer.append(`
                         <li class="list-group-item d-flex align-items-center justify-content-between">
-                            <span>${foundEntity.login} ${foundEntity.role.name}</span>
+                            <span>${foundEntity.username} ${foundEntity.role.name}</span>
                             <div class="d-flex align-items-center">
                                 <button class="btn btn-danger btn-sm mr-2" onclick="deleteEntity(${foundEntity.id}, '${entity}', this)">Удалить</button>
                                 <div class="text-danger small deleteEntityError" style="display: none;"></div>
@@ -188,7 +188,7 @@ function showUserCreateForm() {
     $("#createUserForm").submit(function (e) {
         e.preventDefault();
         const createData = {
-            login: $("#newUserName").val(),
+            username: $("#newUserName").val(),
             password: $("#newUserPassword").val(),
             role:{
                 id: $("#newUserRole").val()

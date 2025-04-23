@@ -40,6 +40,4 @@ public class DetailSpecificationBuilder implements SpecificationBuilder<Detail, 
                         "%" + name.toLowerCase() + "%"
                 );
     }
-
-
 }
