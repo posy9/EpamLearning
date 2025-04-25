@@ -1,7 +1,5 @@
 package by.bsu.detailstorage.config;
 
-import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -36,15 +34,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .exceptionHandling(exception -> {
-                    exception.accessDeniedHandler((request, response, accessDeniedException) -> {
-                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                        request.setAttribute(RequestDispatcher.ERROR_STATUS_CODE, HttpServletResponse.SC_FORBIDDEN);
-                        request.setAttribute("message", "Доступ запрещён");
-                        request.getRequestDispatcher("/error").forward(request, response);
-                    });
-
-                })
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers("/logout").authenticated()
                         .requestMatchers(HttpMethod.GET, "/login").anonymous()
