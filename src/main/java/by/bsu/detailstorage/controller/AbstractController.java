@@ -18,13 +18,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-public class AbstractController<T extends DataEntity,R extends ReadDto, C extends CreateDto, F extends FilterDto> {
+public abstract class AbstractController<T extends DataEntity, R extends ReadDto, C extends CreateDto, F extends FilterDto> {
 
     private final ModelMapper modelMapper;
     private final AbstractService<T> entityService;
     private final Class<T> entityClass;
     private final Class<R> readDtoClass;
-    private final SpecificationBuilder<T,F> entitySpecificationBuilder;
+    private final SpecificationBuilder<T, F> entitySpecificationBuilder;
 
     @GetMapping
     Page<R> getAllEntities(@ModelAttribute F filterDto, @PageableDefault(size = Integer.MAX_VALUE) Pageable pageable) {

@@ -19,10 +19,10 @@ import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.ENTITY_NOT_FOU
 @RequiredArgsConstructor
 public abstract class AbstractService<T extends DataEntity> {
 
-    private final EntityRepository<T,Long> entityRepository;
+    private final EntityRepository<T, Long> entityRepository;
     private final EntityNameRegistry EntityName;
 
-    public T findById(long id){
+    public T findById(long id) {
         Optional<T> foundBrand = entityRepository.findById(id);
         if (foundBrand.isPresent()) {
             return foundBrand.get();
@@ -31,14 +31,14 @@ public abstract class AbstractService<T extends DataEntity> {
         }
     }
 
-    public T createEntity(T entity){
+    public T createEntity(T entity) {
         fieldsToLowerCase(entity);
         entityRepository.save(entity);
         return entity;
     }
 
-    public T updateEntity(long id, T entity){
-        if(entityRepository.findById(id).isEmpty()) {
+    public T updateEntity(long id, T entity) {
+        if (entityRepository.findById(id).isEmpty()) {
             throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(),
                     EntityName.getEntityName(), id));
         }
@@ -47,7 +47,7 @@ public abstract class AbstractService<T extends DataEntity> {
         return entityRepository.save(entity);
     }
 
-    public void deleteEntity(long id){
+    public void deleteEntity(long id) {
         Optional<T> entityForDelete = entityRepository.findById(id);
         if (entityForDelete.isPresent()) {
             T entity = entityForDelete.get();
@@ -57,7 +57,7 @@ public abstract class AbstractService<T extends DataEntity> {
         }
     }
 
-    public Page<T> findMultiple(Specification<T> specification, Pageable pageable){
+    public Page<T> findMultiple(Specification<T> specification, Pageable pageable) {
         Page<T> foundEntities = entityRepository.findAll(specification, pageable);
         if (!foundEntities.isEmpty()) {
             return foundEntities;
@@ -67,14 +67,14 @@ public abstract class AbstractService<T extends DataEntity> {
     }
 
     @SneakyThrows
-    private void fieldsToLowerCase(T entity){
-       Field[] fields = entity.getClass().getDeclaredFields();
-       for (Field field : fields) {
-           field.setAccessible(true);
-           Object fieldValue = field.get(entity);
-           if (fieldValue instanceof String) {
-               field.set(entity,((String) fieldValue).trim().toLowerCase());
-           }
-       }
+    private void fieldsToLowerCase(T entity) {
+        Field[] fields = entity.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            Object fieldValue = field.get(entity);
+            if (fieldValue instanceof String) {
+                field.set(entity, ((String) fieldValue).trim().toLowerCase());
+            }
+        }
     }
 }

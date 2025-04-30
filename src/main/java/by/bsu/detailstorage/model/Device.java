@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Table(name = "device", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"brand_id","model"})
+        @UniqueConstraint(columnNames = {"brand_id", "model"})
 })
 @Data
 public class Device implements DataEntity {

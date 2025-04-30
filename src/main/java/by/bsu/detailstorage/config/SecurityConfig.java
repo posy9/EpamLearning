@@ -37,11 +37,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers("/logout").authenticated()
                         .requestMatchers(HttpMethod.GET, "/login").anonymous()
-                        .requestMatchers( "/logout").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/logout").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/js/details.js").authenticated()
                         .requestMatchers("/js/adminPage.js").hasRole("ADMIN")
                         .requestMatchers("/details/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/", "/brands/", "/devices", "/countries", "/types", "/categories","/error").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/", "/brands/", "/devices", "/countries", "/types", "/categories", "/error").authenticated()
                         .requestMatchers("/**").hasRole("ADMIN")
                 )
                 .formLogin(form -> form

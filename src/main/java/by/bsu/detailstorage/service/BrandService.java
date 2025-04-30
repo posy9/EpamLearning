@@ -12,6 +12,6 @@ import static by.bsu.detailstorage.registry.EntityNameRegistry.BRAND;
 public class BrandService extends AbstractService<Brand> {
 
     public BrandService(BrandRepository repository) {
-       super(repository, BRAND);
+        super(repository, BRAND);
     }
 }

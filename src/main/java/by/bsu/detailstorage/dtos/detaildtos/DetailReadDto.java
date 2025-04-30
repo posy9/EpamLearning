@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class DetailReadDto implements ReadDto {
 
-    private  Long id;
+    private Long id;
 
     private String name;
 

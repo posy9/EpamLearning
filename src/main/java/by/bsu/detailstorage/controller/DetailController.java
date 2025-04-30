@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value ="/details")
+@RequestMapping(value = "/details")
 public class DetailController extends AbstractController<Detail, DetailReadDto, DetailCreateDto, DetailFilterDto> {
 
     public DetailController(ModelMapper modelMapper, DetailService service, DetailSpecificationBuilder detailSpecificationBuilder) {

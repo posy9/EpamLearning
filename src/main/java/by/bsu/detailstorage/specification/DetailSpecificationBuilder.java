@@ -12,9 +12,9 @@ public class DetailSpecificationBuilder implements SpecificationBuilder<Detail, 
     public Specification<Detail> build(DetailFilterDto filterDto) {
         return withDeviceId(filterDto.getDevice_id())
                 .and(withTypeId(filterDto.getType_id())
-                .and(withCountryId(filterDto.getCountry_id()))
-                .and(withNameLike(filterDto.getName())));
-    };
+                        .and(withCountryId(filterDto.getCountry_id()))
+                        .and(withNameLike(filterDto.getName())));
+    }
 
     private Specification<Detail> withDeviceId(Long deviceId) {
         return ((root, query, criteriaBuilder) -> deviceId == null
