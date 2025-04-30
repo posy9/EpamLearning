@@ -2,12 +2,17 @@ package by.bsu.detailstorage.service;
 
 import by.bsu.detailstorage.model.User;
 import by.bsu.detailstorage.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import static by.bsu.detailstorage.registry.EntityNameRegistry.USER;
+import static by.bsu.detailstorage.registry.ErrorMessagesRegistry.ENTITY_NOT_FOUND;
 
 @Service
 public class UserService extends AbstractService<User> implements UserDetailsService {
@@ -33,5 +38,15 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
         return user;
     }
 
-
+    @Override
+    @PreAuthorize("#id != authentication.principal.id")
+    public void deleteEntity(long id) {
+        Optional<User> entityForDelete = userRepository.findById(id);
+        if (entityForDelete.isPresent()) {
+            User entity = entityForDelete.get();
+            userRepository.delete(entity);
+        } else {
+            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), USER.getEntityName(), id));
+        }
+    }
 }
