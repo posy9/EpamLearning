@@ -41,12 +41,6 @@ public class UserService extends AbstractService<User> implements UserDetailsSer
     @Override
     @PreAuthorize("#id != authentication.principal.id")
     public void deleteEntity(long id) {
-        Optional<User> entityForDelete = userRepository.findById(id);
-        if (entityForDelete.isPresent()) {
-            User entity = entityForDelete.get();
-            userRepository.delete(entity);
-        } else {
-            throw new EntityNotFoundException(String.format(ENTITY_NOT_FOUND.getMessage(), USER.getEntityName(), id));
-        }
+        super.deleteEntity(id);
     }
 }
