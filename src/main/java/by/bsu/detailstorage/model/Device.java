@@ -1,0 +1,27 @@
+package by.bsu.detailstorage.model;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Table(name = "device", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"brand_id", "model"})
+})
+@Data
+public class Device implements DataEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
+
+    @Column(name = "model", length = 50, nullable = false)
+    private String model;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+}
