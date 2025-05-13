@@ -87,6 +87,9 @@ function showUpdateForm(detailId) {
 
     openModal('editModal');
 
+    $("#editDetailType").empty();
+    $("#editDetailDevice").empty();
+    $("#editDetailCountry").empty();
     $("#editFormError").hide().text(""); // Скрыть ошибку, если была
 
     $.get({
@@ -196,6 +199,7 @@ function showDevices(selector) {
         $.get({
             url: "/devices",
             success: function (data) {
+                $(selector).empty();
                 data.content.forEach(function (device) {
                     $(selector).append(`<option value="${device.id}">${device.brand.name} ${device.model}</option>`);
                 });
@@ -210,6 +214,7 @@ function showTypes(selector) {
         $.get({
             url: "/types",
             success: function (data) {
+                $(selector).empty();
                 data.content.forEach(function (type) {
                     $(selector).append(`<option value="${type.id}">${type.name}</option>`);
                 });
@@ -224,6 +229,7 @@ function showCountries(selector) {
         $.get({
             url: "/countries",
             success: function (data) {
+                $(selector).empty();
                 data.content.forEach(function (country) {
                     $(selector).append(`<option value="${country.id}">${country.name}</option>`);
                 });
@@ -238,6 +244,7 @@ function showBrands(selector) {
         $.get({
             url: "/brands",
             success: function (data) {
+                $(selector).empty();
                 data.content.forEach(function (brand) {
                     $(selector).append(`<option value="${brand.id}">${brand.name}</option>`);
                 });
@@ -252,6 +259,7 @@ function showCategories(selector) {
         $.get({
             url: "/categories",
             success: function (data) {
+                $(selector).empty();
                 data.content.forEach(function (category) {
                     $(selector).append(`<option value="${category.id}">${category.name}</option>`);
                 });
